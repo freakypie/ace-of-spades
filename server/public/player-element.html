@@ -1,26 +1,44 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 
 <link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="/assets/polymer-flip.html">
 
-<dom-module id="card-element">
+<dom-module id="player-element">
   <style>
     :host {
+      width: 20%;
+      display: inline-block;
+      float: left;
+      text-align: center;
+      cursor: pointer;
+    }
+    :host img{
       display: inline-block;
       border-radius: 50%;
-      width: 300px;
-      height: 300px;
-      background: orange;
+      background: transparent;
+      padding: 5px;
+      max-width:100%;
+      margin: auto;
+    }
+    :host h3 div {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin: 0 3px;
+      display: inline-block;
+    }
+    :host h3 div[title="connected"] {
+      background: green;
     }
   </style>
   <template>
-    <content></content>
+    <img src="{{ avatar }}" />
+    <h3><div title="{{ connection }}"></div>{{ name }}</h3>
   </template>
 </dom-module>
 
 <script>
   Polymer({
-    is: "card-element",
+    is: "player-element",
     behaviors: [
       Polymer.NeonAnimationRunnerBehavior
     ],
@@ -33,7 +51,10 @@
             node: this
           }
         }
-      }
+      },
+      name: String,
+      connection: String,
+      avatar: String
     },
     listeners: {
       'neon-animation-finish': '_onNeonAnimationFinish'

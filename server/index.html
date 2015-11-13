@@ -1,14 +1,16 @@
 <html>
   <head>
     <link rel="import" href="/assets/card-element.html">
+    <link rel="import" href="/assets/player-element.html">
   </head>
 
   <body>
+    <player-element name="randall" avatar="http://lorempixel.com/100/100/cats/1/" connection="connected"></player-element>
     <h1>Hello</h1>
     <template is="dom-bind">
       <button on-click="_onButtonClick">click me</button>
       <br>
-      <my-animatable></my-animatable>
+      <card-element></card-element>
 
     </template>
 
@@ -21,7 +23,7 @@
 
       var scope = document.querySelector('template[is="dom-bind"]');
       scope._onButtonClick = function(event) {
-        var node = document.querySelector('my-animatable');
+        var node = document.querySelector('card-element');
         if(node) {
           node.animate();
         }

@@ -2,3 +2,4 @@
 bower_components/
 server/public/client/
 node_modules/
+*.swp
