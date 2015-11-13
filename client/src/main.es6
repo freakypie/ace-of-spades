@@ -3,20 +3,34 @@ window.jQuery = $;
 window.$ = $;
 
 var _ = require("underscore");
+var log = require("debug")("main");
 
-var BaseView = require("./views/base");
+var bv = require("backbone_views");
 var MajkinGame = require("./games/majkin");
 
 
-class Main extends BaseView {
+class Main extends bv.MixinView {
+  get mixins() {
+    return [bv.Composite]
+  }
+
   get el() {
-    return "body";
+    return "#game";
+  }
+
+  get views() {
+    return {
+      "#players": require("./views/players")
+    };
   }
 
   initialize(options) {
+    super.initialize(options);
+    log("starting main application");
     this.setupWebsockets();
-
-    this.game = new MajkinGame();
+    this.game = new MajkinGame(this);
+    window.game = this.game;
+    this.renderViews();
   }
 
   setupWebsockets() {

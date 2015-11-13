@@ -1,0 +1,61 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/assets/elements/polymer-flip.html">
+
+<dom-module id="card-element">
+  <style>
+    :host {
+      display: inline-block;
+      background: orange;
+    }
+  </style>
+  <template>
+    <template if="{{ face('up') }}">
+      <img src="{{ front }}" />
+    </template>
+    <template if="{{ face('down') }}">
+      <img src="{{ back }}" />
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "card-element",
+    behaviors: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],
+    properties: {
+      faceup: {
+        type: Boolean,
+        value: false
+      },
+      front: String,
+      back: {
+        type: String,
+        value: "http://lorempixel.com/250/400/sports/"
+      },
+      animationConfig: {
+        value: function() {
+          return {
+            name: 'polymer-flip',
+            axis: 'rotateY',
+            node: this
+          }
+        }
+      }
+    },
+    face: function(face){
+      return this.faceup ? face === 'up' : face === 'down';
+    },
+    listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+    drawCard: function() {
+    },
+    _onNeonAnimationFinish: function() {
+      console.log('animation done!');
+    }
+  });
+</script>

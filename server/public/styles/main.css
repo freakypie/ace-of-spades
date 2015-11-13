@@ -1,0 +1,58 @@
+html, body {
+  height: 100%;
+  background: #ebf0ef;
+}
+
+#players{
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+#PlayArea{
+  width: 100%;
+  height: 75%;
+}
+#Lower{
+  width: 100%;
+  height: 25%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+#Hand{
+  width: 70%;
+  display: inline-block;
+}
+#Deck {
+  width: 25%;
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+}
+#deck-image img{
+  position: absolute;
+  bottom: 0;
+  max-height: 200px;
+}
+#deck-image .card1 {
+  right: 15px;
+  z-index: 10;
+  bottom: 0px;
+}
+#deck-image .card2 {
+  right: 10px;
+  z-index: 9;
+  bottom: 2px;
+}
+#deck-image .card3 {
+  right: 5px;
+  z-index: 8;
+  bottom: 4px;
+}
+#deck-image .card4 {
+  right: 0px;
+  z-index: 7;
+  bottom: 6px;
+}

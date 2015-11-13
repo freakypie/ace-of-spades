@@ -1,0 +1,63 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/assets/elements/polymer-flip.html">
+
+<dom-module id="deck-element">
+  <template>
+    <template is="dom-if" if="[[ showCards(1, numcards) ]]">
+      <div id="deck-image" class="one-card">
+        <img src="http://lorempixel.com/250/400/sports/" class="card" />
+      </div>
+    </template>
+    <template is="dom-if" if="{{ showCards(2, numcards) }}">
+      <div id="deck-image" class="two-card">
+        <img src="http://lorempixel.com/250/400/sports/" class="card1" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card2" />
+      </div>
+    </template>
+    <template is="dom-if" if="{{ showCards(3, numcards) }}">
+      <div id="deck-image" class="three-card">
+        <img src="http://lorempixel.com/250/400/sports/" class="card1" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card2" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card3" />
+      </div>
+    </template>
+    <template is="dom-if" if="{{ showCards(4, numcards) }}">
+      <div id="deck-image" class="four-card">
+        <img src="http://lorempixel.com/250/400/sports/" class="card1" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card2" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card3" />
+        <img src="http://lorempixel.com/250/400/sports/" class="card4" />
+      </div>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "deck-element",
+    properties: {
+      numcards: {
+        type:String,
+        value: "15"
+      }
+    },
+    showCards: function(value, numcards){
+      switch(value){
+        case 1:
+          val = parseInt(numcards) <= 10;
+          break;
+        case 2:
+          val = parseInt(numcards) > 10 && parseInt(numcards) <= 20;
+          break;
+        case 3:
+          val = parseInt(numcards) > 20 && parseInt(numcards) <=40;
+          break;
+        case 4:
+          val = parseInt(numcards) > 40;
+      }
+      return val;
+    }
+  });
+</script>
