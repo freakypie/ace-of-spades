@@ -1,0 +1,14 @@
+{
+  "name": "ace-of-spades",
+  "version": "0.0.0",
+  "description": "Mobile Card Game",
+  "author": "",
+  "contributors": [],
+  "scripts": {
+    "bower-install": "bower install"
+  },
+  "dependencies": {
+    "express": "*",
+    "socket.io": "*"
+  }
+}
