@@ -1,17 +1,30 @@
 <html>
   <head>
-    <link rel="import" href="/assets/card-element.html">
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+    <link rel="import" href="/assets/elements/card-element.html">
+    <link rel="import" href="/assets/elements/player-element.html">
   </head>
 
   <body>
-    <h1>Hello</h1>
-    <template is="dom-bind">
-      <button on-click="_onButtonClick">click me</button>
-      <br>
-      <my-animatable></my-animatable>
+    <div id="players">
+      <player-element name="randall" avatar="http://lorempixel.com/100/100/cats/1/" connection="connected"></player-element>
+    </div>
+    <div id="PlayArea">
 
-    </template>
+    </div>
+    <div id="Lower">
+      <div id="Hand">
 
+      </div>
+      <div id="Deck">
+        <template is="dom-bind">
+          <button on-click="_onButtonClick">click me</button>
+          <br>
+          <card-element></card-element>
+        </template>
+      </div>
+    </div>
+    
     <script src="/socket.io/socket.io.js"></script>
     <script src="/reload/reload.js"></script>
     <script src="assets/client/bundle.js"></script>
@@ -22,7 +35,7 @@
 
       var scope = document.querySelector('template[is="dom-bind"]');
       scope._onButtonClick = function(event) {
-        var node = document.querySelector('my-animatable');
+        var node = document.querySelector('card-element');
         if(node) {
           node.animate();
         }
