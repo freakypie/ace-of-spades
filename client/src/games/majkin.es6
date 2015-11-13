@@ -6,28 +6,21 @@ class MajkinGame extends BaseGame {
 
     // DEBUG: generate arbitrary cards
 
-    // DEBUG: Add players to the game arbitrarily
-    self.players[0] = new Player(
-      {
-        id: 0
-      }
-    );
-
     // deal everyone a single card face up from central deck
-    for (var player in players) {
-      var drawn_card = self.central_deck().draw();
-      self.player_creature(
-        player,
-        new Stack(
-          {
-            card_instances: [drawn_card],
-            controller: player,
-          }
-        )
-      );
-    }
+    // for (var player in players) {
+    //   var drawn_card = self.central_deck().draw();
+    //   self.player_creature(
+    //     player,
+    //     new Stack(
+    //       {
+    //         card_instances: [drawn_card],
+    //         controller: player,
+    //       }
+    //     )
+    //   );
+    // }
 
-    self.play();
+    // self.play();
   }
 
   play() {

@@ -5,6 +5,7 @@ var log = require("debug")("base-game");
 
 var Stack = require("../models/stack");
 var Player = require("../models/player");
+var Card = require("../models/card");
 
 
 class BaseGame extends Backbone.Model {
@@ -23,6 +24,7 @@ class BaseGame extends Backbone.Model {
     this.socket = app.socket;
     var PlayerCollection = Backbone.Collection.extend({model: Player});
     var StackCollection = Backbone.Collection.extend({model: Stack});
+    var CardCollection = Backbone.Collection.extend({model: Card});
     this.players = new PlayerCollection();
     this.stacks = new StackCollection();
 

@@ -1,5 +1,4 @@
 var Backbone = require("backbone");
-<<<<<<< HEAD
 var store = require("store");
 var log = require("debug")("player");
 
