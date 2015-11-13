@@ -1,7 +1,7 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 
 <link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="/bower/neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="/assets/polymer-flip.html">
 
 <dom-module id="my-animatable">
   <style>
@@ -28,7 +28,8 @@
       animationConfig: {
         value: function() {
           return {
-            name: 'scale-down-animation',
+            name: 'polymer-flip',
+            axis: 'rotateY',
             node: this
           }
         }
@@ -39,6 +40,7 @@
     },
     animate: function() {
       this.playAnimation();
+      this.style.background = 'blue';
     },
     _onNeonAnimationFinish: function() {
       console.log('animation done!');
