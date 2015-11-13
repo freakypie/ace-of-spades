@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="/assets/styles/main.css" />
     <link rel="import" href="/assets/elements/card-element.html">
     <link rel="import" href="/assets/elements/player-element.html">
+    <link rel="import" href="/assets/elements/deck-element.html">
   </head>
 
   <body>
@@ -17,11 +18,7 @@
 
       </div>
       <div id="Deck">
-        <template is="dom-bind">
-          <button on-click="_onButtonClick">click me</button>
-          <br>
-          <card-element></card-element>
-        </template>
+        <deck-element numcards="65"></deck-element>
       </div>
     </div>
     
@@ -32,14 +29,6 @@
     <script>
       console.log("main starting");
       var app = new Main();
-
-      var scope = document.querySelector('template[is="dom-bind"]');
-      scope._onButtonClick = function(event) {
-        var node = document.querySelector('card-element');
-        if(node) {
-          node.animate();
-        }
-      };
     </script>
   </body>
 </html>

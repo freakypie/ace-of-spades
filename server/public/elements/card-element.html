@@ -34,8 +34,8 @@
       front: String,
       back: {
         type: String,
-        value: ""
-      }
+        value: "http://lorempixel.com/250/400/sports/"
+      },
       animationConfig: {
         value: function() {
           return {
@@ -48,13 +48,11 @@
     },
     face: function(face){
       return this.faceup ? face === 'up' : face === 'down';
-    };
+    },
     listeners: {
       'neon-animation-finish': '_onNeonAnimationFinish'
     },
-    animate: function() {
-      this.playAnimation();
-      this.style.background = 'blue';
+    drawCard: function() {
     },
     _onNeonAnimationFinish: function() {
       console.log('animation done!');
