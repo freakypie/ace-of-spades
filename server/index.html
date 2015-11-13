@@ -2,9 +2,9 @@
   <h1>Hello</h1>
   <my-animatable></my-animatable>
 
-  <link rel="import" href="card-element.html">
+  <link rel="import" href="assets/card-element.html">
   <script src="/socket.io/socket.io.js"></script>
-  <script src="/static/client/bundle.js"></script>
+  <script src="assets/client/bundle.js"></script>
   <script>
     var socket = io.connect('http://localhost:8005');
     socket.on('news', function (data) {
