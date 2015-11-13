@@ -8,6 +8,8 @@ var _ = require('underscore');
 var log = require("debug")("game");
 
 server.listen(8005);
+io.set("close timeout", 3000);
+io.set("heartbeat timeout", 1000);
 
 app.use('/bower', express.static(__dirname + '/../bower_components'));
 app.use('/assets', express.static(__dirname + '/public'));
@@ -31,7 +33,6 @@ io.on('connection', function (socket) {
       // establish host
       data.host = true;
       socket.player = players.add(data);
-      socket.player = players.add(data);
 
       // start game
       game.set({
@@ -41,7 +42,7 @@ io.on('connection', function (socket) {
       });
     } else if (game.get("status") == "open") {
       // add to the game
-      players.add(data);
+      socket.player = players.add(data);
       log("player added to game", players.length);
 
       game.set({
@@ -55,15 +56,25 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function() {
-    if (socket.player.attributes.host) {
-      // TODO: reassign host instead
-      players.reset([]);
-      game.reset({status: "pending"});
-      log("host disconnected, resetting game", players.length);
-      io.emit("game:end");
-    } else {
-      players.remove(socket.player);
-      log("player disconnected", players.length);
+    var player = socket.player;
+    log("player is disconnecting!", player && player.id || null);
+    if (player) {
+      players.remove(player);
+
+      if (player.attributes.host) {
+        if (players.length == 0) {
+          log("resetting game");
+          game.clear().set({status: "pending"});
+        } else {
+          // reassign host
+          log("reassigning host");
+          players.models[0].set({host: true});
+        }
+      } else {
+        log("player disconnected", players.length);
+      }
+
+      game.set({players: players.toJSON()});
     }
   });
 });
@@ -76,4 +87,4 @@ events.listenTo(game, "change", function() {
 
 
 
-reload(server, app, 500, true);
+reload(server, app, 1500, true);

@@ -18,6 +18,10 @@ module.exports = {
       filename: "bundle.js"
   },
   resolve: {
+    alias: {
+      forms: require.resolve("empty-module")
+    },
     extensions: ["", ".webpack.js", ".web.js", ".js", ".es6"]
-  }
+  },
+  devtool: "source-map-eval"
 };
