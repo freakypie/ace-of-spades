@@ -6,7 +6,7 @@
   "contributors": [],
   "scripts": {
     "bower-install": "bower install"
-  }
+  },
   "dependencies": {
     "express": "*",
     "socket.io": "*"
