@@ -4,9 +4,6 @@
   "description": "Mobile Card Game",
   "author": "",
   "contributors": [],
-  "scripts": {
-    "bower-install": "bower install"
-  },
   "dependencies": {
     "express": "*",
     "socket.io": "*"
