@@ -5,6 +5,7 @@ var reload = require("reload");
 
 server.listen(8005);
 
+app.use('/assets', express.static('public'));
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 });

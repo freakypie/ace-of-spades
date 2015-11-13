@@ -4,9 +4,6 @@
   "description": "Mobile Card Game",
   "author": "",
   "contributors": [],
-  "scripts": {
-    "bower-install": "bower install"
-  },
   "dependencies": {
     "babel-core": "^6.1.20",
     "babel-loader": "^6.1.0",
