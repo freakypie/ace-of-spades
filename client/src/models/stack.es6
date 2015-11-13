@@ -14,40 +14,40 @@ class Stack extends Backbone.Model {
   }
 
   draw() {
-    return self.cards.shift(); //pop from top
+    return this.cards.shift(); //pop from top
   }
 
   draw_all() {
-    var cards = self.cards;
-    self.cards = [];
+    var cards = this.cards;
+    this.cards = [];
     return cards;
   }
 
   top() {
-    this.cards[0];
+    return this.cards[0];
   }
 
   bottom() {
-    this.cards[this.size()-1];
+    return this.cards[this.size()-1];
   }
 
   place_on_top(cards) {
     if(cards instanceof Array){
       for(var card_instance in cards) {
-        self.cards.unshift(card_instance);
+        this.cards.unshift(card_instance);
       }
     } else {
-      self.cards.unshift(cards);
+      this.cards.unshift(cards);
     }
   }
 
   place_on_bottom(cards) {
     if(cards instanceof Array){
       for(var card_instance in cards) {
-        self.cards.push(card_instance);
+        this.cards.push(card_instance);
       }
     } else {
-      self.cards.push(cards);
+      this.cards.push(cards);
     }
   }
 
@@ -56,7 +56,7 @@ class Stack extends Backbone.Model {
   }
 
   size() {
-    return self.cards.length;
+    return this.cards.length;
   }
 }
 
