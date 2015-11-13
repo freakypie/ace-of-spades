@@ -1,0 +1,16 @@
+{
+  "name": "ace_of_spades",
+  "description": "Mobile card game",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
