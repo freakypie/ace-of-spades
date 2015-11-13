@@ -1,14 +1,19 @@
 <html>
-  <h1>Hello</h1>
-  <my-animatable></my-animatable>
+  <head>
 
-  <link rel="import" href="card-element.html">
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://localhost:8005');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
-  </script>
+    <link rel="import" href="card-element.html">
+  </head>
+  <body>
+    <h1>Hello</h1>
+    <my-animatable></my-animatable>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:8005');
+      socket.on('news', function (data) {
+        console.log(data);
+        socket.emit('my other event', { my: 'data' });
+      });
+    </script>
+  </body>
 </html>
