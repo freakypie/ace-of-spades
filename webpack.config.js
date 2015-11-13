@@ -5,7 +5,7 @@ module.exports = {
     loaders: [
       {
         test: /\.es6?$/,
-        loader: 'babel'
+        loader: 'babel?presets[]=es2015'
       }
     ]
   },

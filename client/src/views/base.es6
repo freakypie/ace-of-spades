@@ -16,4 +16,4 @@ class TemplateView extends Backbone.View {
   }
 }
 
-window.Main = Main;
+module.exports = TemplateView;

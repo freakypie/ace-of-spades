@@ -1,3 +1,4 @@
-bower_components/
 .idea/
+bower_components/
+server/public/client/
 node_modules/
