@@ -1,0 +1,46 @@
+[
+  {
+    "name": "spider",
+    "lvl": 1,
+    "flavor_text": "*squish*"
+  },
+  {
+    "name": "baby bear",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!"
+  },
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack."
+  },
+  {
+    "name": "wolf pack",
+    "lvl": 2,
+    "flavor_text": "Oh, there they are.",
+    "properties": {
+      "multiattack": 5
+    }
+  },
+  {
+    "name": "mama bear",
+    "lvl": 7,
+    "flavor_text": "Oh, you've done it now!",
+    "properties": {
+      "avenge": [
+        "baby bear",
+        7
+      ]
+    }
+  },
+  {
+    "name": "dragon",
+    "lvl": 10,
+    "flavor_text": "Big. Scaled. Flies. Breathes fire. You know the drill."
+  },
+  {
+    "name": "tarrasque",
+    "lvl": 20,
+    "flavor_text": "You're not strong enough to fight it. You never will be."
+  }
+]
