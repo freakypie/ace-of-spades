@@ -1,7 +1,7 @@
 var Backbone = require("backbone");
 
 
-export default class Stack extends Backbone.Model {
+class Stack extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
@@ -59,6 +59,8 @@ export default class Stack extends Backbone.Model {
     return self.cards.length;
   }
 }
+
+module.exports = Stack
 
 // model.attributes.properties
 // model.get("whatever")

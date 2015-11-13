@@ -3,10 +3,10 @@ var BaseGame = require("./base");
 var Stack = require("../models/stack");
 
 class MajkinGame extends BaseGame {
-  initialize() {
+  start() {
     // generate arbitrary cards
     //TODO: better initialization
-    this.stacks[0] = new Stack(
+    this.stacks.add(
       {
         name: "central_deck",
         cards: [],
@@ -14,18 +14,35 @@ class MajkinGame extends BaseGame {
         deck: true
       }
     );
+    this.stacks.add(
+      {
+        name: "discard_pile",
+        cards: [],
+        face_up: true,
+        deck: true
+      }
+    );
+    this.stacks.add(
+      {
+        name: "enemy_creature",
+        cards: [],
+        face_up: true,
+        deck: false
+      }
+    );
 
     // deal everyone a single card face up from central deck
     for (var player in players) {
       var drawn_card = this.central_deck().draw();
-      this.player_creature(
-        player,
-        new Stack(
-          {
-            cards: [drawn_card],
-            controller: player,
-          }
-        )
+
+      this.stacks.add(
+        {
+          name: "player_creature"+player.id,
+          controller: player,
+          cards: [drawn_card],
+          face_up: true,
+          deck: false
+        }
       );
     }
 
@@ -70,30 +87,30 @@ class MajkinGame extends BaseGame {
     return this.stacks[0];
   }
 
-  // stack get/set methods (so that we don't screw up a key name)
-  player_creature(player) {
-    return this.stacks['player_creature'+player.id];
+  discard_pile() {
+    return this.stacks[1];
   }
 
-  player_creature(player, stack) {
-    return this.stacks['player_creature'+player.id] = stack;
-  }
+  //discard_pile(stack) {
+  //  return this.stacks['discard_pile'] = stack;
+  //}
 
   enemy_creature() {
-    return this.stacks['enemy_creature'];
+    return this.stacks[2];
   }
 
-  enemy_creature(stack) {
-    return this.stacks['enemy_creature'] = stack;
+  //enemy_creature(stack) {
+  //  return this.stacks['enemy_creature'] = stack;
+  //}
+
+  // stack get/set methods (so that we don't screw up a key name)
+  player_creature(player) {
+    return this.stacks[3+player.id];
   }
 
-  discard_pile() {
-    return this.stacks['discard_pile'];
-  }
-
-  discard_pile(stack) {
-    return this.stacks['discard_pile'] = stack;
-  }
+  //player_creature(player, stack) {
+  //  return this.stacks['player_creature'+player.id] = stack;
+  //}
 
 }
 
