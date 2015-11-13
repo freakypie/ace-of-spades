@@ -5,15 +5,27 @@
 
   <body>
     <h1>Hello</h1>
-    <button on-click="_onButtonClick">click me</button>
-    <br>
-    <my-animatable></my-animatable>
+    <template is="dom-bind">
+      <button on-click="_onButtonClick">click me</button>
+      <br>
+      <my-animatable></my-animatable>
+
+    </template>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/reload/reload.js"></script>
     <script src="assets/client/bundle.js"></script>
+    <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
       var app = new Main();
+
+      var scope = document.querySelector('template[is="dom-bind"]');
+      scope._onButtonClick = function(event) {
+        var node = document.querySelector('my-animatable');
+        if(node) {
+          node.animate();
+        }
+      };
     </script>
   </body>
 </html>
