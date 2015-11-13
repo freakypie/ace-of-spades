@@ -56,6 +56,7 @@ io.on('connection', function (socket) {
 
   socket.on('disconnect', function() {
     if (socket.player.attributes.host) {
+      // TODO: reassign host instead
       players.reset([]);
       game.reset({status: "pending"});
       log("host disconnected, resetting game", players.length);
