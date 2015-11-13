@@ -1,6 +1,6 @@
 var BaseGame = require("./base");
 
-export default class MajkinGame {
+class MajkinGame {
   initialize() {
     // start game ("game:start" signal is sent by base)
 
@@ -21,3 +21,5 @@ export default class MajkinGame {
         // end game
   }
 }
+
+module.exports = MajkinGame;

@@ -5,7 +5,11 @@ module.exports = {
     loaders: [
       {
         test: /\.es6?$/,
-        loader: 'babel?presets[]=es2015'
+        loader: 'babel',
+        query: {
+          cacheDirectory: true,
+          presets: ['es2015', 'stage-2']
+        }
       }
     ]
   },

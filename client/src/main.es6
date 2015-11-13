@@ -15,8 +15,7 @@ class Main extends BaseView {
 
   initialize(options) {
     this.setupWebsockets();
-
-    this.game = new MajkinGame();
+    this.game = new MajkinGame(this);
   }
 
   setupWebsockets() {
