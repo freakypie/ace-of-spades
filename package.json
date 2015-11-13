@@ -8,8 +8,14 @@
     "bower-install": "bower install"
   },
   "dependencies": {
+    "babel-core": "^6.1.20",
+    "babel-loader": "^6.1.0",
+    "backbone": "^1.2.3",
     "express": "*",
+    "jquery": "^2.1.4",
     "reload": "^0.7.0",
-    "socket.io": "*"
+    "socket.io": "*",
+    "underscore": "^1.8.3",
+    "webpack": "^1.12.4"
   }
 }
