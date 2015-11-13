@@ -8,7 +8,8 @@ export default class Stack extends Backbone.Model {
       controller: null,
       card_instances: [],
       properties: {},
-      face_up: true
+      face_up: true,
+      deck: false,
     }
   }
 
@@ -20,6 +21,14 @@ export default class Stack extends Backbone.Model {
     var card_instances = self.card_instances;
     self.card_instances = [];
     return card_instances;
+  }
+
+  top() {
+    this.card_instances[0];
+  }
+
+  bottom() {
+    this.card_instances[this.size()-1];
   }
 
   place_on_top(card_instances) {

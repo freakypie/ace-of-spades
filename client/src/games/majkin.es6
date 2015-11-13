@@ -27,11 +27,13 @@ export default class MajkinGame {
       );
     }
 
+    // initialize enemy creature stack
+    self.enemy_creature(new Stack());
+
     self.play();
   }
 
   play() {
-    // select a random player to start
     // cycle turn through each player
     for (var player in players) {
       //if monster deck is empty
@@ -42,14 +44,7 @@ export default class MajkinGame {
       }
 
       // turn over top card from central deck (deck monster)
-      var drawn_card = self.central_deck().draw();
-      enemy_creature(
-          new Stack(
-              {
-                card_instances: [drawn_card],
-              }
-          )
-      );
+      self.enemy_creature().place_on_top(self.central_deck().draw());
 
       // if player level + player monster level >= deck monster level
       if(self.enemy_creature()[0].properties['lvl'] < self.player_creature(player)[0].properties['lvl'] + player.properties['lvl']) {
@@ -75,9 +70,10 @@ export default class MajkinGame {
             name: "central_deck",
             card_instances: [],
             face_up: false,
+            deck: true
           }
       );
-    }
+    }l
     return self.stacks[0];
   }
 
