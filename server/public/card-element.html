@@ -1,0 +1,26 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<script>
+  Polymer({
+    is: "my-animatable',
+    behaviours: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],
+    properties: {
+      value: function() {
+        return {
+          name: 'scale-down-animation',
+          node: this
+        }
+      }
+    },
+    listeners: {
+      'neon-animation-finish': '_onNeonAnimationFinish'
+    },
+    animate: function() {
+      this.playAnimation();
+    },
+    _onNeonAnimationFinish: function() {
+      console.log('animation done!');
+    }
+</script>
