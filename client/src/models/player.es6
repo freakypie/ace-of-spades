@@ -1,4 +1,5 @@
 var Backbone = require("backbone");
+<<<<<<< HEAD
 var store = require("store");
 var log = require("debug")("player");
 
@@ -6,39 +7,44 @@ var log = require("debug")("player");
 class Player extends Backbone.Model {
   get defaults() {
     return {
-      name: "unnamed"
-    }
+      name: "unnamed",
+      properties: {},
+    };
   }
 
   initialize(options) {
     super.initialize(options);
-    this.load();
+
+    log("local", localStorage.player);
+    log("store", store.get("player", {}));
+
     if (! this.attributes.id) {
-      this.set({id: Math.floor(Math.random() * 10000)});
-      this.set({name: this.attributes.id});
-      this.save();
+      this.loadSession();
+      if (! this.attributes.id) {
+        this.set({id: Math.floor(Math.random() * 10000)});
+        this.set({name: this.attributes.id});
+        this.saveSession();
+      }
     }
 
     // if the player is updated store locally
     this.listenTo(this, "change", function(e) {
-      log("saving player", e);
-      this.save();
+      if (this.me) {
+        log("saving player", e);
+        this.saveSession();
+      }
     });
   }
 
   get me() {
-    return window.app.game.player.cid == this.cid;
+    return game.player.cid == this.cid;
   }
 
-  load() {
+  loadSession() {
     this.set(store.get("player", {}));
   }
-
-  sync(method, model, options) {
-    log("sync was called", method, model, options);
-    if (method === "update") {
-      store.set("player", model.toJSON());
-    }
+  saveSession() {
+    store.set("player", this.toJSON());
   }
 }
 

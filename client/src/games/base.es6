@@ -21,8 +21,10 @@ class BaseGame extends Backbone.Model {
     log("game is starting");
     this.app = app;
     this.socket = app.socket;
-    this.players = new Backbone.Collection({model: Player});
-    this.stacks = new Backbone.Collection({model: Stack});
+    var PlayerCollection = Backbone.Collection.extend({model: Player});
+    var StackCollection = Backbone.Collection.extend({model: Stack});
+    this.players = new PlayerCollection();
+    this.stacks = new StackCollection();
 
     // connection properties
     this.setupWebsocketEvents(this.socket);
@@ -36,7 +38,7 @@ class BaseGame extends Backbone.Model {
     });
     this.listenTo(this, "change:players", function(e) {
       log("game players updated");
-      this.players.set(this.attributes.players);
+      this.players.reset(this.attributes.players);
     });
 
     // get or create the current player
