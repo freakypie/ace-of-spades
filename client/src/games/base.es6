@@ -6,6 +6,7 @@ var log = require("debug")("base-game");
 var Stack = require("../models/stack");
 var Player = require("../models/player");
 var Card = require("../models/card");
+var Area = require("../models/area");
 
 
 class BaseGame extends Backbone.Model {
@@ -25,8 +26,11 @@ class BaseGame extends Backbone.Model {
     var PlayerCollection = Backbone.Collection.extend({model: Player});
     var StackCollection = Backbone.Collection.extend({model: Stack});
     var CardCollection = Backbone.Collection.extend({model: Card});
+    var AreaCollection = Backbone.Collection.extend({model: Area});
     this.players = new PlayerCollection();
+    this.areas = new AreaCollection();
     this.stacks = new StackCollection();
+    this.cards = new CardCollection();
 
     // connection properties
     this.setupWebsocketEvents(this.socket);

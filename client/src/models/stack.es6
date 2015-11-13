@@ -1,7 +1,7 @@
 var Backbone = require("backbone");
 
 
-export default class Stack extends Backbone.Model {
+class Stack extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
@@ -56,3 +56,8 @@ export default class Stack extends Backbone.Model {
 
 // set property
 // model.set({face_up: false}) // sends "change", "change:face_up", signals
+
+
+Stack.collection = Backbone.Collection.extend({model: Stack});
+
+module.exports = Stack;

@@ -1,6 +1,9 @@
 var Backbone = require("backbone");
 var store = require("store");
 var log = require("debug")("player");
+var _ = require("underscore");
+
+var Stack = require("./stack");
 
 
 class Player extends Backbone.Model {
@@ -31,6 +34,20 @@ class Player extends Backbone.Model {
       if (this.me) {
         log("saving player", e);
         this.saveSession();
+      }
+    });
+
+    // create play Area
+    _.defer(() => {
+      this.area = game.areas.findWhere({
+        player_id: this.id,
+      });
+      if (! this.area) {
+        this.area = game.areas.add({
+          player: this,
+          player_id: this.id,
+          stacks: new Stack.collection()
+        });
       }
     });
   }
