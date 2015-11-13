@@ -1,0 +1,66 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/assets/elements/polymer-flip.html">
+
+<dom-module id="deck-element">
+  <style>
+    :host {
+    }
+  </style>
+  <template>
+    <template if="{{ show(1) }}">
+      <div id="deck-image" class="one-card">
+        <img src="..." class="card" />
+      </div>
+    </template>
+    <template if="{{ show(2) }}">
+      <div id="deck-image" class="two-card">
+        <img src="..." class="card1" />
+        <img src="..." class="card2" />
+      </div>
+    </template>
+    <template if="{{ show(3) }}">
+      <div id="deck-image" class="three-card">
+        <img src="..." class="card1" />
+        <img src="..." class="card2" />
+        <img src="..." class="card3" />
+      </div>
+    </template>
+    <template if="{{ show(4) }}">
+      <div id="deck-image" class="four-card">
+        <img src="..." class="card1" />
+        <img src="..." class="card2" />
+        <img src="..." class="card3" />
+        <img src="..." class="card4" />
+      </div>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: "deck-element",
+    behaviors: [
+      Polymer.NeonAnimationRunnerBehavior
+    ],
+    properties: {
+      numcards: String
+    },
+    show: function(value){
+      switch(value){
+        case 1:
+          return this.numcards <= 10;
+          break;
+        case 2:
+          return this.numcards > 10 && this.numcards <= 20;
+          break;
+        case 3:
+          return this.numcards > 20 && this.numcards <=40;
+          break;
+        case 4:
+          return this.numcards > 40;
+      }
+    }
+  });
+</script>

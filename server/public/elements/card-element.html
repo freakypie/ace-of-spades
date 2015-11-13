@@ -7,14 +7,16 @@
   <style>
     :host {
       display: inline-block;
-      border-radius: 50%;
-      width: 300px;
-      height: 300px;
       background: orange;
     }
   </style>
   <template>
-    <content></content>
+    <template if="{{ face('up') }}">
+      <img src="{{ front }}" />
+    </template>
+    <template if="{{ face('down') }}">
+      <img src="{{ back }}" />
+    </template>
   </template>
 </dom-module>
 
@@ -25,6 +27,15 @@
       Polymer.NeonAnimationRunnerBehavior
     ],
     properties: {
+      faceup: {
+        type: Boolean,
+        value: false
+      },
+      front: String,
+      back: {
+        type: String,
+        value: ""
+      }
       animationConfig: {
         value: function() {
           return {
@@ -35,6 +46,9 @@
         }
       }
     },
+    face: function(face){
+      return this.faceup ? face === 'up' : face === 'down';
+    };
     listeners: {
       'neon-animation-finish': '_onNeonAnimationFinish'
     },
