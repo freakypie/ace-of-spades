@@ -1,10 +1,19 @@
 var BaseGame = require("./base");
 
+var Stack = require("../models/stack");
+
 class MajkinGame extends BaseGame {
   initialize() {
-    // start game ("game:start" signal is sent by base)
-
-    // DEBUG: generate arbitrary cards
+    // generate arbitrary cards
+    //TODO: better initialization
+    this.stacks[0] = new Stack(
+      {
+        name: "central_deck",
+        cards: [],
+        face_up: false,
+        deck: true
+      }
+    );
 
     // deal everyone a single card face up from central deck
     for (var player in players) {
@@ -13,7 +22,7 @@ class MajkinGame extends BaseGame {
         player,
         new Stack(
           {
-            card_instances: [drawn_card],
+            cards: [drawn_card],
             controller: player,
           }
         )
@@ -58,17 +67,6 @@ class MajkinGame extends BaseGame {
   }
 
   central_deck() {
-    if (!0 in this.stacks){
-      //TODO: better initialization
-      this.stacks[0] = new Stack(
-        {
-          name: "central_deck",
-          card_instances: [],
-          face_up: false,
-          deck: true
-        }
-      );
-    }
     return this.stacks[0];
   }
 
