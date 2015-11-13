@@ -1,7 +1,7 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 
-<link rel="import" href="/assets/neon-animation-runner-behavior.html">
-<link rel="import" href="/assets/animations/scale-down-animation.html">
+<link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="/bower/neon-animation/animations/scale-down-animation.html">
 
 <dom-module id="my-animatable">
   <style>
@@ -21,14 +21,16 @@
 <script>
   Polymer({
     is: "my-animatable",
-    behaviours: [
+    behaviors: [
       Polymer.NeonAnimationRunnerBehavior
     ],
     properties: {
-      value: function() {
-        return {
-          name: 'scale-down-animation',
-          node: this
+      animationConfig: {
+        value: function() {
+          return {
+            name: 'scale-down-animation',
+            node: this
+          }
         }
       }
     },

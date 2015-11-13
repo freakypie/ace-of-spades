@@ -1,23 +1,34 @@
 <html>
   <head>
-
     <link rel="import" href="/assets/card-element.html">
   </head>
 
   <body>
     <h1>Hello</h1>
-    <button on-click="_onButtonClick">click me</button>
-    <br>
-    <my-animatable></my-animatable>
+    <template is="dom-bind">
+      <button on-click="_onButtonClick">click me</button>
+      <br>
+      <my-animatable></my-animatable>
+
+    </template>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="assets/client/bundle.js"></script>
+    <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
       var socket = io.connect('http://localhost:8005');
       socket.on('news', function (data) {
         console.log(data);
         socket.emit('my other event', { my: 'data' });
       });
+
+      var scope = document.querySelector('template[is="dom-bind"]');
+      scope._onButtonClick = function(event) {
+        var node = document.querySelector('my-animatable');
+        if(node) {
+          node.animate();
+        }
+      };
     </script>
   </body>
 </html>
