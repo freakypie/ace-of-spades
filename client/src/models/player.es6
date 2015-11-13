@@ -1,4 +1,5 @@
 var Backbone = require("backbone");
+<<<<<<< HEAD
 var store = require("store");
 var log = require("debug")("player");
 
@@ -6,8 +7,9 @@ var log = require("debug")("player");
 class Player extends Backbone.Model {
   get defaults() {
     return {
-      name: "unnamed"
-    }
+      name: "unnamed",
+      properties: {},
+    };
   }
 
   initialize(options) {

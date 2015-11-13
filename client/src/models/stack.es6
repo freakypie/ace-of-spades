@@ -6,10 +6,48 @@ export default class Stack extends Backbone.Model {
     return {
       name: "unnamed",
       controller: null,
-      face_up: true,
-      cards: [],
-      properties: {}
+      card_instances: [],
+      properties: {},
+      face_up: true
     }
+  }
+
+  draw() {
+    return self.card_instances.shift(); //pop from top
+  }
+
+  draw_all() {
+    var card_instances = self.card_instances;
+    self.card_instances = [];
+    return card_instances;
+  }
+
+  place_on_top(card_instances) {
+    if(card_instances instanceof Array){
+      for(var card_instance in card_instances) {
+        self.card_instances.unshift(card_instance);
+      }
+    } else {
+      self.card_instances.unshift(card_instances);
+    }
+  }
+
+  place_on_bottom(card_instances) {
+    if(card_instances instanceof Array){
+      for(var card_instance in card_instances) {
+        self.card_instances.push(card_instance);
+      }
+    } else {
+      self.card_instances.push(card_instances);
+    }
+  }
+
+  shuffle(){
+
+  }
+
+  size() {
+    return self.card_instances.length;
   }
 }
 
