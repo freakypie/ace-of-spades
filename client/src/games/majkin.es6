@@ -1,6 +1,6 @@
 var BaseGame = require("./base");
 
-class MajkinGame {
+class MajkinGame extends BaseGame {
   initialize() {
     // start game ("game:start" signal is sent by base)
 

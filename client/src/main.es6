@@ -3,6 +3,7 @@ window.jQuery = $;
 window.$ = $;
 
 var _ = require("underscore");
+var log = require("debug")("main");
 
 var BaseView = require("./views/base");
 var MajkinGame = require("./games/majkin");
@@ -14,6 +15,7 @@ class Main extends BaseView {
   }
 
   initialize(options) {
+    log("starting main application");
     this.setupWebsockets();
     this.game = new MajkinGame(this);
   }
