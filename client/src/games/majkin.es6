@@ -36,6 +36,13 @@ class MajkinGame extends BaseGame {
       var drawn_card = this.central_deck().draw();
       var card_list = this.player_creature(player);
       card_list.get("cards").add(drawn_card);
+
+      player.attributes.hand = [];
+      for(var i=0;i<6;i++){
+        var card = this.central_deck().draw();
+        player.attributes.hand.push(card);
+      }
+      console.log(player.attributes.hand);
     }
   }
 

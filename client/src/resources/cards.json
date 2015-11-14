@@ -6,6 +6,90 @@
     "front": "/assets/images/foe-bats.png"
   },
   {
+    "name": "bats",
+    "lvl": 1,
+    "flavor_text": "*squish*",
+    "front": "/assets/images/foe-bats.png"
+  },
+  {
+    "name": "bats",
+    "lvl": 1,
+    "flavor_text": "*squish*",
+    "front": "/assets/images/foe-bats.png"
+  },
+  {
+    "name": "bats",
+    "lvl": 1,
+    "flavor_text": "*squish*",
+    "front": "/assets/images/foe-bats.png"
+  },
+    {
+      "name": "bats",
+      "lvl": 1,
+      "flavor_text": "*squish*",
+      "front": "/assets/images/foe-bats.png"
+    },
+    {
+      "name": "bats",
+      "lvl": 1,
+      "flavor_text": "*squish*",
+      "front": "/assets/images/foe-bats.png"
+    },
+    {
+      "name": "bats",
+      "lvl": 1,
+      "flavor_text": "*squish*",
+      "front": "/assets/images/foe-bats.png"
+    },
+    {
+      "name": "bats",
+      "lvl": 1,
+      "flavor_text": "*squish*",
+      "front": "/assets/images/foe-bats.png"
+    },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
+    "name": "foe creeper",
+    "lvl": 1,
+    "flavor_text": "For the love of all things holy, don't mess with it!",
+    "front": "/assets/images/foe-creeper.png"
+  },
+  {
     "name": "foe creeper",
     "lvl": 1,
     "flavor_text": "For the love of all things holy, don't mess with it!",
@@ -17,13 +101,81 @@
     "flavor_text": "This idiot forgot to bring his pack.",
     "front": "/assets/images/foe-death-onion.png"
   },
+
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
+
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
+  {
+    "name": "wolf",
+    "lvl": 2,
+    "flavor_text": "This idiot forgot to bring his pack.",
+    "front": "/assets/images/foe-death-onion.png"
+  },
   {
     "name": "wolf pack",
-    "lvl": 2,
+    "lvl": 4,
     "flavor_text": "Oh, there they are.",
     "front": "/assets/images/foe-haunted-house.png",
     "properties": {
       "multiattack": 5
+    }
+  },
+  {
+    "name": "wolf pack",
+    "lvl": 4,
+    "flavor_text": "Oh, there they are.",
+    "front": "/assets/images/foe-haunted-house.png",
+    "properties": {
+      "multiattack": 5
+    }
+  },
+  {
+    "name": "wolf pack",
+    "lvl": 4,
+    "flavor_text": "Oh, there they are.",
+    "front": "/assets/images/foe-haunted-house.png",
+    "properties": {
+      "multiattack": 5
+    }
+  },
+  {
+    "name": "mama bear",
+    "lvl": 7,
+    "flavor_text": "Oh, you've done it now!",
+    "front": "/assets/images/foe-horta.png",
+    "properties": {
+      "avenge": [
+        "baby bear",
+        7
+      ]
     }
   },
   {

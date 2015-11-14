@@ -12,6 +12,7 @@ class Player extends Backbone.Model {
       name: "unnamed",
       lvl: 1,
       properties: {},
+      hand: [],
     };
   }
 
