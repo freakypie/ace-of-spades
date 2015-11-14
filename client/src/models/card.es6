@@ -13,7 +13,7 @@ class Card extends Backbone.Model {
             area: null,
             owner: null,
             controller: null,
-            face_up: true,
+            faceup: true,
         }
     }
 }

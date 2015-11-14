@@ -1,5 +1,6 @@
 var bv = require("backbone_views");
 var _ = require("underscore");
+var log = require("debug")("majkin");
 
 
 class CardListItem extends bv.DetailView {
@@ -10,10 +11,7 @@ class CardListItem extends bv.DetailView {
     this.listenTo(this.model, "change", function() {
       this.render()
     });
-    this.listenTo(this.model.get("cards"), "reset", function() {
-      this.render()
-    });
-    this.listenTo(this.model.get("cards"), "update", function() {
+    this.listenTo(this.model.get("cards"), "all", function(e) {
       this.render()
     });
   }

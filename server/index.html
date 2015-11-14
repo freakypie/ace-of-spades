@@ -22,6 +22,11 @@
     <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
       var app = new Main();
+      var y = 0;
+      setInterval(function() {
+        y += 1;
+        $(".card").css("transform", "rotateY("+y+"deg)");
+      }, 16)
     </script>
   </body>
 </html>

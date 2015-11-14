@@ -98,12 +98,14 @@ class MajkinGame extends BaseGame {
 
     // turn over top card from central deck (deck monster)
     var enemy_card_list = this.enemy_creature(player);
-    enemy_card_list.place_on_top(this.central_deck().draw());
+    var enemy_creature = this.central_deck().draw();
+    enemy_creature.set({faceup: false});
+    enemy_card_list.place_on_top(enemy_creature);
 
     _.delay(() => {
+      enemy_creature.set({faceup: true});
 
       // if player level + player monster level >= deck monster level
-      var enemy_creature = enemy_card_list.top();
       var player_card_list = this.player_creature(player);
       if (player_card_list) {
         var player_creature = player_card_list.top();
@@ -127,13 +129,11 @@ class MajkinGame extends BaseGame {
       } else {
         log("player is missing a monster", player.attributes.name);
       }
-
-      // put enemy monster in discard pile
-      this.discard_pile().place_on_bottom(
-        enemy_card_list.draw_all()
-      );
-
       _.delay(() => {
+        // put enemy monster in discard pile
+        this.discard_pile().place_on_bottom(
+          enemy_card_list.draw_all()
+        );
         cb(winner);
       }, 1000);
     }, 1000);
