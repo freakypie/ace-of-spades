@@ -106,11 +106,9 @@ class MajkinGame extends BaseGame {
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
-      for(var i=0;i<6;i++) {
-        var card = this.weapon_deck().draw();
-        // player.attributes.hand.place_on_bottom(card);
-        this.player_hand(player).place_on_bottom(card);
-      }
+      var card = this.weapon_deck().draw();
+      // player.attributes.hand.place_on_bottom(card);
+      this.player_hand(player).place_on_bottom(card);
     }
 
     var q = queue({concurrency: 1});
@@ -166,43 +164,56 @@ class MajkinGame extends BaseGame {
 
       // give time to react
       var $pass_button = $('#pass-button');
-      $pass_button.show();
+      var $item_button = $('#item-button');
       console.log(player.id, game.player.id);
       if (player.me) {
         $pass_button.show();
+        if(this.player_hand(player).size()){
+          $item_button.show();
+        }
       } else {
         $pass_button.hide();
+        $item_button.hide();
         log("some other players turn");
       }
 
-      this.countdown(3, () => {
-        this.fight(player, cb);
+      this.countdown(15, () => {
+        this.fight(player, 0, cb);
         $pass_button.hide();
+        $item_button.hide();
       }, 10000);
 
       $pass_button.off().click(() => {
         console.log("clearTimeout("+this.countdown_delay_id+")");
         clearTimeout(this.countdown_delay_id);
-        this.fight(player, cb);
+        this.fight(player, 0, cb);
         $pass_button.hide();
+        $item_button.hide();
+      });
+
+      $item_button.off().click(() => {
+        console.log("clearTimeout("+this.countdown_delay_id+")");
+        clearTimeout(this.countdown_delay_id);
+        var item = this.player_hand(player).draw();
+        this.fight(player, item.lvl, cb);
+        $pass_button.hide();
+        $item_button.hide();
       });
     }, 1000);
   }
 
   countdown(seconds, callback) {
-    // console.log("countdown("+seconds+")");
     $('#pass-button').find('#countdown').text(seconds);
     if (seconds > 0) {
       this.countdown_delay_id = _.delay(() => {
         this.countdown(seconds - 1, callback)
       }, 1000);
-      // console.log("this.countdown_delay_id = _.delay() = "+this.countdown_delay_id+"");
     } else {
       callback();
     }
   }
 
-  fight(player, cb){
+  fight(player, item_bonus, cb){
     console.log("fight()");
     // if player level + player monster level >= deck monster level
     var winner = null;
@@ -212,7 +223,7 @@ class MajkinGame extends BaseGame {
     var player_card_list = this.player_creature(player);
     if (player_card_list) {
       var player_creature = player_card_list.top();
-      var player_level = player_creature.attributes.lvl;
+      var player_level = player_creature.attributes.lvl + item_bonus;
       var enemy_level = enemy_creature.attributes.lvl;
       if (enemy_level <= player_level) {
         // player gains a level
