@@ -25,7 +25,6 @@ class CardList extends Backbone.Model {
     });
 
     if (this.attributes.area) {
-      console.log("setting area");
       this.attributes.area.get("card_lists").add(this);
     }
   }

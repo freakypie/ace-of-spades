@@ -13,34 +13,15 @@
         -webkit-transform-style: preserve-3d;
         backface-visibility: hidden;
       }
-      card-element {
-        top: 0;
-        left: 0;
-        position: absolute;
-      }
     </style>
     <template>
       <content></content>
-    </template>
-    <template is="dom-repeat" items="[[cards]]">
-      <card-element faceup="{{item.faceup}}"
-                    front="{{item.front}}"
-                    back="{{item.back}}"
-                    card_id="{{item.id}}">
-      </card-element>
     </template>
   </template>
 
   <script>
     Polymer({
       is: "hand-element",
-      properties: {
-        cards: {
-          type: Array,
-          value: [],
-          notify: true,
-        }
-      }
     });
   </script>
 </dom-module>

@@ -10,6 +10,7 @@ var log = require("debug")("game");
 server.listen(8005);
 io.set("close timeout", 3000);
 io.set("heartbeat timeout", 1000);
+io.set('transports', ['websocket']);
 
 app.use('/bower', express.static(__dirname + '/../bower_components'));
 app.use('/assets', express.static(__dirname + '/public'));

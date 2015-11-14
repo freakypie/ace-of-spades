@@ -39,7 +39,7 @@ class Main extends bv.MixinView {
   }
 
   setupWebsockets() {
-    var socket = io.connect();
+    var socket = io.connect({transports: ['websocket']});
     this.socket = socket;
     socket.on('news', function (data) {
       console.log(data);
