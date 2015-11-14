@@ -47,9 +47,7 @@ html, body {
   right: 20px;
   bottom: 10px;
 }
-#deck-image img{
-  position: absolute;
-  bottom: 0;
+#deck-image img {
   max-height: 200px;
 }
 #deck-image .card1 {

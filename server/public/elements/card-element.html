@@ -8,6 +8,8 @@
     :host {
       display: inline-block;
       background: orange;
+      min-height: 180px;
+      min-width: 120px;
     }
   </style>
   <template>
@@ -46,7 +48,7 @@
         }
       }
     },
-    face: function(face){
+    face: function(face) {
       return this.faceup ? face === 'up' : face === 'down';
     },
     listeners: {
