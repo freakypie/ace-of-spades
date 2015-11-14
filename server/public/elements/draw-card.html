@@ -14,12 +14,6 @@
 
     configure: function(config) {
       var node = config.node;
-      var start = config.start;
-      var end = config.end;
-      var pos2 = (end - start)/4;
-      var pos3 = ((end - start)/4)*2;
-      var pos4 = ((end - start)/4)*3;
-
       this._effect = new KeyframeEffect(node, [
         {
           transform: 'perspective(400px) translateZ(0px) rotateY(0deg) scale(1) translate(0px, 0px)',

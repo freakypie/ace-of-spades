@@ -1,5 +1,4 @@
 <link rel="import" href="/bower/polymer/polymer.html">
-
 <link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
 
 <dom-module id="player-element">
@@ -45,7 +44,12 @@
     properties: {
       name: String,
       connection: String,
-      avatar: String
+      avatar: String,
+      host: Boolean,
+      active: {
+        type: Boolean,
+        value: false
+      }
     },
       });
 </script>
