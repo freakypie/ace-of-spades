@@ -14,7 +14,6 @@ class Stack extends Backbone.Model {
     }
   }
 
-
   initialize(options) {
     // TODO: add to the area they belong to
     this.listenTo(this, "change:area", function() {

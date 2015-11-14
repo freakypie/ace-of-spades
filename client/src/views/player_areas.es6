@@ -2,14 +2,45 @@ var bv = require("backbone_views");
 var _ = require("underscore");
 
 
+class StackItem extends bv.DetailView {
+  get tagName() {
+    return "deck-element";
+  }
+  initialize() {
+    this.listenTo(this.model, "change", this.render.bind(null));
+    this.listenTo(this.model.get("stacks"), "update", this.render.bind(null));
+  }
+  render() {
+    var deck = this.el;
+    for(var x=0; x<this.model.get("cards").length; x++) {
+      deck.add($("<card-element></card-element>").get(0));
+    }
+    return this;
+  }
+}
+
+
 class PlayerAreaItemView extends bv.ListView {
+
+  get itemViewClass() {
+    return StackItem;
+  }
+
+  get listSelector() {
+    return "decks";
+  }
 
   get template() {
     return _.template(`
       <div>AREA: <%- player_id %></div>
-      <div class="list decks">
+      <div class="decks">
       </div>
     `);
+  }
+
+  initialize(options) {
+    this.collection = options.model.get("stacks");
+    super.initialize(options);
   }
 
   render(context) {
