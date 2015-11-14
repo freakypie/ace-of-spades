@@ -13,7 +13,8 @@ class StackItem extends bv.DetailView {
   render() {
     var deck = this.el;
     for(var x=0; x<this.model.get("cards").length; x++) {
-      deck.add($("<card-element></card-element>").get(0));
+      var card = $("<card-element faceup='1'></card-element>").get(0);
+      deck.add(card);
     }
     return this;
   }

@@ -74,7 +74,7 @@
       this.playAnimation('placeCard', 'place');
     },
     flip: function() {
-      this.playAnimation('flip');
+      this.playAnimation('flip', 'flip');
       this.faceup = !this.faceup;
     },
     ready: function() {
@@ -84,6 +84,7 @@
         this.style.background = "url('"+this.front+"')";
       }
       this.style.backgroundSize = "contain";
+      this.flip();
     },
     _onNeonAnimationFinish: function(e, animation) {
       switch(animation){
@@ -96,6 +97,10 @@
           break;
         case 'place':
           this.style.transform = "scale(1) translate(-660px, 90px)";
+          break;
+        case 'flip':
+          console.log(this);
+          this.style.background = "url('" + this.front + "')";
           break;
       }
     }
