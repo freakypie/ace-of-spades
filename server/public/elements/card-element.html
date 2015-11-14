@@ -8,6 +8,9 @@
 <dom-module id="card-element">
   <style>
     :host {
+      top: 0;
+      left: 0;
+      position: absolute;
       width: 100%;
       height: 100%;
       transform: translate3d(0,0,0) rotateY(0deg);
@@ -44,7 +47,7 @@
   <template>
     <div class="front face">
       <img src="/assets/images/card-front.png">
-      <img class="splash" src="/assets/images/foe-creeper.png">
+      <img class="splash" src="{{ front }}">
     </div>
     <div class="back face">
       <img src="/assets/images/card-back.png">
@@ -94,14 +97,14 @@
       if (! this.faceup) {
         this.faceup = false;
       }
-      // this.faceup_changed();
+      this.faceup_changed();
       // this.flip();
-      var y = 0;
-      setInterval(function() {
-        y += 10;
-        this.style.transform = "rotateY(" + y + "deg)";
-        // this.flip();
-      }.bind(this), 300);
+      // var y = 0;
+      // setInterval(function() {
+      //   y += 10;
+      //   this.style.transform = "rotateY(" + y + "deg)";
+      //   // this.flip();
+      // }.bind(this), 300);
     }
   });
 </script>

@@ -2,30 +2,65 @@ var bv = require("backbone_views");
 var _ = require("underscore");
 var log = require("debug")("majkin");
 
+console.log("Here");
 
-class CardListItem extends bv.DetailView {
+class CardItem extends bv.DetailView {
   get tagName() {
-    return "deck-element";
+    return "card-element";
   }
-  initialize() {
+  initialize(options) {
+    this.parent = options.parent;
+    super.initialize(options);
     this.listenTo(this.model, "change", function() {
-      this.render()
-    });
-    this.listenTo(this.model.get("cards"), "all", function(e) {
-      this.render()
+      this.render();
     });
   }
   render() {
+    this.el.faceup = this.model.attributes.faceup;
+    this.el.front = this.model.attributes.front;
+    this.el.name = this.model.attributes.name;
+    return this;
+  }
+  render2() {
     var deck = this.el;
     var card = null;
 
     deck.clear();
     for(var x=0; x<this.model.get("cards").length; x++) {
-      var card = this.model.get("cards").at(x).toJSON();
-      deck.add(card);
+      deck.add(this.model.get("cards").at(x).toJSON());
     }
     return this;
   }
+}
+
+
+class CardListItem extends bv.ListView {
+  get tagName() {
+    return "deck-element";
+  }
+  getListElement() {
+    return this.$el;
+  }
+  get itemViewClass() {
+    return CardItem;
+  }
+  initialize(options) {
+    // this.listenTo(this.model, "change", function() {
+    //   this.render()
+    // });
+    this.collection = this.model.get("cards");
+    super.initialize(options);
+  }
+  // render() {
+  //   var deck = this.el;
+  //   var card = null;
+  //
+  //   deck.clear();
+  //   for(var x=0; x<this.model.get("cards").length; x++) {
+  //     deck.add(this.model.get("cards").at(x).toJSON());
+  //   }
+  //   return this;
+  // }
 }
 
 
