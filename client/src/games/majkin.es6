@@ -195,7 +195,7 @@ class MajkinGame extends BaseGame {
         console.log("clearTimeout("+this.countdown_delay_id+")");
         clearTimeout(this.countdown_delay_id);
         var item = this.player_hand(player).draw();
-        this.fight(player, item.lvl, cb);
+        this.fight(player, item.attributes.lvl, cb);
         $pass_button.hide();
         $item_button.hide();
       });
@@ -214,7 +214,6 @@ class MajkinGame extends BaseGame {
   }
 
   fight(player, item_bonus, cb){
-    console.log("fight()");
     // if player level + player monster level >= deck monster level
     var winner = null;
     var enemy_card_list = this.enemy_creature(player);
@@ -226,17 +225,16 @@ class MajkinGame extends BaseGame {
       var player_level = player_creature.attributes.lvl + item_bonus;
       var enemy_level = enemy_creature.attributes.lvl;
       if (enemy_level <= player_level) {
-        // player gains a level
-        player.attributes.lvl++;
-        // trigger change
-        player_creature.set({lvl: player_creature.attributes.lvl});
+        // player creature gains a level
+        var new_level = player_creature.attributes.lvl+1;
+        player_creature.set({lvl: new_level});
         log("player was victorious!", player.id);
         if (player_creature.attributes.lvl >= 10){
           // end game
           winner = player;
         }
       } else {
-        log("player was defeated", player_level, enemy_level);
+        log("player was defeated", player_creature.attributes.lvl, enemy_level);
       }
     } else {
       log("player is missing a monster", player.attributes.name);
