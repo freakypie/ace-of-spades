@@ -3,13 +3,14 @@ var store = require("store");
 var log = require("debug")("player");
 var _ = require("underscore");
 
-var CardList = require("./cardlist");
+var CardList = require("./card_list");
 
 
 class Player extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
+      lvl: 1,
       properties: {},
     };
   }
@@ -46,7 +47,7 @@ class Player extends Backbone.Model {
         this.area = game.areas.add({
           player: this,
           player_id: this.id,
-          cardlists: new CardList.collection()
+          card_lists: new CardList.collection()
         });
       }
     });
