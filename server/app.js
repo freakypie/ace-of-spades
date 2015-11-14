@@ -42,6 +42,7 @@ io.on('connection', function (socket) {
       });
     } else if (game.get("status") == "open") {
       // add to the game
+      data.host = false;
       socket.player = players.add(data);
       log("player added to game", players.length);
 

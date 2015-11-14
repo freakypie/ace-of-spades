@@ -25,6 +25,7 @@ class PlayerItemView extends bv.DetailView {
     this.el.name = this.model.attributes.name;
     var cat_id = this.model.attributes.id % 10;
     this.el.avatar = `http://lorempixel.com/100/100/cats/${cat_id}/`;
+    this.el.host = this.model.attributes.host
     this.el.connected = "connected";
 
     return this;

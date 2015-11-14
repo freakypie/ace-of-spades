@@ -11,7 +11,8 @@ class Stack extends Backbone.Model {
       properties: {},
       area: null,
       face_up: true,
-      deck: false
+      deck: false,
+      hand: false,
     }
   }
 
