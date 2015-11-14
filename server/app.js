@@ -34,7 +34,8 @@ io.on('connection', function (socket) {
       // establish host
       data.host = true;
       socket.player = players.add(data);
-
+      socket.join("host");
+      
       // start game
       game.set({
         host: socket.player.toJSON(),
@@ -55,6 +56,10 @@ io.on('connection', function (socket) {
       log("player rejected, game isn't open");
       socket.emit("game", game.toJSON());
     }
+  });
+
+  socket.on("sync", function(data) {
+
   });
 
   socket.on('disconnect', function() {

@@ -53,6 +53,9 @@ class MajkinGame extends BaseGame {
     // deal everyone a single card face up from central deck
     for (var player of this.players.models) {
       if (!player.get("area")) {
+        // sync card data
+        this.socket.emit("sync", ["cards", "weapons"]);
+        
         log("setting up player", player.id);
         var area = this.areas.add({
           player: player,
@@ -77,7 +80,7 @@ class MajkinGame extends BaseGame {
             deck: false
           }),
         });
-        
+
         this.card_lists.add(player.attributes.player_hand, {at: 1});
         player.attributes.player_hand.set({
           area: area,
@@ -109,12 +112,8 @@ class MajkinGame extends BaseGame {
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
-      for(var i = 0; i < 2; i++) {
-        var card = this.weapon_deck().draw();
-        // player.attributes.hand.place_on_bottom(card);
-        this.player_hand(player).place_on_bottom(card);
-        console.log("hand", player.attributes.player_hand.get("cards").length);
-      }
+      var card = this.weapon_deck().draw();
+      this.player_hand(player).place_on_bottom(card);
     }
 
     var q = queue({concurrency: 1});
@@ -170,44 +169,56 @@ class MajkinGame extends BaseGame {
 
       // give time to react
       var $pass_button = $('#pass-button');
-      $pass_button.show();
-      console.log(player.id, game.player.id);
+      var $item_button = $('#item-button');
+
       if (player.me) {
         $pass_button.show();
+        if(this.player_hand(player).size()){
+          $item_button.show();
+        }
       } else {
         $pass_button.hide();
+        $item_button.hide();
         log("some other players turn");
       }
 
-      this.countdown(3, () => {
-        this.fight(player, cb);
+      this.countdown(15, () => {
+        this.fight(player, 0, cb);
         $pass_button.hide();
+        $item_button.hide();
       }, 10000);
 
       $pass_button.off().click(() => {
         console.log("clearTimeout("+this.countdown_delay_id+")");
         clearTimeout(this.countdown_delay_id);
-        this.fight(player, cb);
+        this.fight(player, 0, cb);
         $pass_button.hide();
+        $item_button.hide();
+      });
+
+      $item_button.off().click(() => {
+        console.log("clearTimeout("+this.countdown_delay_id+")");
+        clearTimeout(this.countdown_delay_id);
+        var item = this.player_hand(player).draw();
+        this.fight(player, item.attributes.lvl, cb);
+        $pass_button.hide();
+        $item_button.hide();
       });
     }, 1000);
   }
 
   countdown(seconds, callback) {
-    // console.log("countdown("+seconds+")");
     $('#pass-button').find('#countdown').text(seconds);
     if (seconds > 0) {
       this.countdown_delay_id = _.delay(() => {
         this.countdown(seconds - 1, callback)
       }, 1000);
-      // console.log("this.countdown_delay_id = _.delay() = "+this.countdown_delay_id+"");
     } else {
       callback();
     }
   }
 
-  fight(player, cb){
-    console.log("fight()");
+  fight(player, item_bonus, cb){
     // if player level + player monster level >= deck monster level
     var winner = null;
     var enemy_card_list = this.enemy_creature(player);
@@ -216,20 +227,19 @@ class MajkinGame extends BaseGame {
     var player_card_list = this.player_creature(player);
     if (player_card_list) {
       var player_creature = player_card_list.top();
-      var player_level = player_creature.attributes.lvl;
+      var player_level = player_creature.attributes.lvl + item_bonus;
       var enemy_level = enemy_creature.attributes.lvl;
       if (enemy_level <= player_level) {
-        // player gains a level
-        player.attributes.lvl++;
-        // trigger change
-        player_creature.set({lvl: player_creature.attributes.lvl});
+        // player creature gains a level
+        var new_level = player_creature.attributes.lvl+1;
+        player_creature.set({lvl: new_level});
         log("player was victorious!", player.id);
         if (player_creature.attributes.lvl >= 10){
           // end game
           winner = player;
         }
       } else {
-        log("player was defeated", player_level, enemy_level);
+        log("player was defeated", player_creature.attributes.lvl, enemy_level);
       }
     } else {
       log("player is missing a monster", player.attributes.name);
