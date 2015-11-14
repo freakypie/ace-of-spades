@@ -12,12 +12,12 @@ class Player extends Backbone.Model {
       name: "unnamed",
       lvl: 1,
       properties: {},
-      hand: [],
     };
   }
 
   initialize(options) {
     super.initialize(options);
+    this.attributes.player_hand = new CardList();
 
     log("local", localStorage.player);
     log("store", store.get("player", {}));

@@ -16,6 +16,7 @@ class MajkinGame extends BaseGame {
     cards.reset(cards.shuffle(), {slient: true});
 
     var weapons = new Card.collection(require("json!../resources/weapons.json"));
+    weapons.reset(weapons.shuffle(), {slient: true});
 
     this.card_lists.add({
       area: central_area,
@@ -75,15 +76,17 @@ class MajkinGame extends BaseGame {
             face_up: true,
             deck: false
           }),
-          player_hand: this.card_lists.add({
-            area: area,
-            name: "player_hand",
-            controller: player,
-            controller_id: player.id,
-            face_up: true,
-            hand: true,
-            deck: false
-          })
+        });
+        
+        this.card_lists.add(player.attributes.player_hand, {at: 1});
+        player.attributes.player_hand.set({
+          area: area,
+          name: "player_hand",
+          controller: player,
+          controller_id: player.id,
+          face_up: true,
+          hand: true,
+          deck: false
         });
 
         // scroll to players area
@@ -106,10 +109,11 @@ class MajkinGame extends BaseGame {
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
-      for(var i=0;i<6;i++) {
+      for(var i = 0; i < 2; i++) {
         var card = this.weapon_deck().draw();
         // player.attributes.hand.place_on_bottom(card);
         this.player_hand(player).place_on_bottom(card);
+        console.log("hand", player.attributes.player_hand.get("cards").length);
       }
     }
 
