@@ -10,16 +10,25 @@ var CardList = require("../models/card_list");
 class MajkinGame extends BaseGame {
   start() {
     // generate arbitrary cards
-    var cards = new Card.collection(require("json!../resources/cards.json"))
+    var cards = new Card.collection(require("json!../resources/cards.json"));
     var central_area = this.areas.add({name: "central_deck", default: true});
 
     cards.reset(cards.shuffle(), {slient: true});
+
+    var weapons = new Card.collection(require("json!../resources/weapons.json"));
 
     this.card_lists.add({
       area: central_area,
       name: "central_deck",
       cards: cards,
       face_up: false,
+      deck: true
+    });
+    this.card_lists.add({
+      area: central_area,
+      name: "weapon_deck",
+      cards: weapons,
+      face_up: true,
       deck: true
     });
     this.card_lists.add({
@@ -65,6 +74,15 @@ class MajkinGame extends BaseGame {
             controller_id: player.id,
             face_up: true,
             deck: false
+          }),
+          player_hand: this.card_lists.add({
+            area: area,
+            name: "player_hand",
+            controller: player,
+            controller_id: player.id,
+            face_up: true,
+            hand: true,
+            deck: false
           })
         });
 
@@ -88,12 +106,11 @@ class MajkinGame extends BaseGame {
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
-      player.set({hand: new Card.collection()});
       for(var i=0;i<6;i++) {
-        var card = this.central_deck().draw();
-        player.attributes.hand.add(card);
+        var card = this.weapon_deck().draw();
+        // player.attributes.hand.place_on_bottom(card);
+        this.player_hand(player).place_on_bottom(card);
       }
-      console.log(player.attributes.hand.models);
     }
 
     var q = queue({concurrency: 1});
@@ -227,6 +244,10 @@ class MajkinGame extends BaseGame {
     return this.card_lists.findWhere({name: "central_deck"});
   }
 
+  weapon_deck() {
+    return this.card_lists.findWhere({name: "weapon_deck"});
+  }
+
   discard_pile() {
     return this.card_lists.findWhere({name: "discard_pile"});
   }
@@ -241,6 +262,13 @@ class MajkinGame extends BaseGame {
   player_creature(player) {
     return this.card_lists.findWhere({
       name: "player_creature",
+      controller_id: player.id
+    });
+  }
+
+  player_hand(player) {
+    return this.card_lists.findWhere({
+      name: "player_hand",
       controller_id: player.id
     });
   }
