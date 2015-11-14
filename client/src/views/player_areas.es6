@@ -2,7 +2,6 @@ var bv = require("backbone_views");
 var _ = require("underscore");
 var log = require("debug")("majkin");
 
-console.log("Here");
 
 class CardItem extends bv.DetailView {
   get tagName() {
@@ -23,16 +22,6 @@ class CardItem extends bv.DetailView {
     this.el.description = this.model.attributes.flavor_text;
     return this;
   }
-  render2() {
-    var deck = this.el;
-    var card = null;
-
-    deck.clear();
-    for(var x=0; x<this.model.get("cards").length; x++) {
-      deck.add(this.model.get("cards").at(x).toJSON());
-    }
-    return this;
-  }
 }
 
 
@@ -50,58 +39,45 @@ class CardListItem extends bv.ListView {
     // this.listenTo(this.model, "change", function() {
     //   this.render()
     // });
-    this.collection = this.model.get("cards");
+    this.getCollection();
     super.initialize(options);
   }
-  // render() {
-  //   var deck = this.el;
-  //   var card = null;
-  //
-  //   deck.clear();
-  //   for(var x=0; x<this.model.get("cards").length; x++) {
-  //     deck.add(this.model.get("cards").at(x).toJSON());
-  //   }
-  //   return this;
-  // }
+  getCollection() {
+    this.collection = this.model.get("cards");
+  }
 }
 
-class HandListView extends bv.ListView {
+class HandListView extends CardListItem {
   get tagName() {
     return "hand-element";
   }
-  get itemViewClass() {
-    return HandView;
-  }
-  initialize() {
-    this.collection = null;
+  getCollection() {
+    this.collection = game.player.get("hand");
   }
 }
 
 
 class PlayerAreaItemView extends bv.ListView {
-
-  // get mixins() {
-  //   return [bv.Composite];
-  // }
-
+  get mixins() {
+    return [bv.Composite];
+  }
   get itemViewClass() {
     return CardListItem;
   }
-
   get listSelector() {
     return "decks";
   }
-
   get template() {
     return _.template(`
       <div class="decks">
       </div>
+      <div class="hand">
+      </div>
     `);
   }
-
   get views() {
     return {
-      // "#selector": HandListView
+      ".hand": HandListView
     }
   }
 

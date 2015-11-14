@@ -106,16 +106,11 @@ class MajkinGame extends BaseGame {
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
-      drawn_card = this.weapon_deck().draw();
-      card_list = this.player_hand(player);
-      card_list.place_on_top(drawn_card);
-
-      // player.attributes.hand = [];
-      // for(var i=0;i<6;i++) {
-      //   var card = this.central_deck().draw();
-      //   player.attributes.hand.push(card);
-      // }
-      // console.log(player.attributes.hand);
+      for(var i=0;i<6;i++) {
+        var card = this.weapon_deck().draw();
+        player.attributes.hand.add(card);
+      }
+      console.log(player.attributes.hand.models);
     }
 
     var q = queue({concurrency: 1});
@@ -172,16 +167,17 @@ class MajkinGame extends BaseGame {
       // give time to react
       var $pass_button = $('#pass-button');
       $pass_button.show();
+      console.log(player.id, game.player.id);
       if (player.me) {
-        $('#prompts').show();
+        $pass_button.show();
       } else {
+        $pass_button.hide();
         log("some other players turn");
       }
 
-      this.countdown(10, () => {
+      this.countdown(3, () => {
         this.fight(player, cb);
         $pass_button.hide();
-        $('#prompts').hide();
       }, 10000);
 
       $pass_button.off().click(() => {
@@ -189,7 +185,6 @@ class MajkinGame extends BaseGame {
         clearTimeout(this.countdown_delay_id);
         this.fight(player, cb);
         $pass_button.hide();
-        $('#prompts').hide();
       });
     }, 1000);
   }

@@ -32,7 +32,7 @@ class Player extends Backbone.Model {
     }
 
     // if the player is updated store locally
-    this.listenTo(this, "change", function(e) {
+    this.listenTo(this, "change:name", function(e) {
       if (this.me) {
         log("saving player", e);
         this.saveSession();
@@ -41,7 +41,7 @@ class Player extends Backbone.Model {
   }
 
   get me() {
-    return game.player.cid == this.cid;
+    return game.player.id == this.id;
   }
 
   loadSession() {

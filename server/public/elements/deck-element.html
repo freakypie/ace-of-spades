@@ -25,34 +25,11 @@
     <template>
       <content></content>
     </template>
-    <!-- <template is="dom-repeat" items="[[cards]]">
-      <card-element faceup="{{item.faceup}}"
-                    front="{{item.front}}"
-                    back="{{item.back}}"
-                    card_id="{{item.id}}">
-      </card-element>
-    </template> -->
   </template>
 
   <script>
     Polymer({
       is: "deck-element",
-      showCards: function(value, numcards) {
-        switch(value) {
-          case 1:
-            val = parseInt(numcards) <= 1;
-            break;
-          case 2:
-            val = parseInt(numcards) > 1 && parseInt(numcards) <= 5;
-            break;
-          case 3:
-            val = parseInt(numcards) > 10 && parseInt(numcards) <= 20;
-            break;
-          case 4:
-            val = parseInt(numcards) > 20;
-        }
-        return val;
-      }
     });
   </script>
 </dom-module>
