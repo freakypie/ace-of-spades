@@ -22,6 +22,7 @@ class Main extends bv.MixinView {
     return {
       "#players": require("./views/players"),
       "#player-areas": require("./views/player_areas"),
+      "#hand": require("./views/hand"),
     };
   }
 

@@ -12,9 +12,8 @@ class PlayerItemView extends bv.DetailView {
         // TODO: when randall implements this
         // this.el.selected = true;
         var player = this.model;
-        console.log("player", player);
         var area = $(`#player-areas [data-player=${player.id}]`)
-        console.log("scroll", area.position().left)
+        console.log("scroll", player.id, area)
         $("#player-areas .list").css({
           left: `-${area.position().left}px`
         });

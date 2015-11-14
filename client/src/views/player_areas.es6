@@ -1,66 +1,10 @@
 var bv = require("backbone_views");
 var _ = require("underscore");
 var log = require("debug")("majkin");
-
-
-class CardItem extends bv.DetailView {
-  get tagName() {
-    return "card-element";
-  }
-  initialize(options) {
-    this.parent = options.parent;
-    super.initialize(options);
-    this.listenTo(this.model, "change", function() {
-      this.render();
-    });
-  }
-  render() {
-    this.el.faceup = this.model.attributes.faceup;
-    this.el.front = this.model.attributes.front;
-    this.el.name = this.model.attributes.name;
-    this.el.base_level = this.model.attributes.lvl;
-    this.el.description = this.model.attributes.flavor_text;
-    return this;
-  }
-}
-
-
-class CardListItem extends bv.ListView {
-  get tagName() {
-    return "deck-element";
-  }
-  getListElement() {
-    return this.$el;
-  }
-  get itemViewClass() {
-    return CardItem;
-  }
-  initialize(options) {
-    // this.listenTo(this.model, "change", function() {
-    //   this.render()
-    // });
-    this.getCollection();
-    super.initialize(options);
-  }
-  getCollection() {
-    this.collection = this.model.get("cards");
-  }
-}
-
-class HandListView extends CardListItem {
-  get tagName() {
-    return "hand-element";
-  }
-  getCollection() {
-    this.collection = game.player.get("hand");
-  }
-}
+var CardListItem = require("./card_list_item");
 
 
 class PlayerAreaItemView extends bv.ListView {
-  get mixins() {
-    return [bv.Composite];
-  }
   get itemViewClass() {
     return CardListItem;
   }
@@ -71,14 +15,7 @@ class PlayerAreaItemView extends bv.ListView {
     return _.template(`
       <div class="decks">
       </div>
-      <div class="hand">
-      </div>
     `);
-  }
-  get views() {
-    return {
-      ".hand": HandListView
-    }
   }
 
   initialize(options) {
