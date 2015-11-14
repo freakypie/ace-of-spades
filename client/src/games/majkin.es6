@@ -42,11 +42,15 @@ class MajkinGame extends BaseGame {
 
     // deal everyone a single card face up from central deck
     for (var player of this.players.models) {
-      var area = this.areas.findWhere({player_id: player.id});
+      if (!player.get("area")) {
+        log("setting up player", player.id);
+        var area = this.areas.add({
+          player: player,
+          player_id: player.id
+        });
 
-      if (!player.get("enemy_card_list")) {
-        log("setting up player");
         player.set({
+          area: area,
           enemy_card_list: this.card_lists.add({
             area: area,
             name: "enemy_creature",

@@ -38,20 +38,6 @@ class Player extends Backbone.Model {
         this.saveSession();
       }
     });
-
-    // create play Area
-    _.defer(() => {
-      this.area = game.areas.findWhere({
-        player_id: this.id,
-      });
-      if (! this.area) {
-        this.area = game.areas.add({
-          player: this,
-          player_id: this.id,
-          card_lists: new CardList.collection()
-        });
-      }
-    });
   }
 
   get me() {
