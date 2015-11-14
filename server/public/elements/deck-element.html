@@ -5,59 +5,60 @@
 
 <dom-module id="deck-element">
   <template>
-    <template is="dom-if" if="[[ showCards(1, numcards) ]]">
-      <div id="deck-image" class="one-card">
-        <img src="/assets/images/card-back.png" class="card" />
-      </div>
-    </template>
-    <template is="dom-if" if="{{ showCards(2, numcards) }}">
-      <div id="deck-image" class="two-card">
-        <img src="/assets/images/card-back.png" class="card1" />
-        <img src="/assets/images/card-back.png" class="card2" />
-      </div>
-    </template>
-    <template is="dom-if" if="{{ showCards(3, numcards) }}">
-      <div id="deck-image" class="three-card">
-        <img src="/assets/images/card-back.png" class="card1" />
-        <img src="/assets/images/card-back.png" class="card2" />
-        <img src="/assets/images/card-back.png" class="card3" />
-      </div>
-    </template>
-    <template is="dom-if" if="{{ showCards(4, numcards) }}">
-      <div id="deck-image" class="four-card">
-        <img src="/assets/images/card-back.png" class="card1" />
-        <img src="/assets/images/card-back.png" class="card2" />
-        <img src="/assets/images/card-back.png" class="card3" />
-        <img src="/assets/images/card-back.png" class="card4" />
-      </div>
+    <style>
+      :host {
+        height: 200px;
+        width: 135px;
+        background: white;
+        border: 1px solid black;
+        display: inline-block;
+        position: relative;
+      }
+      card-element {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+    </style>
+
+    <template is="dom-repeat" items="[[cards]]">
+      <card-element></card-element>
     </template>
   </template>
-</dom-module>
 
-<script>
-  Polymer({
-    is: "deck-element",
-    properties: {
-      numcards: {
-        type:String,
-        value: "15"
+  <script>
+    Polymer({
+      is: "deck-element",
+      properties: {
+        cards: {
+          type: Array,
+          value: [],
+          notify: true
+        }
+      },
+      ready: function() {
+        this.cards = [];
+      },
+      add: function(item) {
+        this.unshift('cards', item);
+        console.log(this.cards)
+      },
+      showCards: function(value, numcards) {
+        switch(value) {
+          case 1:
+            val = parseInt(numcards) <= 1;
+            break;
+          case 2:
+            val = parseInt(numcards) > 1 && parseInt(numcards) <= 5;
+            break;
+          case 3:
+            val = parseInt(numcards) > 10 && parseInt(numcards) <= 20;
+            break;
+          case 4:
+            val = parseInt(numcards) > 20;
+        }
+        return val;
       }
-    },
-    showCards: function(value, numcards){
-      switch(value){
-        case 1:
-          val = parseInt(numcards) <= 10;
-          break;
-        case 2:
-          val = parseInt(numcards) > 10 && parseInt(numcards) <= 20;
-          break;
-        case 3:
-          val = parseInt(numcards) > 20 && parseInt(numcards) <=40;
-          break;
-        case 4:
-          val = parseInt(numcards) > 40;
-      }
-      return val;
-    }
-  });
-</script>
+    });
+  </script>
+</dom-module>

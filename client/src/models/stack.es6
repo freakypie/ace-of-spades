@@ -60,4 +60,6 @@ class Stack extends Backbone.Model {
   }
 }
 
-module.exports = Stack
+Stack.collection = Backbone.Collection.extend({model: Stack});
+
+module.exports = Stack;

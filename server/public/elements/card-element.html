@@ -2,23 +2,23 @@
 
 <link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/assets/elements/polymer-flip.html">
+<link rel="import" href="/assets/elements/draw-card.html">
+<link rel="import" href="/assets/elements/place-card.html">
 
 <dom-module id="card-element">
   <style>
     :host {
       display: inline-block;
       background: orange;
+      height: 200px;
+      width: 135px;
+      bottom: 10px;
+      right: 20px;
+      background-size: contain;
     }
   </style>
   <template>
-    <template if="{{ face('up') }}">
-      <img src="{{ front }}" />
-    </template>
-    <template if="{{ face('down') }}">
-      <img src="{{ back }}" />
-    </template>
   </template>
-</dom-module>
 
 <script>
   Polymer({
@@ -29,33 +29,70 @@
     properties: {
       faceup: {
         type: Boolean,
-        value: false
+        value: false,
+        notify: true
       },
       front: String,
       back: {
         type: String,
-        value: "/assets/images/card-back.png"
+        value: "/assets/images/card-front-background.png"
       },
       animationConfig: {
         value: function() {
           return {
-            name: 'polymer-flip',
-            axis: 'rotateY',
-            node: this
+            'flip': {
+              name: 'polymer-flip',
+              axis: 'rotateY',
+              node: this
+            },
+            'drawCard': {
+              name: 'draw-card',
+              node: this
+            },
+            'placeCard': {
+              name: 'place-card',
+              node: this
+            }
           }
         }
       }
     },
-    face: function(face){
+    face: function(face) {
       return this.faceup ? face === 'up' : face === 'down';
     },
     listeners: {
       'neon-animation-finish': '_onNeonAnimationFinish'
     },
     drawCard: function() {
+      this.front = "/assets/images/card-front-background.png";
+      this.playAnimation('drawCard', 'draw');
+      this.faceup = false;
     },
-    _onNeonAnimationFinish: function() {
-      console.log('animation done!');
+    placeCard: function() {
+      this.playAnimation('placeCard', 'place');
+    },
+    flip: function() {
+      this.playAnimation('flip');
+      this.faceup = !this.faceup;
+    },
+    ready: function() {
+      this.style.background = "url('/assets/images/card-back.png')";
+      // this.drawCard();
+    },
+    _onNeonAnimationFinish: function(e, animation) {
+      switch(animation){
+        case 'draw':
+          this.style.background = "url('/assets/images/card-front-background.png')";
+          this.style.backgroundSize = "contain";
+          this.style.transform = "scale(2) translate(-200px, -60px)";
+          var node = this;
+          setTimeout(function(){ node.placeCard();}, 1500);
+          break;
+        case 'place':
+          this.style.transform = "scale(1) translate(-660px, 90px)";
+          break;
+      }
     }
   });
 </script>
+</dom-module>

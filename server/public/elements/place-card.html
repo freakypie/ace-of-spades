@@ -1,0 +1,27 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/neon-animation/neon-animation-behavior.html">
+<link rel="import" href="/bower/neon-animation/web-animations.html">
+
+<script>
+
+  Polymer({
+
+    is: 'place-card',
+
+    behaviors: [
+      Polymer.NeonAnimationBehavior
+    ],
+
+    configure: function(config) {
+      var node = config.node;
+
+      this._effect = new KeyframeEffect(node, [
+        {transform: 'scale(2) translate(-200px, -60px)'},
+        {transform: 'scale(1) translate(-660px, 90px)'},
+      ], 1000);
+      return this._effect;
+    }
+
+  });
+
+</script>

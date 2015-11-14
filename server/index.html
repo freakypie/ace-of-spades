@@ -1,5 +1,8 @@
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/assets/styles/main.css" />
     <link rel="import" href="/assets/elements/card-element.html">
     <link rel="import" href="/assets/elements/player-element.html">
@@ -11,18 +14,7 @@
       <div id="players">
         <!-- <player-element name="randall" avatar="http://lorempixel.com/100/100/cats/1/" connection="connected"></player-element> -->
       </div>
-    </div>
-
-    <div id="PlayArea">
-
-    </div>
-    <div id="Lower">
-      <div id="Hand">
-
-      </div>
-      <div id="Deck">
-        <deck-element numcards="65"></deck-element>
-      </div>
+      <div id="player-areas"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -30,7 +22,6 @@
     <script src="assets/client/bundle.js"></script>
     <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
     <script>
-      console.log("main starting");
       var app = new Main();
     </script>
   </body>

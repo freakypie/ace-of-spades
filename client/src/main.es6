@@ -20,7 +20,8 @@ class Main extends bv.MixinView {
 
   get views() {
     return {
-      "#players": require("./views/players")
+      "#players": require("./views/players"),
+      "#player-areas": require("./views/player_areas"),
     };
   }
 
@@ -35,7 +36,7 @@ class Main extends bv.MixinView {
   }
 
   setupWebsockets() {
-    var socket = io.connect('http://localhost:8005');
+    var socket = io.connect();
     this.socket = socket;
     socket.on('news', function (data) {
       console.log(data);

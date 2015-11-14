@@ -5,6 +5,22 @@ class PlayerItemView extends bv.DetailView {
     return "player-element";
   }
 
+  get events() {
+    return {
+      "click *": function(e) {
+        // TODO: when randall implements this
+        // this.el.selected = true;
+        var player = this.model;
+        console.log("player", player);
+        var area = $(`#player-areas [data-player=${player.id}]`)
+        console.log("scroll", area.position().left)
+        $("#player-areas .list").css({
+          left: `-${area.position().left}px`
+        });
+      }
+    };
+  }
+
   render() {
     this.el.name = this.model.attributes.name;
     var cat_id = this.model.attributes.id % 10;
