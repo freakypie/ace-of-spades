@@ -71,7 +71,7 @@ class CardList extends Backbone.Model {
   }
 
   shuffle() {
-    this.shuffle();    
+    this.collection.reset(this.collection.shuffle(), {silent:true});   
   }
 
   size() {
