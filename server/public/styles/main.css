@@ -1,8 +1,8 @@
 html, body {
   height: 100%;
-  background: blue;
   padding: 0;
   margin: 0;
+  background: #ebf0ef;
 }
 
 #players {

@@ -1,4 +1,4 @@
-<link rel="import" href="/bower/polymer/polymer.html">
+<link rel="import" href="/bower/polymer/polyme.html">
 
 <link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
 <link rel="import" href="/assets/elements/polymer-flip.html">
@@ -7,13 +7,20 @@
   <template>
     <style>
       :host {
-        min-height: 180px;
-        min-width: 120px;
+        height: 200px;
+        width: 135px;
         background: white;
         border: 1px solid black;
         display: inline-block;
+        position: relative;
+      }
+      card-element {
+        top: 0;
+        left: 0;
+        position: absolute;
       }
     </style>
+
     <template is="dom-repeat" items="[[cards]]">
       <card-element></card-element>
     </template>
