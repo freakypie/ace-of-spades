@@ -18,7 +18,6 @@ class PlayerAreaItemView extends bv.DetailView {
 
     var numcards = Math.floor(Math.random() * 3) + 1;
     var deck = this.$("deck-element").get(0);
-    console.log(deck);
     for(var x=0; x<numcards; x++) {
       deck.add($("<card-element></card-element>").get(0));
     }

@@ -14,7 +14,10 @@ class Stack extends Backbone.Model {
   }
 
   draw() {
-    return this.attributes.cards.shift(); //pop from top
+    if (this.attributes.cards.length === 0) {
+      throw new Error("Can't draw from an empty deck");
+    }
+    return this.attributes.cards.shift(); // pop from top
   }
 
   draw_all() {
@@ -42,8 +45,8 @@ class Stack extends Backbone.Model {
   }
 
   place_on_bottom(cards) {
-    if(cards instanceof Array){
-      for(var card in cards) {
+    if (cards instanceof Array){
+      for(var card of cards) {
         this.attributes.cards.push(card);
       }
     } else {

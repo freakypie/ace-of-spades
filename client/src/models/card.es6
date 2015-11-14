@@ -6,16 +6,17 @@ class Card extends Backbone.Model {
         return {
             // loaded from json/server
             name: "",
-            lvl: 0,
+            lvl: Math.floor(Math.random() * 10),
             flavor_text: "",
 
             //edited by game
             owner: null,
             controller: null,
             face_up: true,
-            properties: {}
         }
     }
 }
+
+Card.collection = Backbone.Collection.extend({model: Card});
 
 module.exports = Card
