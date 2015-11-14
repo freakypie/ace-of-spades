@@ -132,7 +132,6 @@ class MajkinGame extends BaseGame {
       this.discard_pile().place_on_bottom(
         enemy_card_list.draw_all()
       );
-      console.log(enemy_card_list.size());
 
       _.delay(() => {
         cb(winner);

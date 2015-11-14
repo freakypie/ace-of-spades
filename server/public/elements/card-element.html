@@ -8,15 +8,45 @@
 <dom-module id="card-element">
   <style>
     :host {
-      display: inline-block;
-      height: 200px;
-      width: 135px;
-      bottom: 10px;
-      right: 20px;
-      background-size: contain;
+      width: 100%;
+      height: 100%;
+      /*transition: all 0.5s;*/
+      -webkit-perspective: 1000;
+      transform: translate3d(0,0,0) rotateY(180deg);
+    }
+    img {
+      width: 100%;
+    }
+    img.splash {
+      position: absolute;
+      width: calc(100% - 10px);
+      top: 5px;
+      left: 5px;
+    }
+    .face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .front.face {
+      background: green;
+      transform: translate3d(0, 0, 1px);
+      /*transform: rotateY(0deg);*/
+    }
+    .back.face {
+      background: red;
+      z-index: 1;
+      transform: translate3d(0, 0, 2px) rotateY(180deg);
     }
   </style>
   <template>
+    <div class="front face">
+      <!-- <img src="/assets/images/card-front.png"> -->
+      <img class="splash" src="/assets/images/foe-creeper.png">
+    </div>
+    <img class="back face" src="/assets/images/card-back.png">
   </template>
 
 <script>
@@ -66,7 +96,7 @@
       'neon-animation-finish': '_onNeonAnimationFinish'
     },
     drawCard: function() {
-      this.front = "/assets/images/card-front-background.png";
+      // this.front = "/assets/images/card-front-background.png";
       this.playAnimation('drawCard', 'draw');
       this.faceup = false;
     },
@@ -79,29 +109,38 @@
     },
     ready: function() {
       if(!this.faceup){
-        this.style.background = "url('"+this.back+"')";
+        // this.style.background = "url('"+this.back+"')";
       } else {
-        this.style.background = "url('"+this.front+"')";
+        // this.style.background = "url('"+this.front+"')";
       }
-      this.style.backgroundSize = "contain";
-      this.flip();
+      // this.style.backgroundSize = "contain";
+      // this.flip();
+
+       var y = 0;
+       setInterval(function() {
+         y += 1;
+         this.style.transform = "rotateY(" + y + "deg)";
+         if((y % 360) < 90 || ((y % 360) > 270 && (y % 360) < 360)){
+          this.querySelector('.back.face').style.zIndex = "-1";
+         } else {
+          this.querySelector('.back.face').style.zIndex = "1";
+         }
+      }.bind(this), 15);
     },
     _onNeonAnimationFinish: function(e, animation) {
       switch(animation){
         case 'draw':
-          this.style.background = "url('/assets/images/card-front-background.png')";
-          this.style.backgroundSize = "contain";
-          this.style.transform = "scale(2) translate(-200px, -60px)";
+          // this.style.background = "url('" + this.front + "')";
+          // this.style.backgroundSize = "contain";
+          // this.style.transform = "scale(2) translate(-200px, -60px)";
           var node = this;
           setTimeout(function(){ node.placeCard();}, 1500);
           break;
         case 'place':
-          this.style.transform = "scale(1) translate(-660px, 90px)";
+          // this.style.transform = "scale(1) translate(-660px, 90px)";
           break;
         case 'flip':
           // TODO: use the correct side (front or back)
-          this.style.background = "url('" + this.front + "')";
-          this.style.backgroundSize = "contain";
           break;
       }
     }

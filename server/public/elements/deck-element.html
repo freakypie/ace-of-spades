@@ -8,8 +8,7 @@
       :host {
         height: 200px;
         width: 135px;
-        background: white;
-        border: 1px solid black;
+        margin: 5px;
         display: inline-block;
         position: relative;
       }
@@ -21,7 +20,10 @@
     </style>
 
     <template is="dom-repeat" items="[[cards]]">
-      <card-element></card-element>
+      <card-element faceup="{{item.faceup}}"
+                    front="{{item.front}}"
+                    back="{{item.back}}">
+      </card-element>
     </template>
   </template>
 
