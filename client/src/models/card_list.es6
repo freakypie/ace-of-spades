@@ -71,12 +71,12 @@ class CardList extends Backbone.Model {
   }
 
   shuffle() {
-    cards_object = JSON.stringify(this.attributes.cards);
+    var cards_object = JSON.stringify(this.attributes.cards);
     for (var i = 0; i <= cards_object.length; i++){
-      random_source_index = Math.floor(Math.random() * cards_object.length);
-      card = cards_object[random_source_index];
+      var random_source_index = Math.floor(Math.random() * cards_object.length);
+      var card = cards_object[random_source_index];
       delete cards_object[random_source_index];
-      random_target_index = Math.floor(Math.random() * cards_object.length);
+      var random_target_index = Math.floor(Math.random() * cards_object.length);
       cards_object.insert(random_target_index, card)
     }
     cards_object

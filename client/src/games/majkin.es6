@@ -52,7 +52,12 @@ class MajkinGame extends BaseGame {
       card_list.get("cards").add(drawn_card);
     }
 
-    this.play();
+    $('#prompt-button').hide();
+    $('#prompts').click(() => {
+      $('#start-button').hide();
+      $('#prompt-button').show();
+      this.play();
+    });
   }
 
   play() {
@@ -87,7 +92,7 @@ class MajkinGame extends BaseGame {
   }
 
   turn(player, cb) {
-    var winner = null;
+    console.log("turn("+player+")");
     // if monster deck is empty
     if (this.central_deck().size() <= 0) {
       log("fliping discard pile");
@@ -100,43 +105,80 @@ class MajkinGame extends BaseGame {
     var enemy_card_list = this.enemy_creature(player);
     enemy_card_list.place_on_top(this.central_deck().draw());
 
-    _.delay(() => {
+    // give time to react
+    var $pass_button = $('#pass-button');
+    $pass_button.show();
+    $('#prompts').show();
 
-      // if player level + player monster level >= deck monster level
-      var enemy_creature = enemy_card_list.top();
-      var player_card_list = this.player_creature(player);
-      if (player_card_list) {
-        var player_creature = player_card_list.top();
-        var player_level = player_creature.attributes.lvl +
-          player.attributes.lvl;
-        var enemy_level = enemy_creature.attributes.lvl;
-        if (enemy_level <= player_level) {
-          // player gains a level
-          player.attributes.lvl++;
-          // trigger change
-          player.set({lvl: player.attributes.lvl});
-          log("player was victorious!", player.id, player.attributes.lvl);
-        } else {
-          log("player was defeated", player_level, enemy_level);
-        }
+    this.countdown(10);
 
-        if (player.attributes.lvl >= 10){
-          // end game
-          winner = player;
-        }
+    var timeout_id = _.delay(() => {
+      this.fight(player, enemy_card_list, cb);
+      $pass_button.hide();
+      $('#prompts').hide();
+    }, 10000);
+    console.log("var timeout_id = _.delay() = "+timeout_id+"");
+
+    $pass_button.click(() => {
+      console.log("clearTimeout(timeout_id="+timeout_id+")");
+      clearTimeout(timeout_id);
+      console.log("clearTimeout(this.countdown_delay_id="+this.countdown_delay_id+")");
+      clearTimeout(this.countdown_delay_id);
+      this.fight(player, enemy_card_list, cb);
+      $pass_button.hide();
+      $('#prompts').hide();
+    });
+  }
+
+  countdown(seconds) {
+    console.log("countdown("+seconds+")");
+    $('#pass-button').find('#countdown').text(seconds);
+    if (seconds>0){
+      this.countdown_delay_id = _.delay(() => {
+        this.countdown(seconds-1)
+      }, 1000);
+      console.log("this.countdown_delay_id = _.delay() = "+this.countdown_delay_id+"");
+    }
+  }
+
+  fight(player, enemy_card_list, cb){
+    console.log("fight()");
+    // if player level + player monster level >= deck monster level
+    var winner = null;
+    var enemy_creature = enemy_card_list.top();
+    var player_card_list = this.player_creature(player);
+    if (player_card_list) {
+      var player_creature = player_card_list.top();
+      var player_level = player_creature.attributes.lvl +
+        player.attributes.lvl;
+      var enemy_level = enemy_creature.attributes.lvl;
+      if (enemy_level <= player_level) {
+        // player gains a level
+        player.attributes.lvl++;
+        // trigger change
+        player.set({lvl: player.attributes.lvl});
+        log("player was victorious!", player.id, player.attributes.lvl);
       } else {
-        log("player is missing a monster", player.attributes.name);
+        log("player was defeated", player_level, enemy_level);
       }
 
-      // put enemy monster in discard pile
-      this.discard_pile().place_on_bottom(
-        enemy_card_list.draw_all()
-      );
+      if (player.attributes.lvl >= 10){
+        // end game
+        winner = player;
+      }
+    } else {
+      log("player is missing a monster", player.attributes.name);
+    }
 
-      _.delay(() => {
-        cb(winner);
-      }, 1000);
+    // put enemy monster in discard pile
+    this.discard_pile().place_on_bottom(
+      enemy_card_list.draw_all()
+    );
+
+    _.delay(() => {
+      cb(winner);
     }, 1000);
+
   }
 
   central_deck() {

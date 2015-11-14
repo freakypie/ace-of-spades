@@ -7,8 +7,17 @@
     <link rel="import" href="/assets/elements/card-element.html">
     <link rel="import" href="/assets/elements/player-element.html">
     <link rel="import" href="/assets/elements/deck-element.html">
+    <link rel="import" href="/assets/elements/control-buttons.html">
   </head>
   <body>
+    <div id="prompts">
+      <button class="btn btn-primary" type="button" id="start-button">
+        Start
+      </button>
+      <button class="btn btn-primary" type="button" id="pass-button">
+        Pass Turn (<span id="countdown">10</span>)
+      </button>
+    </div>
     <div id="game">
       <div id="players">
         <!-- <player-element name="randall" avatar="http://lorempixel.com/100/100/cats/1/" connection="connected"></player-element> -->

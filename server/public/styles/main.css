@@ -70,3 +70,12 @@ html, body {
   z-index: 7;
   bottom: 6px;
 }
+#prompts {
+  z-index: 200;
+  margin: auto;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  bottom: 25%;
+  right: 25%
+}
