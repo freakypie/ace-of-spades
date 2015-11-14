@@ -3,7 +3,7 @@ var store = require("store");
 var log = require("debug")("player");
 var _ = require("underscore");
 
-var Stack = require("./stack");
+var CardList = require("./card_list");
 
 
 class Player extends Backbone.Model {
@@ -47,7 +47,7 @@ class Player extends Backbone.Model {
         this.area = game.areas.add({
           player: this,
           player_id: this.id,
-          stacks: new Stack.collection()
+          card_lists: new CardList.collection()
         });
       }
     });
