@@ -11,7 +11,7 @@ var MajkinGame = require("./games/majkin");
 
 class Main extends bv.MixinView {
   get mixins() {
-    return [bv.Composite]
+    return [bv.Composite];
   }
 
   get el() {

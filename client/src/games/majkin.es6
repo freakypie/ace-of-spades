@@ -29,32 +29,43 @@ class MajkinGame extends BaseGame {
       deck: true
     });
 
-    // deal everyone a single card face up from central deck
+    this.play();
+
     for (var player of this.players.models) {
       log(`dealing to player ${player.attributes.name}`);
       var drawn_card = this.central_deck().draw();
-      var area = this.areas.findWhere({player_id: player.id});
-
-      // TODO: create this when the player connects
-      this.card_lists.add({
-        area: area,
-        name: "enemy_creature",
-        controller_id: player.id,
-        face_up: true,
-        deck: false
-      });
-      var card_list = this.card_lists.add({
-        area: area,
-        name: "player_creature",
-        controller: player,
-        controller_id: player.id,
-        face_up: true,
-        deck: false
-      });
+      var card_list = this.player_creature(player);
       card_list.get("cards").add(drawn_card);
     }
+  }
 
-    this.play();
+  setupPlayers() {
+    log("setting up players");
+    
+    // deal everyone a single card face up from central deck
+    for (var player of this.players.models) {
+      var area = this.areas.findWhere({player_id: player.id});
+
+      if (!player.get("enemy_card_list")) {
+        player.set({
+          enemy_card_list: this.card_lists.add({
+            area: area,
+            name: "enemy_creature",
+            controller_id: player.id,
+            face_up: true,
+            deck: false
+          }),
+          player_card_list: this.card_lists.add({
+            area: area,
+            name: "player_creature",
+            controller: player,
+            controller_id: player.id,
+            face_up: true,
+            deck: false
+          })
+        });
+      }
+    }
   }
 
   play() {

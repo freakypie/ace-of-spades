@@ -63,7 +63,7 @@ io.on('connection', function (socket) {
       players.remove(player);
 
       if (player.attributes.host) {
-        if (players.length == 0) {
+        if (players.length === 0) {
           log("resetting game");
           game.clear().set({status: "pending"});
         } else {

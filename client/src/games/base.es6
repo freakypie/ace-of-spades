@@ -45,6 +45,7 @@ class BaseGame extends Backbone.Model {
     this.listenTo(this, "change:players", function(e) {
       log("game players updated");
       this.players.reset(this.attributes.players);
+      this.setupPlayers();
     });
 
     // get or create the current player
@@ -66,6 +67,10 @@ class BaseGame extends Backbone.Model {
       console.log("game", data);
       game.set(data);
     });
+  }
+
+  setupPlayers() {
+    // overide
   }
 
   /**
