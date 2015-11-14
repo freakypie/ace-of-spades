@@ -1,3 +1,16 @@
+@font-face {
+    font-family: 'bebas';
+    src: url('../fonts/bebasneue_regular-webfont.eot');
+    src: url('../fonts/bebasneue_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bebasneue_regular-webfont.woff2') format('woff2'),
+         url('../fonts/bebasneue_regular-webfont.woff') format('woff'),
+         url('../fonts/bebasneue_regular-webfont.ttf') format('truetype'),
+         url('../fonts/bebasneue_regular-webfont.svg#bebas_neue_regularregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 html, body {
   height: 100%;
   padding: 0;
@@ -6,19 +19,37 @@ html, body {
   font-family: 'Open Sans', sans-serif;
 }
 
-h2{
+h2 {
 	margin: 0;
 	padding: 0;
 	color: #6E4E60;
 }
 
 #players {
-  width: 100%;
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 100;
   padding: 10px;
+  padding-top: 0;
+  text-align: center;
+}
+#players .list {
+  padding: 0 5px 5px 5px;
+  border-radius: 0 0 10px 10px;
+  border: 2px solid #679c98;
+  border-top: none;
+  background: white;
+}
+#players h2 {
+  background: white;
+  display: inline-block;
+  font-size: 0.7em;
+  padding: 2px 15px;
+  border: 1px solid #679c98;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  font-family: bebas;
 }
 #player-areas {
   width: 100%;

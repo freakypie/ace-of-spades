@@ -6,35 +6,26 @@
     :host {
       width: 50px;
       display: inline-block;
-      float: left;
       text-align: center;
       cursor: pointer;
+      box-sizing: border-box;
     }
-    :host img{
+    :host img {
       display: inline-block;
       border-radius: 50%;
       background: transparent;
-      padding: 5px;
+      padding-right: 10px;
       max-width:100%;
       margin: auto;
     }
-    :host h3{
+    :host .text {
+      display: none;
+      font-size: 0.7em;
       margin: 3px 0;
-    }
-    :host h3 div {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      margin: 0 3px;
-      display: inline-block;
-    }
-    :host h3 div[title="connected"] {
-      background: green;
     }
   </style>
   <template>
     <img src="{{ avatar }}" />
-    <h3><div title="{{ connection }}"></div>{{ name }}</h3>
   </template>
 </dom-module>
 

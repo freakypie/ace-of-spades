@@ -41,7 +41,7 @@ class MajkinGame extends BaseGame {
 
   setupPlayers() {
     log("setting up players");
-    
+
     // deal everyone a single card face up from central deck
     for (var player of this.players.models) {
       var area = this.areas.findWhere({player_id: player.id});
@@ -122,20 +122,19 @@ class MajkinGame extends BaseGame {
       var player_card_list = this.player_creature(player);
       if (player_card_list) {
         var player_creature = player_card_list.top();
-        var player_level = player_creature.attributes.lvl +
-          player.attributes.lvl;
+        var player_level = player_creature.attributes.lvl;
         var enemy_level = enemy_creature.attributes.lvl;
         if (enemy_level <= player_level) {
           // player gains a level
           player.attributes.lvl++;
           // trigger change
           player.set({lvl: player.attributes.lvl});
-          log("player was victorious!", player.id, player.attributes.lvl);
+          log("player was victorious!", player.id);
         } else {
           log("player was defeated", player_level, enemy_level);
         }
 
-        if (player.attributes.lvl >= 10){
+        if (player_creature.attributes.lvl >= 10){
           // end game
           winner = player;
         }
