@@ -1,7 +1,7 @@
 var Backbone = require("backbone");
 
 
-export default class Card extends Backbone.Model {
+class Card extends Backbone.Model {
     get defaults() {
         return {
             // loaded from json/server
@@ -18,8 +18,4 @@ export default class Card extends Backbone.Model {
     }
 }
 
-// model.attributes.properties
-// model.get("whatever")
-
-// set property
-// model.set({face_up: false}) // sends "change", "change:face_up", signals
+module.exports = Card

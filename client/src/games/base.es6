@@ -26,7 +26,6 @@ class BaseGame extends Backbone.Model {
     var StackCollection = Backbone.Collection.extend({model: Stack});
     var CardCollection = Backbone.Collection.extend({model: Card});
     this.players = new PlayerCollection();
-    console.log('stacks created');
     this.stacks = new StackCollection();
 
     // connection properties

@@ -1,11 +1,24 @@
 var BaseGame = require("./base");
 
+var Card = require("../models/card");
 var Stack = require("../models/stack");
 
 class MajkinGame extends BaseGame {
   start() {
     // generate arbitrary cards
     //TODO: better initialization
+    var cards_json = require("json!../resources/cards.json");
+
+    var cards = []
+
+    for(var index in cards_json) {
+      cards.push(
+        new Card(
+          cards_json[index]
+        )
+      )
+    }
+
     this.stacks.add(
       {
         name: "central_deck",
@@ -32,7 +45,7 @@ class MajkinGame extends BaseGame {
     );
 
     // deal everyone a single card face up from central deck
-    for (var player in players) {
+    for (var player in this.players) {
       var drawn_card = this.central_deck().draw();
 
       this.stacks.add(
@@ -46,15 +59,15 @@ class MajkinGame extends BaseGame {
       );
     }
 
-    // initialize enemy creature stack
-    this.enemy_creature(new Stack());
+    console.log("this.stacks");
+    console.log(this.stacks);
 
     this.play();
   }
 
   play() {
     // cycle turn through each player
-    for (var player in players) {
+    for (var player in this.players) {
       //if monster deck is empty
       if (this.central_deck().size() <= 0) {
         this.central_deck().place_on_bottom(
@@ -66,9 +79,21 @@ class MajkinGame extends BaseGame {
       this.enemy_creature().place_on_top(this.central_deck().draw());
 
       // if player level + player monster level >= deck monster level
-      if(this.enemy_creature()[0].properties['lvl'] < this.player_creature(player)[0].properties['lvl'] + player.properties['lvl']) {
+
+      console.log('var enemy_creature = this.enemy_creature().top();');
+      var enemy_creature = this.enemy_creature().top();
+      console.log(enemy_creature);
+
+      debugger;
+
+      var player_creature = this.player_creature(player).top();
+
+      console.log('player_creature')
+      console.log(player_creature)
+
+      if(enemy_creature.attributes.properties['lvl'] < player_creature.attributes.properties['lvl'] + player.attributes.properties['lvl']) {
         // player gains a level
-        player.properties['lvl'] ++;
+        player.attributes.properties['lvl'] ++;
       }
 
       // put enemy monster in discard pile
@@ -76,7 +101,7 @@ class MajkinGame extends BaseGame {
         this.enemy_creature().draw_all()
       );
 
-      if (player.properties['lvl'] >= 10){
+      if (player.attributes.properties['lvl'] >= 10){
         // end game
         return player;
       }
@@ -84,11 +109,11 @@ class MajkinGame extends BaseGame {
   }
 
   central_deck() {
-    return this.stacks[0];
+    return this.stacks.at(0);
   }
 
   discard_pile() {
-    return this.stacks[1];
+    return this.stacks.at(1);
   }
 
   //discard_pile(stack) {
@@ -96,7 +121,7 @@ class MajkinGame extends BaseGame {
   //}
 
   enemy_creature() {
-    return this.stacks[2];
+    return this.stacks.at(2);
   }
 
   //enemy_creature(stack) {
@@ -105,7 +130,7 @@ class MajkinGame extends BaseGame {
 
   // stack get/set methods (so that we don't screw up a key name)
   player_creature(player) {
-    return this.stacks[3+player.id];
+    return this.stacks.at(3+player.id);
   }
 
   //player_creature(player, stack) {
