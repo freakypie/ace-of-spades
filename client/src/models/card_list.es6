@@ -8,9 +8,23 @@ class CardList extends Backbone.Model {
       controller: null,
       cards: [],
       properties: {},
+      area: null,
       face_up: true,
       deck: false,
       hand: false,
+    }
+  }
+
+  initialize(options) {
+    // TODO: add to the area they belong to
+    this.listenTo(this, "change:area", function() {
+      if (this.attributes.area) {
+        this.attributes.area.get("card_lists").add(this);
+      }
+    });
+
+    if (this.attributes.area) {
+      this.attributes.area.get("card_lists").add(this);
     }
   }
 

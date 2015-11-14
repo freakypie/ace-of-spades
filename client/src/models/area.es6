@@ -1,5 +1,5 @@
 var Backbone = require("backbone");
-var Stack = require("./stack");
+var CardList = require("./card_list");
 
 
 class Area extends Backbone.Model {
@@ -8,7 +8,7 @@ class Area extends Backbone.Model {
       name: "unnamed",
       default: false,
       player: null,
-      stacks: new Stack.collection()
+      card_lists: new CardList.collection()
     }
   }
 }
