@@ -80,9 +80,9 @@ class HandListView extends bv.ListView {
 
 class PlayerAreaItemView extends bv.ListView {
 
-  get mixins() {
-    return [bv.Composite];
-  }
+  // get mixins() {
+  //   return [bv.Composite];
+  // }
 
   get itemViewClass() {
     return CardListItem;

@@ -29,21 +29,12 @@ class MajkinGame extends BaseGame {
       deck: true
     });
 
-    this.play();
-
-    for (var player of this.players.models) {
-      log(`dealing to player ${player.attributes.name}`);
-      var drawn_card = this.central_deck().draw();
-      var card_list = this.player_creature(player);
-      card_list.get("cards").add(drawn_card);
-
-      player.attributes.hand = [];
-      for(var i=0;i<6;i++){
-        var card = this.central_deck().draw();
-        player.attributes.hand.push(card);
-      }
-      console.log(player.attributes.hand);
-    }
+    $('#prompt-button').hide();
+    $('#start-button').click(() => {
+      $('#start-button').hide();
+      $('#prompt-button').show();
+      this.play();
+    });
   }
 
   setupPlayers() {
@@ -54,6 +45,7 @@ class MajkinGame extends BaseGame {
       var area = this.areas.findWhere({player_id: player.id});
 
       if (!player.get("enemy_card_list")) {
+        log("setting up player");
         player.set({
           enemy_card_list: this.card_lists.add({
             area: area,
@@ -71,11 +63,35 @@ class MajkinGame extends BaseGame {
             deck: false
           })
         });
+
+        // scroll to players area
+        if (player.me) {
+          log("scrolling to player");
+          area = $(`#player-areas [data-player=${player.id}]`);
+          $("#player-areas .list").css({
+            left: `-${area.position().left}px`
+          });
+        }
       }
     }
   }
 
   play() {
+    log("playing");
+    for (var player of this.players.models) {
+      log(`dealing to player ${player.attributes.name}`);
+      var drawn_card = this.central_deck().draw();
+      var card_list = this.player_creature(player);
+      card_list.place_on_top(drawn_card);
+
+      // player.attributes.hand = [];
+      // for(var i=0;i<6;i++) {
+      //   var card = this.central_deck().draw();
+      //   player.attributes.hand.push(card);
+      // }
+      // console.log(player.attributes.hand);
+    }
+
     var q = queue({concurrency: 1});
     q.push(this.queueTurns.bind(this, q));
     q.start();
@@ -107,7 +123,7 @@ class MajkinGame extends BaseGame {
   }
 
   turn(player, cb) {
-    var winner = null;
+    console.log("turn("+player+")");
     // if monster deck is empty
     if (this.central_deck().size() <= 0) {
       log("fliping discard pile");
@@ -116,45 +132,90 @@ class MajkinGame extends BaseGame {
       );
     }
 
-    // turn over top card from central deck (deck monster)
+    // deal the enemy
     var enemy_card_list = this.enemy_creature(player);
     var enemy_creature = this.central_deck().draw();
     enemy_creature.set({faceup: false});
     enemy_card_list.place_on_top(enemy_creature);
 
     _.delay(() => {
+      // reveal the enemy
+      log("enemy revealed", enemy_creature);
       enemy_creature.set({faceup: true});
 
-      // if player level + player monster level >= deck monster level
-      var player_card_list = this.player_creature(player);
-      if (player_card_list) {
-        var player_creature = player_card_list.top();
-        var player_level = player_creature.attributes.lvl;
-        var enemy_level = enemy_creature.attributes.lvl;
-        if (enemy_level <= player_level) {
-          // player gains a level
-          player.attributes.lvl++;
-          // trigger change
-          player.set({lvl: player.attributes.lvl});
-          log("player was victorious!", player.id);
-        } else {
-          log("player was defeated", player_level, enemy_level);
-        }
+      // give time to react
+      var $pass_button = $('#pass-button');
+      $pass_button.show();
+      if (player.me) {
+        $('#prompts').show();
+      } else {
+        log("some other players turn");
+      }
 
+      this.countdown(10, () => {
+        this.fight(player, cb);
+        $pass_button.hide();
+        $('#prompts').hide();
+      }, 10000);
+
+      $pass_button.off().click(() => {
+        console.log("clearTimeout("+this.countdown_delay_id+")");
+        clearTimeout(this.countdown_delay_id);
+        this.fight(player, cb);
+        $pass_button.hide();
+        $('#prompts').hide();
+      });
+    }, 1000);
+  }
+
+  countdown(seconds, callback) {
+    // console.log("countdown("+seconds+")");
+    $('#pass-button').find('#countdown').text(seconds);
+    if (seconds > 0) {
+      this.countdown_delay_id = _.delay(() => {
+        this.countdown(seconds - 1, callback)
+      }, 1000);
+      // console.log("this.countdown_delay_id = _.delay() = "+this.countdown_delay_id+"");
+    } else {
+      callback();
+    }
+  }
+
+  fight(player, cb){
+    console.log("fight()");
+    // if player level + player monster level >= deck monster level
+    var winner = null;
+    var enemy_card_list = this.enemy_creature(player);
+    var enemy_creature = enemy_card_list.top();
+
+    var player_card_list = this.player_creature(player);
+    if (player_card_list) {
+      var player_creature = player_card_list.top();
+      var player_level = player_creature.attributes.lvl;
+      var enemy_level = enemy_creature.attributes.lvl;
+      if (enemy_level <= player_level) {
+        // player gains a level
+        player.attributes.lvl++;
+        // trigger change
+        player_creature.set({lvl: player_creature.attributes.lvl});
+        log("player was victorious!", player.id);
         if (player_creature.attributes.lvl >= 10){
           // end game
           winner = player;
         }
       } else {
-        log("player is missing a monster", player.attributes.name);
+        log("player was defeated", player_level, enemy_level);
       }
-      _.delay(() => {
-        // put enemy monster in discard pile
-        this.discard_pile().place_on_bottom(
-          enemy_card_list.draw_all()
-        );
-        cb(winner);
-      }, 1000);
+    } else {
+      log("player is missing a monster", player.attributes.name);
+    }
+
+    _.delay(() => {
+      // put enemy monster in discard pile
+      this.discard_pile().place_on_bottom(
+        enemy_card_list.draw_all()
+      );
+      cb(winner);
     }, 1000);
   }
 
