@@ -107,7 +107,7 @@ class MajkinGame extends BaseGame {
       card_list.place_on_top(drawn_card);
 
       drawn_card = this.weapon_deck().draw();
-      card_list = this.player_weapon(player);
+      card_list = this.player_hand(player);
       card_list.place_on_top(drawn_card);
 
       // player.attributes.hand = [];
