@@ -9,7 +9,8 @@ class Stack extends Backbone.Model {
       cards: [],
       properties: {},
       face_up: true,
-      deck: false
+      deck: false,
+      hand: false,
     }
   }
 
