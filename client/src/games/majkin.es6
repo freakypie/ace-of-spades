@@ -1,99 +1,121 @@
-var BaseGame = require("./base");
+var log = require("debug")("majkin");
+var queue = require("queue");
+var _ = require("underscore");
 
+var BaseGame = require("./base");
 var Card = require("../models/card");
 var Stack = require("../models/stack");
+
 
 class MajkinGame extends BaseGame {
   start() {
     // generate arbitrary cards
-    //TODO: better initialization
-    var cards_json = require("json!../resources/cards.json");
+    var cards = new Card.collection(require("json!../resources/cards.json"))
+    var central_area = this.areas.add({name: "central_deck", default: true});
 
-    var cards = []
-
-    for(var index in cards_json) {
-      cards.push(
-        new Card(
-          cards_json[index]
-        )
-      )
-    }
-
-    this.stacks.add(
-      {
-        name: "central_deck",
-        cards: [],
-        face_up: false,
-        deck: true
-      }
-    );
-    this.stacks.add(
-      {
-        name: "discard_pile",
-        cards: [],
-        face_up: true,
-        deck: true
-      }
-    );
-    this.stacks.add(
-      {
-        name: "enemy_creature",
-        cards: [],
-        face_up: true,
-        deck: false
-      }
-    );
+    this.stacks.add({
+      area: central_area,
+      name: "central_deck",
+      cards: cards.models,
+      face_up: false,
+      deck: true
+    });
+    this.stacks.add({
+      area: central_area,
+      name: "discard_pile",
+      cards: [],
+      face_up: true,
+      deck: true
+    });
+    this.stacks.add({
+      area: central_area,
+      name: "enemy_creature",
+      cards: [],
+      face_up: true,
+      deck: false
+    });
 
     // deal everyone a single card face up from central deck
-    for (var player in this.players) {
+    for (var player of this.players.models) {
+      log(`dealing to player ${player.attributes.name}`);
       var drawn_card = this.central_deck().draw();
 
-      this.stacks.add(
-        {
-          name: "player_creature"+player.id,
-          controller: player,
-          cards: [drawn_card],
-          face_up: true,
-          deck: false
-        }
-      );
+      // TODO: create this when the player connects
+      this.stacks.add({
+        name: "player_creature" + player.id,
+        area: this.areas.findWhere({player_id: player.id}),
+        controller: player,
+        controller_id: player.id,
+        cards: [drawn_card],
+        face_up: true,
+        deck: false
+      });
     }
-
-    console.log("this.stacks");
-    console.log(this.stacks);
 
     this.play();
   }
 
   play() {
-    // cycle turn through each player
-    for (var player in this.players) {
-      //if monster deck is empty
-      if (this.central_deck().size() <= 0) {
-        this.central_deck().place_on_bottom(
-          this.discard_pile().draw_all()
-        );
-      }
+    var q = queue({concurrency: 1});
+    q.push(this.queueTurns.bind(this, q));
+    q.start();
+  }
 
-      // turn over top card from central deck (deck monster)
-      this.enemy_creature().place_on_top(this.central_deck().draw());
+  queueTurns(q, cb) {
+    this.players.models.forEach((player) => {
+      q.push((cb) => {
+        this.turn(player, (winner) => {
+          if (winner) {
+            console.log("WE HAVE A WINNER!", winner);
+            for(var x=0; x<q.length; x++) {
+              q.pop();
+            }
+          }
+          cb();
+        });
+      });
+    });
 
-      // if player level + player monster level >= deck monster level
+    q.push((cb) => {
+      console.log("turn ended");
+      _.delay(() => {
+        this.queueTurns(q, cb);
+      }, 1000);
+    });
 
-      console.log('var enemy_creature = this.enemy_creature().top();');
-      var enemy_creature = this.enemy_creature().top();
-      console.log(enemy_creature);
+    cb();
+  }
 
-      debugger;
+  turn(player, cb) {
+    log("taking turn", player.id)
+    var winner = null;
+    // if monster deck is empty
+    if (this.central_deck().size() <= 0) {
+      this.central_deck().place_on_bottom(
+        this.discard_pile().draw_all()
+      );
+    }
 
-      var player_creature = this.player_creature(player).top();
+    // turn over top card from central deck (deck monster)
+    this.enemy_creature().place_on_top(this.central_deck().draw());
 
-      console.log('player_creature')
-      console.log(player_creature)
-
-      if(enemy_creature.attributes.properties['lvl'] < player_creature.attributes.properties['lvl'] + player.attributes.properties['lvl']) {
+    // if player level + player monster level >= deck monster level
+    var enemy_stack = this.enemy_creature();
+    var enemy_creature = enemy_stack.top();
+    var player_stack = this.player_creature(player);
+    if (player_stack) {
+      var player_creature = player_stack.top();
+      var player_level = player_creature.attributes.lvl +
+        player.attributes.lvl;
+      var enemy_level = enemy_creature.attributes.lvl;
+      if (enemy_level <= player_level) {
         // player gains a level
-        player.attributes.properties['lvl'] ++;
+        player.attributes.lvl++;
+        // trigger change
+        player.set({lvl: player.attributes.lvl});
+        log("player was victorious!", player.id, player.attributes.lvl);
+      } else {
+        log("player was defeated", player_level, enemy_level);
       }
 
       // put enemy monster in discard pile
@@ -101,15 +123,18 @@ class MajkinGame extends BaseGame {
         this.enemy_creature().draw_all()
       );
 
-      if (player.attributes.properties['lvl'] >= 10){
+      if (player.attributes.lvl >= 10){
         // end game
-        return player;
+        winner = player;
       }
+    } else {
+      log("player is missing a monster", player.attributes.name);
     }
+    cb(winner);
   }
 
   central_deck() {
-    return this.stacks.at(0);
+    return this.stacks.findWhere({name: "central_deck"});
   }
 
   discard_pile() {
@@ -121,7 +146,7 @@ class MajkinGame extends BaseGame {
   //}
 
   enemy_creature() {
-    return this.stacks.at(2);
+    return this.stacks.findWhere({name: "enemy_creature"});
   }
 
   //enemy_creature(stack) {
@@ -130,7 +155,7 @@ class MajkinGame extends BaseGame {
 
   // stack get/set methods (so that we don't screw up a key name)
   player_creature(player) {
-    return this.stacks.at(3+player.id);
+    return this.stacks.findWhere({controller_id: player.id});
   }
 
   //player_creature(player, stack) {

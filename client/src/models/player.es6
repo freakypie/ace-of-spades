@@ -10,6 +10,7 @@ class Player extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
+      lvl: 1,
       properties: {},
     };
   }

@@ -2,26 +2,68 @@ var bv = require("backbone_views");
 var _ = require("underscore");
 
 
-class PlayerAreaItemView extends bv.DetailView {
+class StackItem extends bv.DetailView {
+  get tagName() {
+    return "deck-element";
+  }
+  initialize() {
+    this.listenTo(this.model, "change", this.render.bind(null));
+    this.listenTo(this.model.get("stacks"), "update", this.render.bind(null));
+  }
+  render() {
+    var deck = this.el;
+    for(var x=0; x<this.model.get("cards").length; x++) {
+      deck.add($("<card-element></card-element>").get(0));
+    }
+    return this;
+  }
+}
+
+
+class PlayerAreaItemView extends bv.ListView {
+
+  get itemViewClass() {
+    return StackItem;
+  }
+
+  get listSelector() {
+    return "decks";
+  }
+
   get template() {
     return _.template(`
-      <div>AREA: <%- player.id %></div>
-      <div>
-        <deck-element></deck-element>
+      <div>AREA: <%- player_id %></div>
+      <div class="decks">
       </div>
     `);
   }
 
-  render(context) {
-    super.render(context);
-    this.$el.attr("data-player", this.model.get("player").id);
+  initialize(options) {
+    this.collection = options.model.get("stacks");
+    super.initialize(options);
+  }
 
-    var numcards = Math.floor(Math.random() * 3) + 1;
-    var deck = this.$("deck-element").get(0);
-    console.log(deck);
-    for(var x=0; x<numcards; x++) {
-      deck.add($("<card-element></card-element>").get(0));
+  render(context) {
+    if (! context) {
+      context = {};
     }
+    context.player = this.model.get("player");
+    if (context.player) {
+      context.player_id = context.player.id;
+    } else {
+      context.player_id = "central";
+    }
+    super.render(context);
+    var player = this.model.get("player");
+    if (player) {
+      this.$el.attr("data-player", context.player_id);
+    }
+
+    // var numcards = Math.floor(Math.random() * 3) + 1;
+    // var deck = this.$("deck-element").get(0);
+    // for(var x=0; x<numcards; x++) {
+    //   deck.add($("<card-element></card-element>").get(0));
+    // }
     return this;
   }
 }
