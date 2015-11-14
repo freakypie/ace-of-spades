@@ -13,6 +13,8 @@ class MajkinGame extends BaseGame {
     var cards = new Card.collection(require("json!../resources/cards.json"))
     var central_area = this.areas.add({name: "central_deck", default: true});
 
+    cards.reset(cards.shuffle(), {slient: true});
+
     this.card_lists.add({
       area: central_area,
       name: "central_deck",
