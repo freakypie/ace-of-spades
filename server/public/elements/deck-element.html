@@ -41,6 +41,9 @@
       add: function(item) {
         this.unshift('cards', item);
       },
+      clear: function() {
+        this.splice('cards', 0, this.cards.length);
+      },
       showCards: function(value, numcards) {
         switch(value) {
           case 1:
