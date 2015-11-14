@@ -8,15 +8,16 @@ var CardList = require("../models/card_list");
 
 
 class MajkinGame extends BaseGame {
-  start() {
+  setup() {
     // generate arbitrary cards
     var cards = new Card.collection(require("json!../resources/cards.json"));
     var central_area = this.areas.add({name: "central_deck", default: true});
-
     cards.reset(cards.shuffle(), {slient: true});
+    this.cards = cards;
 
     var weapons = new Card.collection(require("json!../resources/weapons.json"));
     weapons.reset(weapons.shuffle(), {slient: true});
+    this.weapons = weapons;
 
     this.card_lists.add({
       area: central_area,
@@ -38,12 +39,51 @@ class MajkinGame extends BaseGame {
       face_up: true,
       deck: true
     });
+  }
+  start() {
 
+    if (! this.player.attributes.host) {
+      $('#start-button').hide();
+    }
     $('#prompt-button').hide();
     $('#start-button').click(() => {
       $('#start-button').hide();
       $('#prompt-button').show();
+      this.socket.emit("game:event", {event: "play"});
       this.play();
+    });
+
+    this.listenTo(this.players, "all", function(e, model) {
+      // console.log("players", arguments);
+      if (model.me) {
+        log("host changed", this.player.get("host"));
+        if (! this.player.get("host")) {
+          $('#start-button').show();
+        } else {
+          $('#start-button').hide();
+        }
+      }
+    })
+    this.listenTo(this, "play", function() {
+      if (! this.player.get("host")) {
+        this.play();
+      }
+    });
+    this.listenTo(this, "end-turn", function(data) {
+      if (data.player != game.player.id) {
+        log("other turn ended", data.player, game.player.id);
+        $('#pass-button').show().click();
+      }
+    });
+    this.listenTo(this, "use-item", function(data) {
+      if (data.player != game.player.id) {
+        log("other player used item!", data.player, game.player.id);
+        var player = game.players.get(data.player);
+        if (! player.get("used_item")) {
+          player.set({used_item: true});
+          $('#item-button').show().click();
+        }
+      }
     });
   }
 
@@ -54,8 +94,11 @@ class MajkinGame extends BaseGame {
     for (var player of this.players.models) {
       if (!player.get("area")) {
         // sync card data
-        this.socket.emit("sync", ["cards", "weapons"]);
-        
+        if (player.me && !player.get("host")) {
+          log("syncing with host", player.get("host"));
+          this.socket.emit("sync", ["cards", "weapons"]);
+        }
+
         log("setting up player", player.id);
         var area = this.areas.add({
           player: player,
@@ -81,8 +124,8 @@ class MajkinGame extends BaseGame {
           }),
         });
 
-        this.card_lists.add(player.attributes.player_hand, {at: 1});
-        player.attributes.player_hand.set({
+        this.card_lists.add(player.player_hand, {at: 1});
+        player.player_hand.set({
           area: area,
           name: "player_hand",
           controller: player,
@@ -105,6 +148,7 @@ class MajkinGame extends BaseGame {
   }
 
   play() {
+
     log("playing");
     for (var player of this.players.models) {
       log(`dealing to player ${player.attributes.name}`);
@@ -124,12 +168,31 @@ class MajkinGame extends BaseGame {
   queueTurns(q, cb) {
     this.players.models.forEach((player) => {
       q.push((cb) => {
+
+        var area = this.areas.findWhere({player_id: player.id});
+        log("scrolling to current player");
+        area = $(`#player-areas [data-player=${player.id}]`);
+        $("#player-areas .list").css({
+          left: `-${area.position().left}px`
+        });
+
         this.turn(player, (winner) => {
           if (winner) {
-            console.log("WE HAVE A WINNER!", winner);
+            log("WE HAVE A WINNER!", winner);
+            if (game.player.id == winner.id) {
+              alert("YOU WIN!");
+            } else {
+              alert("Sorry, you lost");
+            }
             for(var x=0; x<q.length; x++) {
               q.pop();
             }
+          }
+          if (player.me && (! player.get("used_item"))) {
+            this.socket.emit("game:event", {
+              event:"end-turn",
+              player: player.id
+            });
           }
           cb();
         });
@@ -188,8 +251,10 @@ class MajkinGame extends BaseGame {
         $item_button.hide();
       }, 10000);
 
+      player.set({used_item: false});
+
       $pass_button.off().click(() => {
-        console.log("clearTimeout("+this.countdown_delay_id+")");
+        log("passing");
         clearTimeout(this.countdown_delay_id);
         this.fight(player, 0, cb);
         $pass_button.hide();
@@ -197,12 +262,19 @@ class MajkinGame extends BaseGame {
       });
 
       $item_button.off().click(() => {
-        console.log("clearTimeout("+this.countdown_delay_id+")");
+        log("player using item", player.id, game.player.id);
         clearTimeout(this.countdown_delay_id);
         var item = this.player_hand(player).draw();
+        log("using item", item);
         this.fight(player, item.attributes.lvl, cb);
         $pass_button.hide();
         $item_button.hide();
+
+        player.set({used_item: true});
+        this.socket.emit("game:event", {
+          event: "use-item",
+          player: player.id
+        });
       });
     }, 1000);
   }
@@ -227,6 +299,7 @@ class MajkinGame extends BaseGame {
     var player_card_list = this.player_creature(player);
     if (player_card_list) {
       var player_creature = player_card_list.top();
+
       var player_level = player_creature.attributes.lvl + item_bonus;
       var enemy_level = enemy_creature.attributes.lvl;
       if (enemy_level <= player_level) {
@@ -234,11 +307,13 @@ class MajkinGame extends BaseGame {
         var new_level = player_creature.attributes.lvl+1;
         player_creature.set({lvl: new_level});
         log("player was victorious!", player.id);
-        if (player_creature.attributes.lvl >= 10){
+        $("#monster-blood").show();
+        if (player_creature.attributes.lvl >= 10) {
           // end game
           winner = player;
         }
       } else {
+        $("#player-blood").show();
         log("player was defeated", player_creature.attributes.lvl, enemy_level);
       }
     } else {
@@ -247,6 +322,8 @@ class MajkinGame extends BaseGame {
 
     _.delay(() => {
       // put enemy monster in discard pile
+      $("#player-blood").hide();
+      $("#monster-blood").hide();
       this.discard_pile().place_on_bottom(
         enemy_card_list.draw_all()
       );

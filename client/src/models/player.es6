@@ -11,13 +11,14 @@ class Player extends Backbone.Model {
     return {
       name: "unnamed",
       lvl: 1,
+      host: false,
       properties: {},
     };
   }
 
   initialize(options) {
     super.initialize(options);
-    this.attributes.player_hand = new CardList();
+    this.player_hand = new CardList();
 
     log("local", localStorage.player);
     log("store", store.get("player", {}));
@@ -32,6 +33,9 @@ class Player extends Backbone.Model {
     }
 
     // if the player is updated store locally
+    this.listenTo(this, "change:host", function() {
+      console.log("user changed", this.attributes.host);
+    });
     this.listenTo(this, "change:name", function(e) {
       if (this.me) {
         log("saving player", e);

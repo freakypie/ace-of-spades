@@ -16,7 +16,6 @@ class HandView extends bv.ListView {
   }
   initialize(options) {
     this.collection = game.player.get("player_hand").get("cards");
-    console.log(this.collection);
     super.initialize(options);
   }
 }

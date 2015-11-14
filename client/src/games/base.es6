@@ -44,12 +44,13 @@ class BaseGame extends Backbone.Model {
     });
     this.listenTo(this, "change:players", function(e) {
       log("game players updated");
-      this.players.reset(this.attributes.players);
+      this.players.set(this.attributes.players);
       this.setupPlayers();
     });
 
     // get or create the current player
     this.player = new Player();
+    this.players.add(this.player);
 
     // TODO: detect if the game is on
 
@@ -66,6 +67,26 @@ class BaseGame extends Backbone.Model {
     socket.on("game", function(data) {
       console.log("game", data);
       game.set(data);
+    });
+    socket.on("game:event", function(data) {
+      log("game:event", data);
+      game.trigger(data.event, data);
+    });
+    socket.on("sync", function(data) {
+      if (game.player.get("host")) {
+        log("sync request", data);
+        socket.emit("sync-response", {
+          "cards": game.cards.toJSON(),
+          "weapons": game.weapons.toJSON()
+        });
+      }
+    });
+    socket.on("sync-response", function(data) {
+      log("sync response", data);
+      if (! game.player.get("host")) {
+        game.cards.set(data.cards);
+        game.weapons.set(data.weapons);
+      }
     });
   }
 

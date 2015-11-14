@@ -26,20 +26,20 @@
 
   {
     "name": "horta",
-    "lvl": 7,
+    "lvl": 2,
     "front": "/assets/images/foe-horta.png"
   },
 
   {
     "name": "salt vampire",
-    "lvl": 9,
+    "lvl": 5,
     "flavor_text": "This seems like an easy addiction to address, but some people have to do things the hard way...",
     "front": "/assets/images/foe-salt-vampire.png"
   },
 
   {
     "name": "spores",
-    "lvl": 8,
+    "lvl": 1,
     "front": "/assets/images/foe-spores.png"
   }
 ]

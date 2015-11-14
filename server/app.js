@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
       data.host = true;
       socket.player = players.add(data);
       socket.join("host");
-      
+
       // start game
       game.set({
         host: socket.player.toJSON(),
@@ -59,7 +59,15 @@ io.on('connection', function (socket) {
   });
 
   socket.on("sync", function(data) {
+    io.emit("sync", data);
+  });
 
+  socket.on("sync-response", function(data) {
+    io.emit("sync-response", data);
+  });
+
+  socket.on("game:event", function(data) {
+    io.emit("game:event", data);
   });
 
   socket.on('disconnect', function() {
@@ -76,6 +84,7 @@ io.on('connection', function (socket) {
           // reassign host
           log("reassigning host");
           players.models[0].set({host: true});
+          // TODO: change host group
         }
       } else {
         log("player disconnected", players.length);

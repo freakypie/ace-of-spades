@@ -22,7 +22,7 @@ class Main extends bv.MixinView {
     return {
       "#players": require("./views/players"),
       "#player-areas": require("./views/player_areas"),
-      "#hand": require("./views/hand"),
+      // "#hand": require("./views/hand"),
     };
   }
 
@@ -33,7 +33,8 @@ class Main extends bv.MixinView {
     this.game = new MajkinGame(this);
     window.game = this.game;
     this.renderViews();
-
+    this.game.setup();
+    
     _.delay(() => {
       this.game.start();
     }, 1000);
@@ -42,10 +43,6 @@ class Main extends bv.MixinView {
   setupWebsockets() {
     var socket = io.connect({transports: ['websocket']});
     this.socket = socket;
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
-    });
   }
 }
 

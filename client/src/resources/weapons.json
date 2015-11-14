@@ -1,42 +1,42 @@
 [
   {
     "name": "poison",
-    "lvl": 7,
+    "lvl": 1,
     "front": "/assets/images/potion-poison.png"
   },
   {
     "name": "life potion",
-    "lvl": 7,
+    "lvl": 1,
     "front": "/assets/images/potion-strength.png"
   },
   {
     "name": "bow",
-    "lvl": 5,
+    "lvl": 2,
     "front": "/assets/images/weapon-bow.png"
   },
   {
     "name": "flail",
-    "lvl": 7,
+    "lvl": 1,
     "front": "/assets/images/weapon-flail.png"
   },
   {
     "name": "shield",
-    "lvl": 4,
+    "lvl": 2,
     "front": "/assets/images/weapon-metal-shield.png"
   },
   {
     "name": "phaser",
-    "lvl": 9,
+    "lvl": 5,
     "front": "/assets/images/weapon-phaser.png"
   },
   {
     "name": "sword",
-    "lvl": 8,
+    "lvl": 1,
     "front": "/assets/images/weapon-sword.png"
   },
   {
     "name": "wood shield",
-    "lvl": 3,
+    "lvl": 1,
     "front": "/assets/images/weapon-wooden-shield.png"
   }
 ]
