@@ -9,7 +9,6 @@
   <style>
     :host {
       display: inline-block;
-      background: orange;
       height: 200px;
       width: 135px;
       bottom: 10px;
@@ -32,10 +31,13 @@
         value: false,
         notify: true
       },
-      front: String,
-      back: {
+      front: {
         type: String,
         value: "/assets/images/card-front-background.png"
+      },
+      back: {
+        type: String,
+        value: "/assets/images/card-back.png"
       },
       animationConfig: {
         value: function() {
@@ -76,9 +78,13 @@
       this.faceup = !this.faceup;
     },
     ready: function() {
-      this.style.background = "url('/assets/images/card-back.png')";
+      console.log(this.faceup);
+      if(!this.faceup){
+        this.style.background = "url('"+this.back+"')";
+      } else {
+        this.style.background = "url('"+this.front+"')";
+      }
       this.style.backgroundSize = "contain";
-      // this.drawCard();
     },
     _onNeonAnimationFinish: function(e, animation) {
       switch(animation){
