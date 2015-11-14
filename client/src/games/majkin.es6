@@ -92,7 +92,7 @@ class MajkinGame extends BaseGame {
     if (this.central_deck().size() <= 0) {
       log("fliping discard pile");
       this.central_deck().place_on_bottom(
-        this.discard_pile().draw_all()
+        this.discard_pile().shuffle().draw_all()
       );
     }
 
