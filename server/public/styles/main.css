@@ -8,7 +8,18 @@
          url('../fonts/bebasneue_regular-webfont.svg#bebas_neue_regularregular') format('svg');
     font-weight: normal;
     font-style: normal;
+}
 
+@font-face {
+    font-family: 'bebas-bold';
+    src: url('../fonts/bebasneue_bold-webfont.eot');
+    src: url('../fonts/bebasneue_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bebasneue_bold-webfont.woff2') format('woff2'),
+         url('../fonts/bebasneue_bold-webfont.woff') format('woff'),
+         url('../fonts/bebasneue_bold-webfont.ttf') format('truetype'),
+         url('../fonts/bebasneue_bold-webfont.svg#bebas_neue_bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
 
 html, body {
@@ -23,12 +34,6 @@ h2 {
 	margin: 0;
 	padding: 0;
 	color: #6E4E60;
-}
-
-.power.style-scope.card-element{
-	font-family: bebas;
-	color: #616665;
-	font-size: 24px;
 }
 
 #players {
