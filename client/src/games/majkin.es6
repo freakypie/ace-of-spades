@@ -1,7 +1,7 @@
 var BaseGame = require("./base");
 
 var Card = require("../models/card");
-var Stack = require("../models/stack");
+var CardList = require("../models/cardlist");
 
 class MajkinGame extends BaseGame {
   start() {
@@ -19,7 +19,7 @@ class MajkinGame extends BaseGame {
       )
     }
 
-    this.stacks.add(
+    this.cardlists.add(
       {
         name: "central_deck",
         cards: [],
@@ -27,7 +27,7 @@ class MajkinGame extends BaseGame {
         deck: true
       }
     );
-    this.stacks.add(
+    this.cardlists.add(
       {
         name: "discard_pile",
         cards: [],
@@ -35,7 +35,7 @@ class MajkinGame extends BaseGame {
         deck: true
       }
     );
-    this.stacks.add(
+    this.cardlists.add(
       {
         name: "enemy_creature",
         cards: [],
@@ -48,7 +48,7 @@ class MajkinGame extends BaseGame {
     for (var player in this.players) {
       var drawn_card = this.central_deck().draw();
 
-      this.stacks.add(
+      this.cardlists.add(
         {
           name: "player_creature"+player.id,
           controller: player,
@@ -58,9 +58,6 @@ class MajkinGame extends BaseGame {
         }
       );
     }
-
-    console.log("this.stacks");
-    console.log(this.stacks);
 
     this.play();
   }
@@ -79,17 +76,9 @@ class MajkinGame extends BaseGame {
       this.enemy_creature().place_on_top(this.central_deck().draw());
 
       // if player level + player monster level >= deck monster level
-
-      console.log('var enemy_creature = this.enemy_creature().top();');
       var enemy_creature = this.enemy_creature().top();
-      console.log(enemy_creature);
-
-      debugger;
 
       var player_creature = this.player_creature(player).top();
-
-      console.log('player_creature')
-      console.log(player_creature)
 
       if(enemy_creature.attributes.properties['lvl'] < player_creature.attributes.properties['lvl'] + player.attributes.properties['lvl']) {
         // player gains a level
@@ -109,32 +98,32 @@ class MajkinGame extends BaseGame {
   }
 
   central_deck() {
-    return this.stacks.at(0);
+    return this.cardlists.at(0);
   }
 
   discard_pile() {
-    return this.stacks.at(1);
+    return this.cardlists.at(1);
   }
 
-  //discard_pile(stack) {
-  //  return this.stacks['discard_pile'] = stack;
+  //discard_pile(cardlist) {
+  //  return this.cardlists['discard_pile'] = cardlist;
   //}
 
   enemy_creature() {
-    return this.stacks.at(2);
+    return this.cardlists.at(2);
   }
 
-  //enemy_creature(stack) {
-  //  return this.stacks['enemy_creature'] = stack;
+  //enemy_creature(cardlist) {
+  //  return this.cardlists['enemy_creature'] = cardlist;
   //}
 
-  // stack get/set methods (so that we don't screw up a key name)
+  // cardlist get/set methods (so that we don't screw up a key name)
   player_creature(player) {
-    return this.stacks.at(3+player.id);
+    return this.cardlists.at(3+player.id);
   }
 
-  //player_creature(player, stack) {
-  //  return this.stacks['player_creature'+player.id] = stack;
+  //player_creature(player, cardlist) {
+  //  return this.cardlists['player_creature'+player.id] = cardlist;
   //}
 
 }

@@ -1,7 +1,7 @@
 var Backbone = require("backbone");
 
 
-class Stack extends Backbone.Model {
+class CardList extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
@@ -61,6 +61,6 @@ class Stack extends Backbone.Model {
   }
 }
 
-Stack.collection = Backbone.Collection.extend({model: Stack});
+CardList.collection = Backbone.Collection.extend({model: CardList});
 
-module.exports = Stack;
+module.exports = CardList;

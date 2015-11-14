@@ -3,7 +3,7 @@ var _ = require("underscore");
 var store = require("store");
 var log = require("debug")("base-game");
 
-var Stack = require("../models/stack");
+var CardList = require("../models/cardlist");
 var Player = require("../models/player");
 var Card = require("../models/card");
 var Area = require("../models/area");
@@ -24,12 +24,12 @@ class BaseGame extends Backbone.Model {
     this.app = app;
     this.socket = app.socket;
     var PlayerCollection = Backbone.Collection.extend({model: Player});
-    var StackCollection = Backbone.Collection.extend({model: Stack});
+    var CardListCollection = Backbone.Collection.extend({model: CardList});
     var CardCollection = Backbone.Collection.extend({model: Card});
     var AreaCollection = Backbone.Collection.extend({model: Area});
     this.players = new PlayerCollection();
     this.areas = new AreaCollection();
-    this.stacks = new StackCollection();
+    this.cardlists = new CardListCollection();
     this.cards = new CardCollection();
 
     // connection properties

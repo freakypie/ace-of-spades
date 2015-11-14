@@ -5,7 +5,7 @@ class Area extends Backbone.Model {
     get defaults() {
         return {
             player: null,
-            stacks: null
+            cardlists: null
         }
     }
 }
