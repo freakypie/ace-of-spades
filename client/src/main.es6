@@ -32,6 +32,7 @@ class Main extends bv.MixinView {
     this.game = new MajkinGame(this);
     window.game = this.game;
     this.renderViews();
+    this.game.start()
   }
 
   setupWebsockets() {

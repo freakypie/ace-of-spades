@@ -6,39 +6,49 @@ class Stack extends Backbone.Model {
     return {
       name: "unnamed",
       controller: null,
-      card_instances: [],
+      cards: [],
       properties: {},
-      face_up: true
+      face_up: true,
+      deck: false,
+      hand: false,
     }
   }
 
   draw() {
-    return self.card_instances.shift(); //pop from top
+    return this.attributes.cards.shift(); //pop from top
   }
 
   draw_all() {
-    var card_instances = self.card_instances;
-    self.card_instances = [];
-    return card_instances;
+    var cards = this.attributes.cards;
+    this.attributes.cards = [];
+    return cards;
   }
 
-  place_on_top(card_instances) {
-    if(card_instances instanceof Array){
-      for(var card_instance in card_instances) {
-        self.card_instances.unshift(card_instance);
+  top () {
+    return this.attributes.cards[0];
+  }
+
+  bottom() {
+    return this.attributes.cards[this.size()-1];
+  }
+
+  place_on_top(cards) {
+    if(cards instanceof Array){
+      for(var card in cards) {
+        this.attributes.cards.unshift(card);
       }
     } else {
-      self.card_instances.unshift(card_instances);
+      this.attributes.cards.unshift(cards);
     }
   }
 
-  place_on_bottom(card_instances) {
-    if(card_instances instanceof Array){
-      for(var card_instance in card_instances) {
-        self.card_instances.push(card_instance);
+  place_on_bottom(cards) {
+    if(cards instanceof Array){
+      for(var card in cards) {
+        this.attributes.cards.push(card);
       }
     } else {
-      self.card_instances.push(card_instances);
+      this.attributes.cards.push(cards);
     }
   }
 
@@ -47,16 +57,9 @@ class Stack extends Backbone.Model {
   }
 
   size() {
-    return self.card_instances.length;
+    return this.attributes.cards.length;
   }
 }
-
-// model.attributes.properties
-// model.get("whatever")
-
-// set property
-// model.set({face_up: false}) // sends "change", "change:face_up", signals
-
 
 Stack.collection = Backbone.Collection.extend({model: Stack});
 

@@ -1,59 +1,107 @@
 var BaseGame = require("./base");
 
-class MajkinGame extends BaseGame {
-  initialize() {
-    // start game ("game:start" signal is sent by base)
+var Card = require("../models/card");
+var Stack = require("../models/stack");
 
-    // DEBUG: generate arbitrary cards
+class MajkinGame extends BaseGame {
+  start() {
+    // generate arbitrary cards
+    //TODO: better initialization
+    var cards_json = require("json!../resources/cards.json");
+
+    var cards = []
+
+    for(var index in cards_json) {
+      cards.push(
+        new Card(
+          cards_json[index]
+        )
+      )
+    }
+
+    this.stacks.add(
+      {
+        name: "central_deck",
+        cards: [],
+        face_up: false,
+        deck: true
+      }
+    );
+    this.stacks.add(
+      {
+        name: "discard_pile",
+        cards: [],
+        face_up: true,
+        deck: true
+      }
+    );
+    this.stacks.add(
+      {
+        name: "enemy_creature",
+        cards: [],
+        face_up: true,
+        deck: false
+      }
+    );
 
     // deal everyone a single card face up from central deck
-    // for (var player in players) {
-    //   var drawn_card = self.central_deck().draw();
-    //   self.player_creature(
-    //     player,
-    //     new Stack(
-    //       {
-    //         card_instances: [drawn_card],
-    //         controller: player,
-    //       }
-    //     )
-    //   );
-    // }
+    for (var player in this.players) {
+      var drawn_card = this.central_deck().draw();
 
-    // self.play();
+      this.stacks.add(
+        {
+          name: "player_creature"+player.id,
+          controller: player,
+          cards: [drawn_card],
+          face_up: true,
+          deck: false
+        }
+      );
+    }
+
+    console.log("this.stacks");
+    console.log(this.stacks);
+
+    this.play();
   }
 
   play() {
-    // select a random player to start
     // cycle turn through each player
-    for (var player in players) {
+    for (var player in this.players) {
       //if monster deck is empty
-      if (self.central_deck().size() <= 0) {
-        self.central_deck().place_on_bottom(
-            self.discard_pile().draw_all()
+      if (this.central_deck().size() <= 0) {
+        this.central_deck().place_on_bottom(
+          this.discard_pile().draw_all()
         );
       }
 
       // turn over top card from central deck (deck monster)
-      var drawn_card = self.central_deck().draw();
-      enemy_creature(
-          new Stack(
-              {
-                card_instances: [drawn_card],
-              }
-          )
-      );
+      this.enemy_creature().place_on_top(this.central_deck().draw());
 
       // if player level + player monster level >= deck monster level
-      if(self.enemy_creature()[0].properties['lvl'] < self.player_creature(player)[0].properties['lvl'] + player.properties['lvl']) {
-        // player gains a level
-        player.properties['lvl'] ++;
-      }
-      self.central_deck().place_on_bottom(
-          self.enemy_creature().draw_all()
-      )
 
-      if (player.properties['lvl'] >= 10){
+      console.log('var enemy_creature = this.enemy_creature().top();');
+      var enemy_creature = this.enemy_creature().top();
+      console.log(enemy_creature);
+
+      debugger;
+
+      var player_creature = this.player_creature(player).top();
+
+      console.log('player_creature')
+      console.log(player_creature)
+
+      if(enemy_creature.attributes.properties['lvl'] < player_creature.attributes.properties['lvl'] + player.attributes.properties['lvl']) {
+        // player gains a level
+        player.attributes.properties['lvl'] ++;
+      }
+
+      // put enemy monster in discard pile
+      this.central_deck().place_on_bottom(
+        this.enemy_creature().draw_all()
+      );
+
+      if (player.attributes.properties['lvl'] >= 10){
         // end game
         return player;
       }
@@ -61,43 +109,33 @@ class MajkinGame extends BaseGame {
   }
 
   central_deck() {
-    if (!0 in self.stacks){
-      //TODO: better initialization
-      self.stacks[0] = new Stack(
-          {
-            name: "central_deck",
-            card_instances: [],
-            face_up: false,
-          }
-      );
-    }
-    return self.stacks[0];
-  }
-
-  // stack get/set methods (so that we don't screw up a key name)
-  player_creature(player) {
-    return self.stacks['player_creature'+player.id];
-  }
-
-  player_creature(player, stack) {
-    return self.stacks['player_creature'+player.id] = stack;
-  }
-
-  enemy_creature() {
-    return self.stacks['enemy_creature'];
-  }
-
-  enemy_creature(stack) {
-    return self.stacks['enemy_creature'] = stack;
+    return this.stacks.at(0);
   }
 
   discard_pile() {
-    return self.stacks['discard_pile'];
+    return this.stacks.at(1);
   }
 
-  discard_pile(stack) {
-    return self.stacks['discard_pile'] = stack;
+  //discard_pile(stack) {
+  //  return this.stacks['discard_pile'] = stack;
+  //}
+
+  enemy_creature() {
+    return this.stacks.at(2);
   }
+
+  //enemy_creature(stack) {
+  //  return this.stacks['enemy_creature'] = stack;
+  //}
+
+  // stack get/set methods (so that we don't screw up a key name)
+  player_creature(player) {
+    return this.stacks.at(3+player.id);
+  }
+
+  //player_creature(player, stack) {
+  //  return this.stacks['player_creature'+player.id] = stack;
+  //}
 
 }
 
