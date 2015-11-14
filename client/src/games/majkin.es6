@@ -10,49 +10,46 @@ var Stack = require("../models/stack");
 class MajkinGame extends BaseGame {
   start() {
     // generate arbitrary cards
-    //TODO: better initialization
     var cards = new Card.collection(require("json!../resources/cards.json"))
+    var central_area = this.areas.add({name: "central_deck", default: true});
 
-    this.stacks.add(
-      {
-        name: "central_deck",
-        cards: cards.models,
-        face_up: false,
-        deck: true
-      }
-    );
-    this.stacks.add(
-      {
-        name: "discard_pile",
-        cards: [],
-        face_up: true,
-        deck: true
-      }
-    );
-    this.stacks.add(
-      {
-        name: "enemy_creature",
-        cards: [],
-        face_up: true,
-        deck: false
-      }
-    );
+    this.stacks.add({
+      area: central_area,
+      name: "central_deck",
+      cards: cards.models,
+      face_up: false,
+      deck: true
+    });
+    this.stacks.add({
+      area: central_area,
+      name: "discard_pile",
+      cards: [],
+      face_up: true,
+      deck: true
+    });
+    this.stacks.add({
+      area: central_area,
+      name: "enemy_creature",
+      cards: [],
+      face_up: true,
+      deck: false
+    });
 
     // deal everyone a single card face up from central deck
     for (var player of this.players.models) {
       log(`dealing to player ${player.attributes.name}`);
       var drawn_card = this.central_deck().draw();
 
-      this.stacks.add(
-        {
-          name: "player_creature"+player.id,
-          controller: player,
-          controller_id: player.id,
-          cards: [drawn_card],
-          face_up: true,
-          deck: false
-        }
-      );
+      // TODO: create this when the player connects
+      this.stacks.add({
+        name: "player_creature" + player.id,
+        area: this.areas.findWhere({player_id: player.id}),
+        controller: player,
+        controller_id: player.id,
+        cards: [drawn_card],
+        face_up: true,
+        deck: false
+      });
     }
 
     this.play();
@@ -80,7 +77,7 @@ class MajkinGame extends BaseGame {
     });
 
     q.push((cb) => {
-      console.log("turn ended, you need to add code to reset it");
+      console.log("turn ended");
       _.delay(() => {
         this.queueTurns(q, cb);
       }, 1000);

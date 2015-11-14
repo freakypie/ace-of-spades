@@ -9,7 +9,8 @@ class Card extends Backbone.Model {
             lvl: Math.floor(Math.random() * 10),
             flavor_text: "",
 
-            //edited by game
+            // edited by game
+            area: null,
             owner: null,
             controller: null,
             face_up: true,
