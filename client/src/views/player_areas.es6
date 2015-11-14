@@ -7,13 +7,22 @@ class StackItem extends bv.DetailView {
     return "deck-element";
   }
   initialize() {
-    this.listenTo(this.model, "change", this.render.bind(null));
-    this.listenTo(this.model.get("stacks"), "update", this.render.bind(null));
+    this.listenTo(this.model, "change", function() {
+      console.log("stack changed");
+      this.render()
+    });
+    this.listenTo(this.model.get("cards"), "update", function() {
+      console.log("cards changed");
+      this.render()
+    });
   }
   render() {
     var deck = this.el;
+    var card = null;
     for(var x=0; x<this.model.get("cards").length; x++) {
-      deck.add($("<card-element></card-element>").get(0));
+      card = $("<card-element class='kung-fu' faceup='true'></card-element>").get(0)
+      deck.add(card);
+      card.flip();
     }
     return this;
   }

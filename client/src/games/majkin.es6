@@ -16,21 +16,19 @@ class MajkinGame extends BaseGame {
     this.stacks.add({
       area: central_area,
       name: "central_deck",
-      cards: cards.models,
+      cards: cards,
       face_up: false,
       deck: true
     });
     this.stacks.add({
       area: central_area,
       name: "discard_pile",
-      cards: [],
       face_up: true,
       deck: true
     });
     this.stacks.add({
       area: central_area,
       name: "enemy_creature",
-      cards: [],
       face_up: true,
       deck: false
     });
@@ -41,15 +39,15 @@ class MajkinGame extends BaseGame {
       var drawn_card = this.central_deck().draw();
 
       // TODO: create this when the player connects
-      this.stacks.add({
+      var stack = this.stacks.add({
         name: "player_creature" + player.id,
         area: this.areas.findWhere({player_id: player.id}),
         controller: player,
         controller_id: player.id,
-        cards: [drawn_card],
         face_up: true,
         deck: false
       });
+      stack.get("cards").add(drawn_card);
     }
 
     this.play();

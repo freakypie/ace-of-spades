@@ -74,7 +74,7 @@
       this.playAnimation('placeCard', 'place');
     },
     flip: function() {
-      this.playAnimation('flip');
+      this.playAnimation('flip', 'flip');
       this.faceup = !this.faceup;
     },
     ready: function() {
@@ -96,6 +96,10 @@
           break;
         case 'place':
           this.style.transform = "scale(1) translate(-660px, 90px)";
+          break;
+        case 'flip':
+          // TODO: use the correct side (front or back)
+          this.style.background = "url('" + this.front + "')";
           break;
       }
     }

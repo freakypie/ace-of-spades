@@ -1,4 +1,5 @@
 var Backbone = require("backbone");
+var Card = require("./card");
 
 
 class Stack extends Backbone.Model {
@@ -6,7 +7,7 @@ class Stack extends Backbone.Model {
     return {
       name: "unnamed",
       controller: null,
-      cards: [],
+      cards: new Card.collection(),
       properties: {},
       area: null,
       face_up: true,
@@ -35,17 +36,17 @@ class Stack extends Backbone.Model {
   }
 
   draw_all() {
-    var cards = this.attributes.cards;
-    this.attributes.cards = [];
+    var cards = this.attributes.cards.models;
+    this.attributes.cards.reset([]);
     return cards;
   }
 
   top () {
-    return this.attributes.cards[0];
+    return this.attributes.cards.at(0);
   }
 
   bottom() {
-    return this.attributes.cards[this.size()-1];
+    return this.attributes.cards.at(this.size() - 1);
   }
 
   place_on_top(cards) {
@@ -61,14 +62,14 @@ class Stack extends Backbone.Model {
   place_on_bottom(cards) {
     if (cards instanceof Array){
       for(var card of cards) {
-        this.attributes.cards.push(card);
+        this.attributes.cards.add(card);
       }
     } else {
-      this.attributes.cards.push(cards);
+      this.attributes.cards.add(cards);
     }
   }
 
-  shuffle(){
+  shuffle() {
 
   }
 
