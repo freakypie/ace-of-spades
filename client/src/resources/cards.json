@@ -19,7 +19,7 @@
   },
 
   {
-    "name": "haunted house",
+    "name": "cursed house",
     "lvl": 4,
     "front": "/assets/images/foe-haunted-house.png"
   },
@@ -49,7 +49,7 @@
     "front": "/assets/images/potion-poison.png"
   },
   {
-    "name": "strength potion",
+    "name": "life potion",
     "lvl": 7,
     "front": "/assets/images/potion-strength.png"
   },
@@ -64,7 +64,7 @@
     "front": "/assets/images/weapon-flail.png"
   },
   {
-    "name": "metal shield",
+    "name": "shield",
     "lvl": 4,
     "front": "/assets/images/weapon-metal-shield.png"
   },
@@ -79,7 +79,7 @@
     "front": "/assets/images/weapon-sword.png"
   },
   {
-    "name": "wooden shield",
+    "name": "wood shield",
     "lvl": 3,
     "front": "/assets/images/weapon-wooden-shield.png"
   }
