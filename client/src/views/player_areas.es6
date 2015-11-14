@@ -65,8 +65,24 @@ class CardListItem extends bv.ListView {
   // }
 }
 
+class HandListView extends bv.ListView {
+  get tagName() {
+    return "hand-element";
+  }
+  get itemViewClass() {
+    return HandView;
+  }
+  initialize() {
+    this.collection = null;
+  }
+}
+
 
 class PlayerAreaItemView extends bv.ListView {
+
+  get mixins() {
+    return [bv.Composite];
+  }
 
   get itemViewClass() {
     return CardListItem;
@@ -78,10 +94,15 @@ class PlayerAreaItemView extends bv.ListView {
 
   get template() {
     return _.template(`
-      <div>AREA: <%- player_id %></div>
       <div class="decks">
       </div>
     `);
+  }
+
+  get views() {
+    return {
+      // "#selector": HandListView
+    }
   }
 
   initialize(options) {
