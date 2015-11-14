@@ -36,6 +36,11 @@ h2 {
 	color: #6E4E60;
 }
 
+#logo{
+	top: 0px;
+	left: 0px;
+}
+
 #players {
   position: fixed;
   top: 0;
@@ -46,18 +51,18 @@ h2 {
   text-align: center;
 }
 #players .list {
-  padding: 0 5px 5px 5px;
+  padding: 5px;
   border-radius: 0 0 10px 10px;
-  border: 2px solid #679c98;
+  border: 4px solid #679c98;
   border-top: none;
   background: white;
 }
 #players h2 {
   background: white;
   display: inline-block;
-  font-size: 0.7em;
+  font-size: 0.9em;
   padding: 2px 15px;
-  border: 1px solid #679c98;
+  border: 4px solid #679c98;
   border-top: none;
   border-radius: 0 0 10px 10px;
   font-family: bebas;
@@ -73,7 +78,6 @@ h2 {
 #player-areas .list > div {
   box-sizing: border-box;
   padding-top: 60px;
-  border-top: 1px solid black;
   display: inline-block;
   background: #FFF;
   width: 100%;
@@ -108,7 +112,7 @@ h2 {
 #deck-image .card2 {
   right: 10px;
   z-index: 9;
-  bottom: 2px;
+  bottom: g;
 }
 #deck-image .card3 {
   right: 5px;
@@ -123,7 +127,7 @@ h2 {
 #prompts {
   z-index: 200;
   margin: auto;
-  position: absolute;
+  position: relative;
   top: 5px;
   left: 5px;
 }
