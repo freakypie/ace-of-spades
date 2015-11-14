@@ -108,9 +108,9 @@ class MajkinGame extends BaseGame {
 
       for(var i=0;i<6;i++) {
         var card = this.weapon_deck().draw();
-        player.attributes.hand.add(card);
+        // player.attributes.hand.place_on_bottom(card);
+        this.player_hand(player).place_on_bottom(card);
       }
-      console.log(player.attributes.hand.models);
     }
 
     var q = queue({concurrency: 1});
