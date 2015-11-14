@@ -1,0 +1,46 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<dom-module id="hand-element">
+  <template>
+    <style>
+      :host {
+        height: 200px;
+        width: 135px;
+        margin: 5px;
+        display: inline-block;
+        position: relative;
+        -webkit-perspective: 1000;
+        -webkit-transform-style: preserve-3d;
+        backface-visibility: hidden;
+      }
+      card-element {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+    </style>
+    <template>
+      <content></content>
+    </template>
+    <template is="dom-repeat" items="[[cards]]">
+      <card-element faceup="{{item.faceup}}"
+                    front="{{item.front}}"
+                    back="{{item.back}}"
+                    card_id="{{item.id}}">
+      </card-element>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: "hand-element",
+      properties: {
+        cards: {
+          type: Array,
+          value: [],
+          notify: true,
+        }
+      }
+    });
+  </script>
+</dom-module>

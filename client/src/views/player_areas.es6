@@ -19,6 +19,8 @@ class CardItem extends bv.DetailView {
     this.el.faceup = this.model.attributes.faceup;
     this.el.front = this.model.attributes.front;
     this.el.name = this.model.attributes.name;
+    this.el.base_level = this.model.attributes.lvl;
+    this.el.description = this.model.attributes.flavor_text;
     return this;
   }
   render2() {

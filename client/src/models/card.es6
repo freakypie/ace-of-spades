@@ -6,7 +6,7 @@ class Card extends Backbone.Model {
         return {
             // loaded from json/server
             name: "",
-            lvl: Math.floor(Math.random() * 10),
+            lvl: Math.floor(Math.random() % 9) + 1,
             flavor_text: "",
 
             // edited by game

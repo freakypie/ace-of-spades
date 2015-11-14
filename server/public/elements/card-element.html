@@ -34,6 +34,26 @@
       top: 82px;
       left: 5px;
     }
+    p {
+      position: absolute;
+      left: 10px;
+      width: calc(100% - 20px);
+      z-index: 100;
+      margin: 0;
+    }
+    p.card-name {
+      top: 86px;
+      color: white;
+    }
+    p.power {
+      top: 86px;
+      left: 110px;
+    }
+    p.description {
+      top: 110px;
+      white-space: initial;
+      font-size: 11px;
+    }
     .face {
       position: absolute;
       top: 0;
@@ -55,6 +75,9 @@
       <img src="/assets/images/card-front.png">
       <img class="splash" src="{{ front }}">
       <img class="info-bar" src="/assets/images/title-bar-overlay-2.png">
+      <p class="card-name">{{ name }}</p>
+      <p class="power">{{ base_level }}</p>
+      <p class="description">{{ description }}</p>
     </div>
     <div class="back face">
       <img src="/assets/images/card-back.png">
@@ -71,6 +94,18 @@
       name: {
         type: String,
         value: null,
+      },
+      base_level: {
+        type: String,
+        value: "0"
+      },
+      total_level: {
+        type: String,
+        value: null
+      },
+      description: {
+        type: String,
+        value: "This is a temporary description",
       },
       faceup: {
         type: Boolean,
