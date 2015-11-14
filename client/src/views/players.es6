@@ -1,4 +1,5 @@
 var bv = require("backbone_views");
+var _ = require("underscore")
 
 class PlayerItemView extends bv.DetailView {
   get tagName() {
@@ -34,6 +35,12 @@ class PlayerItemView extends bv.DetailView {
 
 
 class PlayerListView extends bv.ListView {
+  get template() {
+	return _.template(`
+	<h2>Players</h2>
+	<div class="list"></div>
+	`)
+  }
   get itemViewClass() {
     return PlayerItemView;
   }
