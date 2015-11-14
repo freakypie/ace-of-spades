@@ -32,16 +32,13 @@
     }
     .front.face {
       background: green;
-      z-index: 0;
       transform: translate3d(0, 0, 1px);
       /*transform: rotateY(0deg);*/
-      backface-visibility: hidden;
     }
     .back.face {
       background: red;
-      backface-visibility: hidden;
-      z-index: 0;
-      transform: translate3d(0, 0, 0px) rotateY(180deg);
+      z-index: 1;
+      transform: translate3d(0, 0, 2px) rotateY(180deg);
     }
   </style>
   <template>
@@ -119,11 +116,16 @@
       // this.style.backgroundSize = "contain";
       // this.flip();
 
-      // var y = 0;
-      // setInterval(function() {
-      //   y += 1;
-      //   this.style.transform = "rotateY(" + y + "deg)";
-      // }.bind(this), 15);
+       var y = 0;
+       setInterval(function() {
+         y += 1;
+         this.style.transform = "rotateY(" + y + "deg)";
+         if((y % 360) < 90 || ((y % 360) > 270 && (y % 360) < 360)){
+          this.querySelector('.back.face').style.zIndex = "-1";
+         } else {
+          this.querySelector('.back.face').style.zIndex = "1";
+         }
+      }.bind(this), 15);
     },
     _onNeonAnimationFinish: function(e, animation) {
       switch(animation){
