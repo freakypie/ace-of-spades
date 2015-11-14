@@ -26,23 +26,24 @@ class MajkinGame extends BaseGame {
       face_up: true,
       deck: true
     });
-    this.card_lists.add({
-      area: central_area,
-      name: "enemy_creature",
-      face_up: true,
-      deck: false
-    });
 
     // deal everyone a single card face up from central deck
     for (var player of this.players.models) {
       log(`dealing to player ${player.attributes.name}`);
       var drawn_card = this.central_deck().draw();
+      var area = this.areas.findWhere({player_id: player.id});
 
       // TODO: create this when the player connects
-
+      this.card_lists.add({
+        area: area,
+        name: "enemy_creature",
+        controller_id: player.id,
+        face_up: true,
+        deck: false
+      });
       var card_list = this.card_lists.add({
-        name: "player_creature" + player.id,
-        area: this.areas.findWhere({player_id: player.id}),
+        area: area,
+        name: "player_creature",
         controller: player,
         controller_id: player.id,
         face_up: true,
@@ -86,50 +87,57 @@ class MajkinGame extends BaseGame {
   }
 
   turn(player, cb) {
-    log("taking turn", player.id)
     var winner = null;
     // if monster deck is empty
     if (this.central_deck().size() <= 0) {
+      log("fliping discard pile");
       this.central_deck().place_on_bottom(
         this.discard_pile().shuffle().draw_all()
       );
     }
 
     // turn over top card from central deck (deck monster)
-    this.enemy_creature().place_on_top(this.central_deck().draw());
+    var enemy_card_list = this.enemy_creature(player);
+    enemy_card_list.place_on_top(this.central_deck().draw());
 
-    // if player level + player monster level >= deck monster level
-    var enemy_card_list = this.enemy_creature();
-    var enemy_creature = enemy_card_list.top();
-    var player_card_list = this.player_creature(player);
-    if (player_card_list) {
-      var player_creature = player_card_list.top();
-      var player_level = player_creature.attributes.lvl +
-        player.attributes.lvl;
-      var enemy_level = enemy_creature.attributes.lvl;
-      if (enemy_level <= player_level) {
-        // player gains a level
-        player.attributes.lvl++;
-        // trigger change
-        player.set({lvl: player.attributes.lvl});
-        log("player was victorious!", player.id, player.attributes.lvl);
+    _.delay(() => {
+
+      // if player level + player monster level >= deck monster level
+      var enemy_creature = enemy_card_list.top();
+      var player_card_list = this.player_creature(player);
+      if (player_card_list) {
+        var player_creature = player_card_list.top();
+        var player_level = player_creature.attributes.lvl +
+          player.attributes.lvl;
+        var enemy_level = enemy_creature.attributes.lvl;
+        if (enemy_level <= player_level) {
+          // player gains a level
+          player.attributes.lvl++;
+          // trigger change
+          player.set({lvl: player.attributes.lvl});
+          log("player was victorious!", player.id, player.attributes.lvl);
+        } else {
+          log("player was defeated", player_level, enemy_level);
+        }
+
+        if (player.attributes.lvl >= 10){
+          // end game
+          winner = player;
+        }
       } else {
-        log("player was defeated", player_level, enemy_level);
+        log("player is missing a monster", player.attributes.name);
       }
 
       // put enemy monster in discard pile
-      this.central_deck().place_on_bottom(
-        this.enemy_creature().draw_all()
+      this.discard_pile().place_on_bottom(
+        enemy_card_list.draw_all()
       );
+      console.log(enemy_card_list.size());
 
-      if (player.attributes.lvl >= 10){
-        // end game
-        winner = player;
-      }
-    } else {
-      log("player is missing a monster", player.attributes.name);
-    }
-    cb(winner);
+      _.delay(() => {
+        cb(winner);
+      }, 1000);
+    }, 1000);
   }
 
   central_deck() {
@@ -137,15 +145,21 @@ class MajkinGame extends BaseGame {
   }
 
   discard_pile() {
-    return this.card_lists.at(1);
+    return this.card_lists.findWhere({name: "discard_pile"});
   }
 
-  enemy_creature() {
-    return this.card_lists.findWhere({name: "enemy_creature"});
+  enemy_creature(player) {
+    return this.card_lists.findWhere({
+      name: "enemy_creature",
+      controller_id: player.id
+    });
   }
 
   player_creature(player) {
-    return this.card_lists.findWhere({controller_id: player.id});
+    return this.card_lists.findWhere({
+      name: "player_creature",
+      controller_id: player.id
+    });
   }
 }
 

@@ -8,21 +8,23 @@ class CardListItem extends bv.DetailView {
   }
   initialize() {
     this.listenTo(this.model, "change", function() {
-      console.log("stack changed");
       this.render()
     });
-    this.listenTo(this.model.get("card_lists"), "update", function() {
-      console.log("cards changed");
+    this.listenTo(this.model.get("cards"), "reset", function() {
+      this.render()
+    });
+    this.listenTo(this.model.get("cards"), "update", function() {
       this.render()
     });
   }
   render() {
     var deck = this.el;
     var card = null;
+
+    deck.clear();
     for(var x=0; x<this.model.get("cards").length; x++) {
-      card = $("<card-element class='kung-fu' faceup='true'></card-element>").get(0)
+      var card = $("<card-element faceup='1'></card-element>").get(0);
       deck.add(card);
-      card.flip();
     }
     return this;
   }
@@ -67,12 +69,6 @@ class PlayerAreaItemView extends bv.ListView {
     if (player) {
       this.$el.attr("data-player", context.player_id);
     }
-
-    // var numcards = Math.floor(Math.random() * 3) + 1;
-    // var deck = this.$("deck-element").get(0);
-    // for(var x=0; x<numcards; x++) {
-    //   deck.add($("<card-element></card-element>").get(0));
-    // }
     return this;
   }
 }
