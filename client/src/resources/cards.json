@@ -4,119 +4,13 @@
     "lvl": 1,
     "front": "/assets/images/foe-bats.png"
   },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
-  {
-    "name": "bats",
-    "lvl": 1,
-    "front": "/assets/images/foe-bats.png"
-  },
 
   {
     "name": "creeper vine",
     "lvl": 1,
     "front": "/assets/images/foe-creeper.png"
   },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
-  {
-    "name": "creeper vine",
-    "lvl": 1,
-    "front": "/assets/images/foe-creeper.png"
-  },
 
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
-  {
-    "name": "death onion",
-    "lvl": 2,
-    "flavor_text": "Don't cry, now.",
-    "front": "/assets/images/foe-death-onion.png"
-  },
   {
     "name": "death onion",
     "lvl": 2,
@@ -129,22 +23,7 @@
     "lvl": 4,
     "front": "/assets/images/foe-haunted-house.png"
   },
-  {
-    "name": "haunted house",
-    "lvl": 4,
-    "front": "/assets/images/foe-haunted-house.png"
-  },
-  {
-    "name": "haunted house",
-    "lvl": 4,
-    "front": "/assets/images/foe-haunted-house.png"
-  },
 
-  {
-    "name": "horta",
-    "lvl": 7,
-    "front": "/assets/images/foe-horta.png"
-  },
   {
     "name": "horta",
     "lvl": 7,
