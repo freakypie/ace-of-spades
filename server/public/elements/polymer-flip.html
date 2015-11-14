@@ -12,16 +12,12 @@
 
     configure: function(config) {
       var node = config.node;
-      
       var isY = config.axis === 'rotateY';
       var rotate = config.axis;
       var transZ = isY ? '150px' : '50px';
       this._effect = new KeyframeEffect(node, [
-        {offset:0, transform: 'perspective(400px) translateZ(0px) ' + rotate + '(0deg) scale(1)', background: "url('"+node.back+"')", backgroundSize: 'contain'},
-        {offset:0.4, transform: 'perspective(400px) translateZ('+transZ+') ' + rotate + '(170deg) scale(1)', background: "url('"+node.back+"')", backgroundSize: 'contain'},
-        {offset:0.5, transform: 'perspective(400px) translateZ('+transZ+') ' + rotate + '(190deg) scale(1)', background: "url('"+node.front+"')", backgroundSize: 'contain'},
-        {offset:0.8, transform: 'perspective(400px) translateZ(0px) ' + rotate + '(360deg) scale(.95)', background: "url('"+node.front+"')", backgroundSize: 'contain'},
-        {offset:1, transform: 'perspective(400px) translateZ(0px) ' + rotate + '(360deg) scale(1)', background: "url('"+node.front+"')", backgroundSize: 'contain'},
+        {offset:0, transform: '' + rotate + '(0deg)'},
+        {offset:1, transform: '' + rotate + '(0deg)'},
       ], this.timingFromConfig(config));
       return this._effect;
     }
