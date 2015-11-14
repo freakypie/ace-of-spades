@@ -23,9 +23,8 @@ class CardListItem extends bv.DetailView {
 
     deck.clear();
     for(var x=0; x<this.model.get("cards").length; x++) {
-      card = $("<card-element class='kung-fu' faceup='true'></card-element>").get(0)
+      var card = $("<card-element faceup='1'></card-element>").get(0);
       deck.add(card);
-      card.flip();
     }
     return this;
   }
