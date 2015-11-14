@@ -2,7 +2,7 @@ var Backbone = require("backbone");
 var Card = require("./card");
 
 
-class Stack extends Backbone.Model {
+class CardList extends Backbone.Model {
   get defaults() {
     return {
       name: "unnamed",
@@ -20,12 +20,12 @@ class Stack extends Backbone.Model {
     // TODO: add to the area they belong to
     this.listenTo(this, "change:area", function() {
       if (this.attributes.area) {
-        this.attributes.area.get("stacks").add(this);
+        this.attributes.area.get("card_lists").add(this);
       }
     });
 
     if (this.attributes.area) {
-      this.attributes.area.get("stacks").add(this);
+      this.attributes.area.get("card_lists").add(this);
     }
   }
 
@@ -79,6 +79,6 @@ class Stack extends Backbone.Model {
   }
 }
 
-Stack.collection = Backbone.Collection.extend({model: Stack});
+CardList.collection = Backbone.Collection.extend({model: CardList});
 
-module.exports = Stack;
+module.exports = CardList;

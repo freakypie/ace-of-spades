@@ -2,7 +2,7 @@ var bv = require("backbone_views");
 var _ = require("underscore");
 
 
-class StackItem extends bv.DetailView {
+class CardListItem extends bv.DetailView {
   get tagName() {
     return "deck-element";
   }
@@ -11,7 +11,7 @@ class StackItem extends bv.DetailView {
       console.log("stack changed");
       this.render()
     });
-    this.listenTo(this.model.get("cards"), "update", function() {
+    this.listenTo(this.model.get("card_lists"), "update", function() {
       console.log("cards changed");
       this.render()
     });
@@ -32,7 +32,7 @@ class StackItem extends bv.DetailView {
 class PlayerAreaItemView extends bv.ListView {
 
   get itemViewClass() {
-    return StackItem;
+    return CardListItem;
   }
 
   get listSelector() {
@@ -48,7 +48,7 @@ class PlayerAreaItemView extends bv.ListView {
   }
 
   initialize(options) {
-    this.collection = options.model.get("stacks");
+    this.collection = options.model.get("card_lists");
     super.initialize(options);
   }
 
