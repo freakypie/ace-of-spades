@@ -15,13 +15,13 @@
     "name": "wolf",
     "lvl": 2,
     "flavor_text": "This idiot forgot to bring his pack.",
-    "front": "/assets/images/foe-creeper.png"
+    "front": "/assets/images/foe-death-onion.png"
   },
   {
     "name": "wolf pack",
     "lvl": 2,
     "flavor_text": "Oh, there they are.",
-    "front": "/assets/images/foe-creeper.png",
+    "front": "/assets/images/foe-haunted-house.png",
     "properties": {
       "multiattack": 5
     }
@@ -30,7 +30,7 @@
     "name": "mama bear",
     "lvl": 7,
     "flavor_text": "Oh, you've done it now!",
-    "front": "/assets/images/foe-creeper.png",
+    "front": "/assets/images/foe-horta.png",
     "properties": {
       "avenge": [
         "baby bear",
@@ -42,12 +42,12 @@
     "name": "dragon",
     "lvl": 10,
     "flavor_text": "Big. Scaled. Flies. Breathes fire. You know the drill.",
-    "front": "/assets/images/foe-creeper.png"
+    "front": "/assets/images/foe-salt-vampire.png"
   },
   {
     "name": "tarrasque",
     "lvl": 20,
     "flavor_text": "You're not strong enough to fight it. You never will be.",
-    "front": "/assets/images/foe-creeper.png"
+    "front": "/assets/images/foe-spores.png"
   }
 ]

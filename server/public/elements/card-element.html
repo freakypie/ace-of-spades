@@ -8,19 +8,30 @@
 <dom-module id="card-element">
   <style>
     :host {
+      top: 0;
+      left: 0;
+      position: absolute;
       width: 100%;
       height: 100%;
-      /*transition: all 0.5s;*/
-      -webkit-perspective: 1000;
-      transform: translate3d(0,0,0) rotateY(180deg);
+      transform: translate3d(0,0,0) rotateY(0deg);
+      transform-origin: 50% 0%;
+      transition: all 300ms;
+      -webkit-transform-style: preserve-3d;
     }
     img {
       width: 100%;
+      backface-visibility: hidden;
     }
     img.splash {
       position: absolute;
       width: calc(100% - 10px);
       top: 5px;
+      left: 5px;
+    }
+    img.info-bar {
+      position: absolute;
+      width: calc(100% - 10px);
+      top: 82px;
       left: 5px;
     }
     .face {
@@ -29,24 +40,25 @@
       left: 0;
       width: 100%;
       height: 100%;
+      backface-visibility: hidden;
+      box-sizing: border-box;
     }
     .front.face {
-      background: green;
-      transform: translate3d(0, 0, 1px);
-      /*transform: rotateY(0deg);*/
+      z-index: 10;
     }
     .back.face {
-      background: red;
-      z-index: 1;
-      transform: translate3d(0, 0, 2px) rotateY(180deg);
+      transform: rotateY(-180deg);
     }
   </style>
   <template>
     <div class="front face">
-      <!-- <img src="/assets/images/card-front.png"> -->
-      <img class="splash" src="/assets/images/foe-creeper.png">
+      <img src="/assets/images/card-front.png">
+      <img class="splash" src="{{ front }}">
+      <img class="info-bar" src="/assets/images/title-bar-overlay-2.png">
     </div>
-    <img class="back face" src="/assets/images/card-back.png">
+    <div class="back face">
+      <img src="/assets/images/card-back.png">
+    </div>
   </template>
 
 <script>
@@ -56,9 +68,14 @@
       Polymer.NeonAnimationRunnerBehavior
     ],
     properties: {
+      name: {
+        type: String,
+        value: null,
+      },
       faceup: {
         type: Boolean,
-        value: false,
+        value: true,
+        observer: "faceup_changed",
         notify: true
       },
       front: {
@@ -68,81 +85,33 @@
       back: {
         type: String,
         value: "/assets/images/card-back.png"
-      },
-      animationConfig: {
-        value: function() {
-          return {
-            'flip': {
-              name: 'polymer-flip',
-              axis: 'rotateY',
-              node: this
-            },
-            'drawCard': {
-              name: 'draw-card',
-              node: this
-            },
-            'placeCard': {
-              name: 'place-card',
-              node: this
-            }
-          }
-        }
       }
     },
     face: function(face) {
       return this.faceup ? face === 'up' : face === 'down';
     },
-    listeners: {
-      'neon-animation-finish': '_onNeonAnimationFinish'
-    },
-    drawCard: function() {
-      // this.front = "/assets/images/card-front-background.png";
-      this.playAnimation('drawCard', 'draw');
-      this.faceup = false;
-    },
-    placeCard: function() {
-      this.playAnimation('placeCard', 'place');
-    },
     flip: function() {
-      this.playAnimation('flip', 'flip');
       this.faceup = !this.faceup;
     },
-    ready: function() {
-      if(!this.faceup){
-        // this.style.background = "url('"+this.back+"')";
+    faceup_changed: function() {
+      if (this.faceup) {
+        this.style.transform = "rotateY(0deg)";
       } else {
-        // this.style.background = "url('"+this.front+"')";
+        this.style.transform = "rotateY(180deg)";
       }
-      // this.style.backgroundSize = "contain";
-      // this.flip();
-
-       var y = 0;
-       setInterval(function() {
-         y += 1;
-         this.style.transform = "rotateY(" + y + "deg)";
-         if((y % 360) < 90 || ((y % 360) > 270 && (y % 360) < 360)){
-          this.querySelector('.back.face').style.zIndex = "-1";
-         } else {
-          this.querySelector('.back.face').style.zIndex = "1";
-         }
-      }.bind(this), 15);
     },
-    _onNeonAnimationFinish: function(e, animation) {
-      switch(animation){
-        case 'draw':
-          // this.style.background = "url('" + this.front + "')";
-          // this.style.backgroundSize = "contain";
-          // this.style.transform = "scale(2) translate(-200px, -60px)";
-          var node = this;
-          setTimeout(function(){ node.placeCard();}, 1500);
-          break;
-        case 'place':
-          // this.style.transform = "scale(1) translate(-660px, 90px)";
-          break;
-        case 'flip':
-          // TODO: use the correct side (front or back)
-          break;
+    ready: function() {
+      if (! this.faceup) {
+        this.faceup = false;
       }
+      this.faceup_changed();
+      // this.flip();
+      // var y = 0;
+      // setInterval(function() {
+      //   y += 10;
+      //   this.style.transform = "rotateY(" + y + "deg)";
+      //   // this.flip();
+      // }.bind(this), 300);
     }
   });
 </script>

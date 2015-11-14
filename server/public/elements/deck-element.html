@@ -11,6 +11,9 @@
         margin: 5px;
         display: inline-block;
         position: relative;
+        -webkit-perspective: 1000;
+        -webkit-transform-style: preserve-3d;
+        backface-visibility: hidden;
       }
       card-element {
         top: 0;
@@ -18,34 +21,21 @@
         position: absolute;
       }
     </style>
-
-    <template is="dom-repeat" items="[[cards]]">
+    <template>
+      <content></content>
+    </template>
+    <!-- <template is="dom-repeat" items="[[cards]]">
       <card-element faceup="{{item.faceup}}"
                     front="{{item.front}}"
-                    back="{{item.back}}">
+                    back="{{item.back}}"
+                    card_id="{{item.id}}">
       </card-element>
-    </template>
+    </template> -->
   </template>
 
   <script>
     Polymer({
       is: "deck-element",
-      properties: {
-        cards: {
-          type: Array,
-          value: [],
-          notify: true
-        }
-      },
-      ready: function() {
-        this.cards = [];
-      },
-      add: function(item) {
-        this.unshift('cards', item);
-      },
-      clear: function() {
-        this.splice('cards', 0, this.cards.length);
-      },
       showCards: function(value, numcards) {
         switch(value) {
           case 1:
