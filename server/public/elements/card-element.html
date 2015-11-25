@@ -8,107 +8,68 @@
 <dom-module id="card-element">
   <style>
     :host {
-      top: 0;
-      left: 0;
-      position: absolute;
-      height: 200px;
-      width: 135px;
-      transform: translate3d(0,0,0) rotateY(0deg);
-      transform-origin: 50% 0%;
-      transition: all 500ms;
-      -webkit-transform-style: preserve-3d;
+      position: relative;
+      display: inline-block;
+      box-sizing: border-box;
     }
     img {
       width: 100%;
-      backface-visibility: hidden;
     }
-    img.splash {
+    #card {
+      transform: translate3d(0,0,0) rotateY(0deg);
+      transform-origin: 50% 64%;
+      transition: all 500ms;
+      -webkit-transform-style: preserve-3d;
       position: absolute;
-      width: calc(100% - 10px);
-      top: 5px;
-      left: 5px;
+      left: 0; top: 0;
     }
-    img.info-bar {
+    content {
       position: absolute;
-      width: calc(100% - 4px);
-      top: 44%;
-      left: 1%;
-    }
-    p {
-      position: absolute;
-      left: 10px;
-      z-index: 100;
-      margin: 0;
-    }
-    p.card-name {
-      padding-top: 3px;
-      top: 43%;
-      color: white;
-      font-family: "bebas";
-      font-size: 20px;
-    }
-    p.power {
-      padding-left: 1px;
-      top: 40.5%;
-      left: 80%;
-      font-family: "bebas-bold";
-      color: #616665;
-	  font-size: 30px;
-    }
-    p.description {
-      top: 110px;
-      white-space: initial;
-      font-size: 11px;
-      padding: 5px;
+      left: 0; top: 0;
     }
     .face {
       position: absolute;
-      top: 0;
-      left: 0;
+      left: 0; top: 0;
+      transition: all 500ms;
+      z-index: 0;
       width: 100%;
       height: 100%;
+      border: 1px solid black;
+      border-radius: 7%;
       backface-visibility: hidden;
       box-sizing: border-box;
-    }
-    .front.face {
-      z-index: 10;
+      overflow: hidden;
     }
     .back.face {
       transform: rotateY(-180deg);
     }
   </style>
   <template>
-    <div class="front face">
-      <img src="/assets/images/card-front.png">
-      <img class="splash" src="{{ front }}">
-      <img class="info-bar" src="/assets/images/title-bar-overlay-2.png">
-      <p class="card-name">{{ name }}</p>
-      <p class="power">[[ base_level ]]</p>
-      <p class="description">{{ description }}</p>
-    </div>
-    <div class="back face">
-      <img src="/assets/images/card-back.png">
+    <div id="card">
+      <div id="front" class="front face">
+        <img src="/assets/images/card-front.png">
+        <content class="content"/>
+      </div>
+      <div id="back" class="back face">
+        <img src="/assets/images/card-back.png">
+      </div>
     </div>
   </template>
 
 <script>
   Polymer({
     is: "card-element",
-    behaviors: [
-      Polymer.NeonAnimationRunnerBehavior
-    ],
+    behaviors: [],
+    listeners: {
+      'transitionend': 'transitionEnded',
+    },
     properties: {
+      aspect: {
+        value: 1.390625,
+      },
       name: {
         type: String,
         value: null,
-      },
-      base_level: {
-        type: String,
-        value: "0"
-      },
-      total_level: {
-        type: String,
-        value: null
       },
       description: {
         type: String,
@@ -117,43 +78,118 @@
       faceup: {
         type: Boolean,
         value: true,
-        observer: "faceup_changed",
-        notify: true
+        observer: "transformChanged",
+        reflectToAttribute: true,
+        // notify: true
       },
-      front: {
+      facedown: {
+        type: Boolean,
+        value: false,
+        observer: "facedownChanged"
+      },
+      rotated: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: "transformChanged"
+      },
+      zoomed: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+        observer: "zoomedChanged",
+        // notify: true
+      },
+      frontface_image: {
         type: String,
         value: "/assets/images/card-front-background.png"
       },
-      back: {
+      backface_image: {
         type: String,
         value: "/assets/images/card-back.png"
-      }
-    },
-    face: function(face) {
-      return this.faceup ? face === 'up' : face === 'down';
-    },
-    flip: function() {
-      this.faceup = !this.faceup;
-    },
-    faceup_changed: function() {
-      if (this.faceup) {
-        this.style.transform = "rotateY(0deg)";
-      } else {
-        this.style.transform = "rotateY(180deg)";
       }
     },
     ready: function() {
       if (! this.faceup) {
         this.faceup = false;
       }
-      this.faceup_changed();
-      // this.flip();
+      this.resetSize();
+      this.transformChanged();
+      this.zoomedChanged();
+
       // var y = 0;
       // setInterval(function() {
       //   y += 10;
       //   this.style.transform = "rotateY(" + y + "deg)";
       //   // this.flip();
       // }.bind(this), 300);
+    },
+    flip: function() {
+      this.faceup = !this.faceup;
+    },
+    zoom: function() {
+      this.zoomed = !this.zoomed;
+    },
+    rotate: function() {
+      this.rotated = !this.rotated;
+    },
+    resetSize: function() {
+      var parentHeight = this.parentNode.style.height.replace(/[^0-9]/, '');
+      parentHeight = parseFloat(parentHeight) || 100;
+
+      var el = this;
+      el.style.height = parentHeight;
+      el.style.width = parentHeight;
+
+      el = this.$.card;
+      el.style.height = parentHeight;
+      el.style.width = parentHeight / this.aspect;
+    },
+    transitionEnded: function() {
+      console.log("transition ended");
+    },
+    zoomedChanged: function() {
+      var bounds = this.getBoundingClientRect();
+      if (this.rotated || (!this.faceup)) {
+        this.transformChanged();
+      }
+      var el = this.$.card;
+      if (this.zoomed) {
+        el.style.left = -bounds.left;
+        el.style.top = -bounds.top;
+        el.style.marginLeft = "5vw";
+        el.style.width = "90vw";
+        el.style.height = "calc(90vw * " + this.aspect + ")";
+        this.style.zIndex = 90;
+      } else {
+        el.style.left = 0;
+        el.style.top = 0;
+        el.style.marginLeft = "0vw";
+        // el.style.width = "100%";
+        // el.style.height = "100%";
+        this.resetSize();
+        this.style.zIndex = 0;
+      }
+    },
+    facedownChanged: function() {
+      this.faceup = !this.facedown;
+    },
+    transformChanged: function() {
+      var el = this.$.card;
+      if (this.faceup || this.zoomed) {
+        el.style.transform = "rotateY(0deg)";
+      } else {
+        el.style.transform = "rotateY(-180deg)";
+      }
+      if (!this.rotated || this.zoomed) {
+        el.style.transform += " rotate(0deg)";
+      } else {
+        if (this.faceup) {
+          el.style.transform += " rotate(90deg)";
+        } else {
+          el.style.transform += " rotate(-90deg)";
+        }
+      }
     }
   });
 </script>

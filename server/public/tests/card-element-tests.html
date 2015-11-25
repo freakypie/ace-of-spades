@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/styles/main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css" />
+    <link rel="import" href="/assets/elements/card-element.html">
+    <style>
+      div.example {
+        padding: 5px; background: grey;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <p>
+        Card styles: cards adjust to the height of the containing div
+      </p>
+      <div class="well">
+        <div style="height: 150px;">
+          <card-element></card-element>
+          <card-element facedown></card-element>
+          <card-element rotated></card-element>
+          <card-element facedown rotated></card-element>
+        </div>
+        <div style="height: 100px;">
+          <card-element></card-element>
+          <card-element facedown></card-element>
+          <card-element rotated></card-element>
+          <card-element facedown rotated></card-element>
+        </div>
+        <div style="height: 50px;">
+          <card-element></card-element>
+          <card-element facedown></card-element>
+          <card-element rotated></card-element>
+          <card-element facedown rotated></card-element>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h2>Flip</h2>
+        <div class="well">
+          <card-element onclick="this.flip()"></card-element>
+          <card-element facedown onclick="this.flip()"></card-element>
+          <card-element rotated onclick="this.flip()"></card-element>
+          <card-element facedown rotated onclick="this.flip()"></card-element>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h2>Rotate</h2>
+        <div class="well">
+          <card-element onclick="this.rotate()"></card-element>
+          <card-element facedown onclick="this.rotate()"></card-element>
+          <card-element rotated onclick="this.rotate()"></card-element>
+          <card-element facedown rotated onclick="this.rotate()"></card-element>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h2>Zoom</h2>
+        <div class="well">
+          <card-element onclick="this.zoom()"></card-element>
+          <card-element facedown onclick="this.zoom()"></card-element>
+          <card-element rotated onclick="this.zoom()"></card-element>
+          <card-element facedown rotated onclick="this.zoom()"></card-element>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script src="/reload/reload.js"></script>
+    <script src="/bower/webcomponentsjs/webcomponents-lite.js"></script>
+  </body>
+</html>
