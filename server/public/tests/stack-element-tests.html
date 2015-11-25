@@ -7,65 +7,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css" />
     <link rel="import" href="/assets/elements/card-element.html">
-    <style>
-      div.example {
-        padding: 5px; background: grey;
-      }
-    </style>
+    <link rel="import" href="/assets/elements/stack-element.html">
   </head>
   <body>
     <div class="container">
       <p>
-        Card styles: cards adjust to the height of the containing div
+        Stack styles: stacks adjust height based on the number of cards
       </p>
-      <div class="well">
-        <div style="height: 150px;">
-          <card-element></card-element>
-          <card-element facedown></card-element>
-          <card-element rotated></card-element>
-          <card-element facedown rotated></card-element>
-        </div>
-        <div style="height: 100px;">
-          <card-element></card-element>
-          <card-element facedown></card-element>
-          <card-element rotated></card-element>
-          <card-element facedown rotated></card-element>
-        </div>
-        <div style="height: 50px;">
-          <card-element></card-element>
-          <card-element facedown></card-element>
-          <card-element rotated></card-element>
-          <card-element facedown rotated></card-element>
-        </div>
-      </div>
-      <hr>
       <div>
-        <h2>Flip</h2>
         <div class="well">
-          <card-element onclick="this.flip()"></card-element>
-          <card-element facedown onclick="this.flip()"></card-element>
-          <card-element rotated onclick="this.flip()"></card-element>
-          <card-element facedown rotated onclick="this.flip()"></card-element>
-        </div>
-      </div>
-      <hr>
-      <div>
-        <h2>Rotate</h2>
-        <div class="well">
-          <card-element onclick="this.rotate()"></card-element>
-          <card-element facedown onclick="this.rotate()"></card-element>
-          <card-element rotated onclick="this.rotate()"></card-element>
-          <card-element facedown rotated onclick="this.rotate()"></card-element>
-        </div>
-      </div>
-      <hr>
-      <div>
-        <h2>Zoom</h2>
-        <div class="well">
-          <card-element onclick="this.zoom()"></card-element>
-          <card-element facedown onclick="this.zoom()"></card-element>
-          <card-element rotated onclick="this.zoom()"></card-element>
-          <card-element facedown rotated onclick="this.zoom()"></card-element>
+          <stack-element>
+            <card-element></card-element>
+            <card-element facedown></card-element>
+            <card-element rotated></card-element>
+            <card-element facedown rotated></card-element>
+          </stack-element>
         </div>
       </div>
     </div>

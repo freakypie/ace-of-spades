@@ -1,10 +1,5 @@
 <link rel="import" href="/bower/polymer/polymer.html">
 
-<link rel="import" href="/bower/neon-animation/neon-animation-runner-behavior.html">
-<link rel="import" href="/assets/elements/polymer-flip.html">
-<link rel="import" href="/assets/elements/draw-card.html">
-<link rel="import" href="/assets/elements/place-card.html">
-
 <dom-module id="card-element">
   <style>
     :host {
@@ -110,9 +105,6 @@
       }
     },
     ready: function() {
-      if (! this.faceup) {
-        this.faceup = false;
-      }
       this.resetSize();
       this.transformChanged();
       this.zoomedChanged();
@@ -124,6 +116,11 @@
       //   // this.flip();
       // }.bind(this), 300);
     },
+    attached: function() {
+      this.resetSize();
+      this.transformChanged();
+      this.zoomedChanged();
+    },
     flip: function() {
       this.faceup = !this.faceup;
     },
@@ -134,8 +131,11 @@
       this.rotated = !this.rotated;
     },
     resetSize: function() {
-      var parentHeight = this.parentNode.style.height.replace(/[^0-9]/, '');
-      parentHeight = parseFloat(parentHeight) || 100;
+      var parentHeight = 100;
+      if (this.parentNode) {
+        parentHeight = this.parentNode.style.height.replace(/[^0-9]/, '');
+        parentHeight = parseFloat(parentHeight) || 100;
+      }
 
       var el = this;
       el.style.height = parentHeight;
