@@ -2,6 +2,12 @@ var Backbone = require("backbone");
 var _ = require("underscore");
 
 
-export default class DealRule extends Rule {
+class DealRule extends Rule {
+  execute() {
+    for (var player in this.players()) {
 
+    }
+  }
 }
+
+module.exports = DealRule;

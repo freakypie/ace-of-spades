@@ -88,6 +88,11 @@
         reflectToAttribute: true,
         observer: "transformChanged"
       },
+      height: {
+        type: Number,
+        observer: "heightChanged",
+        value: 0
+      },
       zoomed: {
         type: Boolean,
         value: false,
@@ -168,7 +173,10 @@
         // el.style.width = "100%";
         // el.style.height = "100%";
         this.resetSize();
-        this.style.zIndex = 0;
+        // TODO: use transitionend
+        setTimeout(function() {
+          this.style.zIndex = this.height;
+        }.bind(this), 500);
       }
     },
     facedownChanged: function() {
@@ -190,6 +198,11 @@
           el.style.transform += " rotate(-90deg)";
         }
       }
+    },
+    heightChanged: function() {
+      var card = this;
+      card.style.top = -this.height;
+      card.style.zIndex = this.height;
     }
   });
 </script>

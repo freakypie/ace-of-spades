@@ -1,0 +1,45 @@
+<link rel="import" href="/bower/polymer/polymer.html">
+
+<dom-module id="stack-element">
+  <template>
+    <style>
+      :host {
+        height: 100px;
+        margin: 5px;
+        display: inline-block;
+        position: relative;
+        -webkit-perspective: 1000;
+        /*z-index: 50;*/
+        border: 1px solid blue;
+      }
+      ::content card-element {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+    </style>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      is: "stack-element",
+      ready: function() {
+        setTimeout(this.align.bind(this), 0);
+      },
+      align: function() {
+        var bounds = this.getBoundingClientRect();
+        var cards = Polymer.dom(this).querySelectorAll('card-element');
+        var scale = 2;
+        var i = cards.length * scale;
+        cards.forEach(function(card) {
+          this.style.width = card.style.width;
+          var bounds2 = card.getBoundingClientRect();
+          card.height = i;
+          // card.style.marginLeft = bounds.left - bounds2.left;
+          i -= scale;
+        }.bind(this));
+      }
+    });
+  </script>
+</dom-module>
