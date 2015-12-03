@@ -27,6 +27,7 @@
       ready: function() {
         setTimeout(this.align.bind(this), 0);
       },
+      /** align cards with the proper height */
       align: function() {
         var bounds = this.getBoundingClientRect();
         var cards = Polymer.dom(this).querySelectorAll('card-element');
@@ -39,6 +40,17 @@
           // card.style.marginLeft = bounds.left - bounds2.left;
           i -= scale;
         }.bind(this));
+      },
+      /** get the top card */
+      top: function() {
+        return this.firstElementChild;
+      },
+      /** get the bottom card */
+      bottom: function() {
+        return this.lastElementChild;
+      },
+      draw: function() {
+
       }
     });
   </script>
