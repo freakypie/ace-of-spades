@@ -152,41 +152,6 @@
       }, "rotate");
       return this;
     },
-    /** sets the card to absolute coordinates */
-    lock: function() {
-      this._transit(function(resolve, reject) {
-        var bounds = this.getBoundingClientRect();
-        var el = this.$.card;
-        document.body.appendChild(this);
-        el.style.position = "absolute";
-        el.style.left = bounds.left;
-        el.style.top = bounds.top;
-        // TODO: is this going to cause a transition? should this delay?
-        resolve();
-      });
-      return this;
-    },
-    reset: function() {
-      this._transit(function(resolve, reject) {
-        var parentHeight = 100;
-        if (this.parentNode) {
-          parentHeight = this.parentNode.style.height.replace(/[^0-9]/, '');
-          parentHeight = parseFloat(parentHeight) || 100;
-        }
-
-        var el = this.$.card;
-        el.style.height = parentHeight;
-        el.style.width = parentHeight / this.aspect;
-        el.style.left = 0;
-        el.style.top = 0;
-
-        this.waitingForTransitionEnd.push(function() {
-          Polymer.dom(this).parentNode.align();
-          resolve();
-        });
-      });
-      return this;
-    },
     raise: function(height) {
       this._transit(function(resolve, reject) {
         this.height = height;
@@ -196,9 +161,17 @@
     },
     move: function(stack) {
       this._transit(function(resolve, reject) {
-        var bounds1 = this.getBoundingClientRect();
-        Polymer.dom(stack).appendChild(this);
 
+        // verify it isn't already here
+        var dom = Polymer.dom(stack)
+        if (! stack.contains(this)) {
+          dom.appendChild(this);
+        } else {
+          resolve();
+          return;
+        }
+
+        var bounds1 = this.getBoundingClientRect();
         window.requestAnimationFrame(function() {
           var bounds2 = this.getBoundingClientRect();
           var el = this.$.card;
