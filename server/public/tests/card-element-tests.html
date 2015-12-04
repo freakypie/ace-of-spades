@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.min.css" />
     <link rel="import" href="/assets/elements/card-element.html">
+    <link rel="import" href="/assets/elements/stack-element.html">
   </head>
   <body>
     <div class="container">
@@ -71,6 +72,19 @@
           <card-element height="10" facedown onclick="this.zoom()"></card-element>
           <card-element height="12" rotated onclick="this.zoom()"></card-element>
           <card-element height="20" facedown rotated onclick="this.zoom()"></card-element>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h2>Chaining Actions</h2>
+        <div class="well">
+          <card-element onclick="this.flip().rotate().flip().rotate()"></card-element>
+          <card-element onclick="this.rotate().raise(Math.random() * 10)"></card-element>
+          <stack-element>
+            <card-element onclick="this.raise(100).move(document.querySelector('#next-stack')).raise(1).reset()"></card-element>
+          </stack-element>
+          <stack-element id="next-stack">
+          </stack-element>
         </div>
       </div>
     </div>

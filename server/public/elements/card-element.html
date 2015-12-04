@@ -18,6 +18,9 @@
       position: absolute;
       left: 0; top: 0;
     }
+    #card.no-animation {
+      transition: none;
+    }
     content {
       position: absolute;
       left: 0; top: 0;
@@ -52,6 +55,8 @@
   </template>
 
 <script>
+  'use strict';
+
   Polymer({
     is: "card-element",
     behaviors: [],
@@ -107,84 +112,143 @@
       backface_image: {
         type: String,
         value: "/assets/images/card-back.png"
-      }
+      },
     },
 
     // Life cycle
+    created: function() {
+      this._transitions = [];
+      this.waitingForTransitionEnd = [];
+    },
 
     ready: function() {
-      this.transitions = [];
       this.resetSize();
       this.transformChanged();
       this.zoomedChanged();
-    },
-    attached: function() {
-      this.resetSize();
-      this.transformChanged();
-      this.zoomedChanged();
+      this.waitingForTransitionEnd.length = 0;
     },
 
     // card transformations
 
     flip: function() {
-      this.faceup = !this.faceup;
-    },
-    zoom: function() {
-      this.zoomed = !this.zoomed;
-    },
-    rotate: function() {
-      this.rotated = !this.rotated;
-    },
-    lock: function() {
-      return new Promise(function(result, reject) {
-        var bounds = this.getBoundingClientRect();
-        var el = this.$.card;
-        el.style.left = -bounds.left;
-        el.style.top = -bounds.top;
-        // TODO: is this going to cause a transition? should this delay?
-        result();
-      }.bind(this));
-
-    },
-    raise: function() {
-
-    },
-    move: function(stack) {
-      this.transitions.push(function(approve, reject) {
-        this.detach();
-        stack.appendChild(this);
-
-        // TODO: verify this won't cause a transition
-        approve();
-      });
-      this._transist();
+      this._transit(function(resolve, reject) {
+        this.faceup = !this.faceup;
+        this.waitingForTransitionEnd.push(resolve);
+      }, "flip");
       return this;
     },
-    _transist: function(func) {
+    zoom: function() {
+      this._transit(function(resolve, reject) {
+        this.zoomed = !this.zoomed;
+        console.log("zooming", this.zoomed);
+        this.waitingForTransitionEnd.push(resolve);
+      }, "zoom");
+      return this;
+    },
+    rotate: function() {
+      this._transit(function(resolve, reject) {
+        this.rotated = !this.rotated;
+        this.waitingForTransitionEnd.push(resolve);
+      }, "rotate");
+      return this;
+    },
+    /** sets the card to absolute coordinates */
+    lock: function() {
+      this._transit(function(resolve, reject) {
+        var bounds = this.getBoundingClientRect();
+        var el = this.$.card;
+        document.body.appendChild(this);
+        el.style.position = "absolute";
+        el.style.left = bounds.left;
+        el.style.top = bounds.top;
+        // TODO: is this going to cause a transition? should this delay?
+        resolve();
+      });
+      return this;
+    },
+    reset: function() {
+      this._transit(function(resolve, reject) {
+        var parentHeight = 100;
+        if (this.parentNode) {
+          parentHeight = this.parentNode.style.height.replace(/[^0-9]/, '');
+          parentHeight = parseFloat(parentHeight) || 100;
+        }
+
+        var el = this.$.card;
+        el.style.height = parentHeight;
+        el.style.width = parentHeight / this.aspect;
+        el.style.left = 0;
+        el.style.top = 0;
+
+        this.waitingForTransitionEnd.push(function() {
+          Polymer.dom(this).parentNode.align();
+          resolve();
+        });
+      });
+      return this;
+    },
+    raise: function(height) {
+      this._transit(function(resolve, reject) {
+        this.height = height;
+        this.waitingForTransitionEnd.push(resolve);
+      }, "raise");
+      return this;
+    },
+    move: function(stack) {
+      this._transit(function(resolve, reject) {
+        var bounds1 = this.getBoundingClientRect();
+        Polymer.dom(stack).appendChild(this);
+
+        window.requestAnimationFrame(function() {
+          var bounds2 = this.getBoundingClientRect();
+          var el = this.$.card;
+          el.classList.add("no-animation");
+          el.style.left = bounds1.left - bounds2.left;
+          el.style.top = bounds1.top - bounds2.top;
+          console.log(el.style.left, el.classList);
+          window.requestAnimationFrame(function() {
+            el.classList.remove("no-animation");
+            el.style.left = 0;
+            el.style.top = 0;
+            this.waitingForTransitionEnd.push(resolve);
+            console.log(el.style.left, el.classList);
+          }.bind(this));
+        }.bind(this));
+      }, "move");
+      return this;
+    },
+    _transit: function(func, name) {
       if (func) {
+        if (! name) {
+          name = "unknown";
+        }
+        func.label = name;
         this._transitions.push(func);
       }
       if (this._transition) {
+        console.warn("already transiting");
         // already going
         return;
       }
-      this._transition = new Promise(this._transitions.pop());
-      this._transition.then(function() {
-        this._transition = null;
-        this._transist();
-      }.bind(this));
+      if (this._transitions.length > 0) {
+        var f = this._transitions.shift();
+        console.log("starting", f.label);
+        this._transition = new Promise(f.bind(this));
+        this._timeout = setTimeout(function() {
+          this._transition = null;
+          this._transit();
+        }.bind(this), 3000);
+        this._transition.then(function() {
+          console.log("transition finished", f.label);
+          clearTimeout(this._timeout);
+          this._transition = null;
+          this._transit();
+        }.bind(this));
+      }
     },
 
     // other
 
-    /** sets the card to absolute coordinates */git 
-    raise: function(height) {
-      return new Promise(function(result, reject) {
-        this.height = height;
-        // TODO: return on transition end
-        result();
-      }.bind(this));
-    },
     resetSize: function() {
       var parentHeight = 100;
       if (this.parentNode) {
@@ -201,7 +265,11 @@
       el.style.width = parentHeight / this.aspect;
     },
     transitionEnded: function() {
-      console.log("transition ended");
+      for (let f of this.waitingForTransitionEnd) {
+        console.log("transition ended");
+        f();
+      }
+      this.waitingForTransitionEnd.length = 0;
     },
     zoomedChanged: function() {
       var bounds = this.getBoundingClientRect();
@@ -223,10 +291,11 @@
         // el.style.width = "100%";
         // el.style.height = "100%";
         this.resetSize();
-        // TODO: use transitionend
-        setTimeout(function() {
+
+        this.waitingForTransitionEnd.push(function() {
+          console.log("unzoomed");
           this.style.zIndex = this.height;
-        }.bind(this), 500);
+        }.bind(this));
       }
     },
     facedownChanged: function() {
@@ -234,10 +303,14 @@
     },
     transformChanged: function() {
       var el = this.$.card;
+      var height = this.height;
+      el.style.transform = "translate3d(0, -" + height + "px, " + height + "px)";
+      this.style.zIndex = this.height;
+
       if (this.faceup || this.zoomed) {
-        el.style.transform = "rotateY(0deg)";
+        el.style.transform += " rotateY(0deg)";
       } else {
-        el.style.transform = "rotateY(-180deg)";
+        el.style.transform += " rotateY(-180deg)";
       }
       if (!this.rotated || this.zoomed) {
         el.style.transform += " rotate(0deg)";
@@ -250,9 +323,7 @@
       }
     },
     heightChanged: function() {
-      var card = this;
-      card.style.top = -this.height;
-      card.style.zIndex = this.height;
+      this.transformChanged();
     }
   });
 </script>

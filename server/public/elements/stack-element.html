@@ -12,7 +12,7 @@
         /*z-index: 50;*/
         border: 1px solid blue;
       }
-      ::content card-element {
+      :host ::content card-element {
         top: 0;
         left: 0;
         position: absolute;
@@ -47,7 +47,7 @@
         }
         // TODO: raise the card
         return Polymer.dom(this).firstElementChild; // pop from top
-      }
+      },
       /** get the top card */
       top: function() {
         return this.firstElementChild;
