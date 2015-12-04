@@ -29,13 +29,6 @@ class CardList extends Backbone.Model {
     }
   }
 
-  draw() {
-    if (this.attributes.cards.length === 0) {
-      throw new Error("Can't draw from an empty deck");
-    }
-    return this.attributes.cards.shift(); // pop from top
-  }
-
   draw_all() {
     var cards = this.attributes.cards.models;
     this.attributes.cards.reset([]);

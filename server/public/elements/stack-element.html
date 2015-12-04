@@ -1,26 +1,23 @@
 <link rel="import" href="/bower/polymer/polymer.html">
-<link rel="import" href="./card-element.html">
 
 <dom-module id="stack-element">
-  <style>
-    :host {
-      display: inline-block;
-      -webkit-perspective: 1000;
-      4px solid blue;
-      min-width: 4px;
-      min-height: 4px;
-      background: lightgrey;
-      margin: 5px;
-      border: 1px solid grey;
-      padding: 5px;
-    }
-    ::content card-element {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-  </style>
   <template>
+    <style>
+      :host {
+        height: 100px;
+        margin: 5px;
+        display: inline-block;
+        position: relative;
+        -webkit-perspective: 1000;
+        /*z-index: 50;*/
+        border: 1px solid blue;
+      }
+      ::content card-element {
+        top: 0;
+        left: 0;
+        position: absolute;
+      }
+    </style>
     <content></content>
   </template>
 
@@ -28,15 +25,27 @@
     Polymer({
       is: "stack-element",
       ready: function() {
-        this.refreshStack();
+        setTimeout(this.align.bind(this), 0);
       },
-      refreshStack: function() {
-        var cards = Polymer.dom(this).querySelectorAll("card-element");
-        var top = 0;
+      align: function() {
+        var bounds = this.getBoundingClientRect();
+        var cards = Polymer.dom(this).querySelectorAll('card-element');
+        var scale = 2;
+        var i = cards.length * scale;
         cards.forEach(function(card) {
-          top -= 2;
-          card.style.top = top;
+          this.style.width = card.style.width;
+          var bounds2 = card.getBoundingClientRect();
+          card.height = i;
+          // card.style.marginLeft = bounds.left - bounds2.left;
+          i -= scale;
         }.bind(this));
+      },
+      draw: function() {
+        if (this.attributes.cards.length === 0) {
+          throw new Error("Can't draw from an empty deck");
+        }
+        // TODO: raise the card
+        return Polymer.dom(this).firstElementChild; // pop from top
       }
     });
   </script>

@@ -8,6 +8,42 @@ var CardList = require("../models/card_list");
 
 
 class MajkinGame extends BaseGame {
+  get rules() {
+    return {
+      'setup': [
+        // create center play area
+        // create play area and hand for each player
+        // create bad stuff deck
+        // create event deck
+        // deal 5 cards to each player
+        // pick random player to start
+        // start round
+      ],
+      'round': [
+        // clear the bad stuff discard pile
+        // draw an event card to the event discard pile
+      ],
+      'turn': [
+        // activate action: forfeit
+        // after thirty seconds: forfeit
+      ],
+      'card': [
+        // cancel turn timeout
+        // place card on discard pile
+        // activate action: challenge
+      ],
+      'forfeit': [
+        // take event card
+        // check winning conditions
+        // advance next player
+      ],
+      'challenge': [
+        // add vote
+        // check challenge conditions
+        // advance next player
+      ]
+    };
+  }
   setup() {
     // generate arbitrary cards
     var cards = new Card.collection(require("json!../resources/cards.json"));
@@ -18,6 +54,10 @@ class MajkinGame extends BaseGame {
     var weapons = new Card.collection(require("json!../resources/weapons.json"));
     weapons.reset(weapons.shuffle(), {slient: true});
     this.weapons = weapons;
+
+    // for (rule of this.rules) {
+    //   rule.execute();
+    // }
 
     this.card_lists.add({
       area: central_area,
@@ -152,7 +192,7 @@ class MajkinGame extends BaseGame {
     log("playing");
     for (var player of this.players.models) {
       log(`dealing to player ${player.attributes.name}`);
-      var drawn_card = this.central_deck().draw();
+      var drawn_card = this.areas.findWhere({name: "central_deck"}).draw();
       var card_list = this.player_creature(player);
       card_list.place_on_top(drawn_card);
 
@@ -212,16 +252,16 @@ class MajkinGame extends BaseGame {
   turn(player, cb) {
     console.log("turn("+player+")");
     // if monster deck is empty
-    if (this.central_deck().size() <= 0) {
+    if (this.areas.findWhere({name: "central_deck"}).size() <= 0) {
       log("fliping discard pile");
-      this.central_deck().place_on_bottom(
+      this.areas.findWhere({name: "central_deck"}).place_on_bottom(
         this.discard_pile().shuffle().draw_all()
       );
     }
 
     // deal the enemy
     var enemy_card_list = this.enemy_creature(player);
-    var enemy_creature = this.central_deck().draw();
+    var enemy_creature = this.areas.findWhere({name: "central_deck"}).draw();
     enemy_creature.set({faceup: false});
     enemy_card_list.place_on_top(enemy_creature);
 
@@ -329,39 +369,6 @@ class MajkinGame extends BaseGame {
       );
       cb(winner);
     }, 1000);
-  }
-
-  central_deck() {
-    return this.card_lists.findWhere({name: "central_deck"});
-  }
-
-  weapon_deck() {
-    return this.card_lists.findWhere({name: "weapon_deck"});
-  }
-
-  discard_pile() {
-    return this.card_lists.findWhere({name: "discard_pile"});
-  }
-
-  enemy_creature(player) {
-    return this.card_lists.findWhere({
-      name: "enemy_creature",
-      controller_id: player.id
-    });
-  }
-
-  player_creature(player) {
-    return this.card_lists.findWhere({
-      name: "player_creature",
-      controller_id: player.id
-    });
-  }
-
-  player_hand(player) {
-    return this.card_lists.findWhere({
-      name: "player_hand",
-      controller_id: player.id
-    });
   }
 }
 

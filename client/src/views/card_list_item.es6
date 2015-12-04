@@ -4,7 +4,7 @@ var CardItem = require("./card_item");
 
 class CardListItem extends bv.ListView {
   get tagName() {
-    return "deck-element";
+    return "stack-element";
   }
   getListElement() {
     return this.$el;
