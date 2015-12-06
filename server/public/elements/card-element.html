@@ -159,13 +159,16 @@
       }, "raise");
       return this;
     },
-    move: function(stack) {
+    move: function(stack, bottom) {
       this._transit(function(resolve, reject) {
 
         // verify it isn't already here
-        var dom = Polymer.dom(stack)
         if (! stack.contains(this)) {
-          dom.appendChild(this);
+          if (bottom) {
+            stack.bottom(this);
+          } else {
+            stack.top(this);
+          }
         } else {
           resolve();
           return;

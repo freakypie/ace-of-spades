@@ -48,9 +48,14 @@
         // TODO: raise the card
         return Polymer.dom(this).firstElementChild; // pop from top
       },
-      /** get the top card */
-      top: function() {
-        return this.firstElementChild;
+      /** get or set the top card */
+      top: function(card) {
+        var dom = Polymer.dom(this);
+        if (card) {
+          dom.insertBefore(card, dom.firstElementChild);
+          this.align();
+        }
+        return dom.firstElementChild;
       },
       /** get the bottom card */
       bottom: function() {
