@@ -25,6 +25,7 @@ class PopulateStackRule extends Rule {
       var el;
       for (let card of cards) {
         el = document.createElement("card-element");
+        el.id = card.name
 
         // TODO: set card traits
         stack.top(el);

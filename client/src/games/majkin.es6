@@ -29,7 +29,7 @@ class MajkinGame extends BaseGame {
 
         // create play area and hand for each player
         // deal 5 cards to each player
-        {'rule': 'deal', num: 5, max: 5,
+        {'rule': 'deal', num: 15, max: 5,
          "from": {area:"main", "group": "badness", name: "draw"},
          "to": {"group": "default", name: "hand"}},
         // TODO: DealRule(max=5)

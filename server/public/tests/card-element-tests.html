@@ -81,9 +81,15 @@
           <card-element onclick="this.flip().rotate().flip().rotate()"></card-element>
           <card-element onclick="this.rotate().raise(Math.random() * 10)"></card-element>
           <stack-element>
-            <card-element onclick="this.raise(100).move(document.querySelector('#next-stack')).raise(1)"></card-element>
+            <card-element onclick="this.raise(100).move(document.querySelector('#next-stack'))"></card-element>
+            <card-element onclick="this.raise(100).move(document.querySelector('#next-stack2'))"></card-element>
+            <card-element onclick="this.move(document.querySelector('#next-stack'))"></card-element>
+            <card-element onclick="this.move(document.querySelector('#next-stack2'))"></card-element>
+            <card-element onclick="this.raise(100).move(document.querySelector('#next-stack'))"></card-element>
           </stack-element>
           <stack-element id="next-stack">
+          </stack-element><br>
+          <stack-element id="next-stack2">
           </stack-element>
         </div>
       </div>

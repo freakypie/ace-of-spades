@@ -1,21 +1,32 @@
 var Backbone = require("backbone");
 var _ = require("underscore");
+var queue = require("queue");
 
 var Rule = require("./base");
 
 
 class DealRule extends Rule {
   execute() {
+    var q = queue({concurrency: 1})
+
     // from deck
+    console.warn("dealing");
     var source = this.stack(this.options.from);
     var dest = null;
     for (let x=0; x<this.options.num; x++) {
-      for (let player of this.players) {
-        this.options.to.player = player.id;
-        dest = this.stack(this.options.to);
-        source.top().raise(100).move(dest);
-      }
+      this.players.forEach(function(player) {
+        q.push(function(x, done) {
+          console.info("dealing to player", player.id, "card", x);
+          this.options.to.player = player.id;
+          dest = this.stack(this.options.to);
+          var card = source.top();
+          console.log("raising card", card.id);
+          card.move(dest);
+          setTimeout(done, 250);
+        }.bind(this, x));
+      }.bind(this));
     }
+    q.start();
   }
 }
 

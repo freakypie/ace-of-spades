@@ -117,11 +117,12 @@
 
     // Life cycle
     created: function() {
-      this._transitions = [];
+      this.stackHeight = 0;
       this.waitingForTransitionEnd = [];
     },
 
     ready: function() {
+      this._transitions = [];
       this.resetSize();
       this.transformChanged();
       this.zoomedChanged();
@@ -156,6 +157,7 @@
       this._transit(function(resolve, reject) {
         this.height = height;
         this.waitingForTransitionEnd.push(resolve);
+        console.log("raising", this.id);
       }, "raise");
       return this;
     },
@@ -181,13 +183,11 @@
           el.classList.add("no-animation");
           el.style.left = bounds1.left - bounds2.left;
           el.style.top = bounds1.top - bounds2.top;
-          console.log(el.style.left, el.classList);
           window.requestAnimationFrame(function() {
             el.classList.remove("no-animation");
             el.style.left = 0;
             el.style.top = 0;
             this.waitingForTransitionEnd.push(resolve);
-            console.log(el.style.left, el.classList);
           }.bind(this));
         }.bind(this));
       }, "move");
@@ -199,23 +199,23 @@
           name = "unknown";
         }
         func.label = name;
-        this._transitions.push(func);
+        this._transitions.push(func.bind(this));
       }
       if (this._transition) {
-        console.warn("already transiting");
+        // console.warn("already transiting");
         // already going
         return;
       }
       if (this._transitions.length > 0) {
         var f = this._transitions.shift();
-        console.log("starting", f.label);
-        this._transition = new Promise(f.bind(this));
+        // console.log("starting", f.label);
+        this._transition = new Promise(f);
         this._timeout = setTimeout(function() {
           this._transition = null;
           this._transit();
         }.bind(this), 3000);
         this._transition.then(function() {
-          console.log("transition finished", f.label);
+          // console.log("transition finished", f.label);
           clearTimeout(this._timeout);
           this._transition = null;
           this._transit();
@@ -242,7 +242,7 @@
     },
     transitionEnded: function() {
       for (let f of this.waitingForTransitionEnd) {
-        console.log("transition ended");
+        // console.log("transition ended");
         f();
       }
       this.waitingForTransitionEnd.length = 0;

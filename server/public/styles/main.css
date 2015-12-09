@@ -87,7 +87,6 @@ h2 {
 }
 #player-areas {
   width: 100%;
-  overflow-x: hidden;
 }
 #player-areas .list {
   white-space: nowrap;

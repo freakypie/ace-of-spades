@@ -36,10 +36,14 @@
         cards.forEach(function(card) {
           this.style.width = card.style.width;
           var bounds2 = card.getBoundingClientRect();
-          card.height = i;
+          setTimeout(function(i) {
+            card.height = i;
+          }.bind(this, i), 10)
+          // card.stackHeight = i;
           // card.style.marginLeft = bounds.left - bounds2.left;
           i -= scale;
         }.bind(this));
+        // console.log("cards aligned", cards.length);
       },
       draw: function() {
         if (this.attributes.cards.length === 0) {
@@ -55,7 +59,8 @@
           dom.insertBefore(card, dom.firstElementChild);
           this.align();
         }
-        return dom.firstElementChild;
+        card = dom.firstElementChild;
+        return card;
       },
       /** get the bottom card */
       bottom: function() {
