@@ -19,10 +19,8 @@ class DealRule extends Rule {
           console.info("dealing to player", player.id, "card", x);
           this.options.to.player = player.id;
           dest = this.stack(this.options.to);
-          var card = source.top();
-          console.log("raising card", card.id);
-          card.move(dest);
-          setTimeout(done, 250);
+          source.top().move(dest);
+          setTimeout(done, 100);
         }.bind(this, x));
       }.bind(this));
     }

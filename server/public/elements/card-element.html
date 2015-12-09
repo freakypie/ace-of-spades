@@ -193,6 +193,11 @@
       }, "move");
       return this;
     },
+    promise: function() {
+      return new Promise(function(resolve, reject) {
+        this._transit(resolve, "promise");
+      }.bind(this));
+    },
     _transit: function(func, name) {
       if (func) {
         if (! name) {
