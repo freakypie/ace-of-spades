@@ -23,11 +23,9 @@ class BaseGame extends Backbone.Model {
     log("game is starting");
     this.app = app;
     this.socket = app.socket;
-    var StackCollection = Backbone.Collection.extend({model: Stack});
     var CardCollection = Backbone.Collection.extend({model: Card});
-    var AreaCollection = Backbone.Collection.extend({model: Area});
+    this.center = new Area();
     this.players = Player.collection();
-    this.areas = new AreaCollection();
     this.cards = new CardCollection();
 
     // connection properties

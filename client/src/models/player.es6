@@ -12,9 +12,8 @@ class Player extends bv.BaseModel {
   get defaults() {
     return {
       name: "unnamed",
-      lvl: 1,
       host: false,
-      properties: {},
+      actions: []
     };
   }
 

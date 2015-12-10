@@ -11,25 +11,22 @@ class DealRule extends Rule {
   }
 
   execute() {
-    var q = queue({concurrency: 1})
-
     // TODO: implement max restriction
     // from deck
     var source = this.stack(this.options.from);
     var dest = null;
-    this.log("dealing from", this.options.from);
-    _.range(this.options.num).forEach(function(x) {
-      this.players.forEach(function(player) {
-        q.push(function(x, done) {
-          this.log(`dealing to player ${player.attributes.name} in `, this.options.to);
-          this.options.to.player = player.id;
-          dest = this.stack(this.options.to);
-          source.top().move(dest);
-          setTimeout(done, 100);
-        }.bind(this, x));
-      }.bind(this));
-    }.bind(this));
-    q.start();
+    var rule = this;
+
+    rule.log("dealing from", rule.options.from);
+    _.range(rule.options.num).forEach(function(x) {
+      rule.players.forEach(function(player) {
+        rule.log(`dealing to player ${player.attributes.name} in `, rule.options.to);
+        rule.options.to.player = player.id;
+        dest = rule.stack(rule.options.to);
+        var card = source.cards.shift();
+        dest.cards.unshift(card);
+      });
+    });
   }
 }
 

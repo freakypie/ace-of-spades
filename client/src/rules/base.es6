@@ -4,7 +4,7 @@ var debug = require("debug");
 
 class Rule {
   get players() {
-    return this.game.players.models;
+    return this.game.players;
   }
   get name() {
     return "base";
@@ -25,33 +25,27 @@ class Rule {
     return stack;
   }
   stack(options) {
+    // get area
     var container = null;
-    if (! options.player) {
-      container = document.querySelector("#temp-stacks");
+    if (options.player) {
+      container = this.players.findWhere({id: options.player}).area;
     } else {
-      container = document.querySelector("#player-areas");
-      var playerArea = container.querySelector("#player-" + options.player);
-      if (! playerArea) {
-        this.log("creating player area", options.player)
-        playerArea = container.appendChild(document.createElement("div"));
-        playerArea.id = "player-" + options.player;
-      }
-      container = playerArea;
+      container = this.game.center;
     }
-    var groupName = options.group || "default";
-    var group = container.querySelector("#" + groupName);
-    if (! group) {
-      this.log(`creating group "${groupName}" in area`, options.player || null);
-      group = container.appendChild(document.createElement("div"));
-      group.id = groupName;
-    }
-    // TODO: actually use area and group
-    var stack = group.querySelector("#" + options.name);
-    if (! stack) {
 
-      // TODO: append to a game element
-      stack = this.createStack(options.name);
-      group.appendChild(stack);
+    // TODO: get group
+    // var groupName = options.group || "default";
+    // var group = container.stacks.findWhere({name: groupName});
+    // if (! group) {
+    //   this.log(`creating group "${groupName}" in area`, container.attributes.name);
+    //   group = container.stacks.add({name: groupName});
+    // }
+
+    // get stack
+    var stack = container.stacks.findWhere({name: options.name});
+    if (! stack) {
+      this.log(`creating stack "${options.name}" in area`, container.attributes.name);
+      stack = container.stacks.add({name: options.name});
     }
     return stack;
   }

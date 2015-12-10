@@ -20,8 +20,8 @@ class Main extends bv.MixinView {
 
   get views() {
     return {
-      "#players": require("./views/players"),
-      "#player-areas": require("./views/player_areas"),
+      // "#players": require("./views/players"),
+      // "#player-areas": require("./views/player_areas"),
       // "#hand": require("./views/hand"),
     };
   }
@@ -34,7 +34,7 @@ class Main extends bv.MixinView {
     window.game = this.game;
     this.renderViews();
     this.game.setup();
-    
+
     _.delay(() => {
       this.game.start();
     }, 1000);

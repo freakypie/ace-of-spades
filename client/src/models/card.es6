@@ -1,7 +1,8 @@
 var Backbone = require("backbone");
+var bv = require("backbone_views");
 
 
-class Card extends Backbone.Model {
+class Card extends bv.BaseModel {
     get defaults() {
         return {
             // loaded from json/server
@@ -17,7 +18,5 @@ class Card extends Backbone.Model {
         }
     }
 }
-
-Card.collection = Backbone.Collection.extend({model: Card});
 
 module.exports = Card

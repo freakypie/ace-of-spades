@@ -8,9 +8,8 @@ class Area extends bv.BaseModel {
   get defaults() {
     return {
       name: "unnamed",
-      default: false,
-      player: null,
-    }
+      default: false
+    };
   }
   initialize(options) {
     super.initialize(options);

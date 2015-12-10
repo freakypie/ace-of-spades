@@ -6,6 +6,7 @@ var Rule = require("./base");
 
 class SignalRule extends Rule {
   execute() {
+    this.log(`signaling ${this.options.name}`);
     this.game.perform(this.options.name);
   }
 }

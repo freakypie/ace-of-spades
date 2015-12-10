@@ -2,6 +2,7 @@ var Backbone = require("backbone");
 var _ = require("underscore");
 
 var Rule = require("./base");
+var Card = require("../models/card");
 
 
 /**
@@ -24,11 +25,10 @@ class PopulateStackRule extends Rule {
 
       var el;
       for (let card of cards) {
-        el = document.createElement("card-element");
-        el.id = card.name
+        el = new Card({id: card.name});
 
         // TODO: set card traits
-        stack.top(el);
+        stack.cards.unshift(el);
       }
     }
   }
