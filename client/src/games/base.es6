@@ -3,7 +3,7 @@ var _ = require("underscore");
 var store = require("store");
 var log = require("debug")("base-game");
 
-var CardList = require("../models/card_list");
+var Stack = require("../models/stack");
 var Player = require("../models/player");
 var Card = require("../models/card");
 var Area = require("../models/area");
@@ -23,13 +23,11 @@ class BaseGame extends Backbone.Model {
     log("game is starting");
     this.app = app;
     this.socket = app.socket;
-    var PlayerCollection = Backbone.Collection.extend({model: Player});
-    var CardListCollection = Backbone.Collection.extend({model: CardList});
+    var StackCollection = Backbone.Collection.extend({model: Stack});
     var CardCollection = Backbone.Collection.extend({model: Card});
     var AreaCollection = Backbone.Collection.extend({model: Area});
-    this.players = new PlayerCollection();
+    this.players = Player.collection();
     this.areas = new AreaCollection();
-    this.card_lists = new CardListCollection();
     this.cards = new CardCollection();
 
     // connection properties
@@ -49,8 +47,11 @@ class BaseGame extends Backbone.Model {
     });
 
     // get or create the current player
-    this.player = new Player();
+    this.player = new Player({name: "you"});
     this.players.add(this.player);
+
+    var cpu = new Player({id: 1, name: "cpu"});
+    this.players.add(cpu);
 
     // TODO: detect if the game is on
 
@@ -62,10 +63,10 @@ class BaseGame extends Backbone.Model {
   setupWebsocketEvents(socket) {
     var game = this;
     socket.on("player", function(data) {
-      console.log("player", data);
+      // console.log("player", data);
     });
     socket.on("game", function(data) {
-      console.log("game", data);
+      // console.log("game", data);
       game.set(data);
     });
     socket.on("game:event", function(data) {

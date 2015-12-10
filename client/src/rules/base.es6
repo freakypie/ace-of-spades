@@ -1,14 +1,19 @@
 var _ = require("underscore");
+var debug = require("debug");
 
 
 class Rule {
   get players() {
     return this.game.players.models;
   }
+  get name() {
+    return "base";
+  }
 
   constructor(options={}) {
     this.game = options.game;
     this.initialize(options);
+    this.log = debug("rule:" + this.name);
     this.options = options;
   }
   initialize() {}
@@ -27,6 +32,7 @@ class Rule {
       container = document.querySelector("#player-areas");
       var playerArea = container.querySelector("#player-" + options.player);
       if (! playerArea) {
+        this.log("creating player area", options.player)
         playerArea = container.appendChild(document.createElement("div"));
         playerArea.id = "player-" + options.player;
       }
@@ -35,6 +41,7 @@ class Rule {
     var groupName = options.group || "default";
     var group = container.querySelector("#" + groupName);
     if (! group) {
+      this.log(`creating group "${groupName}" in area`, options.player || null);
       group = container.appendChild(document.createElement("div"));
       group.id = groupName;
     }

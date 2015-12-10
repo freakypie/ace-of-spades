@@ -1,12 +1,14 @@
 var Backbone = require("backbone");
+var bv = require("backbone_views");
 var store = require("store");
 var log = require("debug")("player");
 var _ = require("underscore");
 
-var CardList = require("./card_list");
+var Stack = require("./stack");
+var Area = require("./area");
 
 
-class Player extends Backbone.Model {
+class Player extends bv.BaseModel {
   get defaults() {
     return {
       name: "unnamed",
@@ -18,8 +20,11 @@ class Player extends Backbone.Model {
 
   initialize(options) {
     super.initialize(options);
-    this.player_hand = new CardList();
 
+    // TODO: sync all player collections to the game area list
+    this.area = new Area();
+
+    // TODO: use a flag and only do this if it is the player (not a cpu)
     log("local", localStorage.player);
     log("store", store.get("player", {}));
 

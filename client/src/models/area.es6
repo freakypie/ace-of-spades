@@ -1,15 +1,20 @@
 var Backbone = require("backbone");
-var CardList = require("./card_list");
+var bv = require("backbone_views");
+
+var Stack = require("./stack");
 
 
-class Area extends Backbone.Model {
+class Area extends bv.BaseModel {
   get defaults() {
     return {
       name: "unnamed",
       default: false,
       player: null,
-      card_lists: new CardList.collection()
     }
+  }
+  initialize(options) {
+    super.initialize(options);
+    this.stacks = new Stack.collection();
   }
 }
 

@@ -4,7 +4,6 @@ var _ = require("underscore");
 
 var BaseGame = require("./base");
 var Card = require("../models/card");
-var CardList = require("../models/card_list");
 
 var PopulateStackRule = require("../rules/populate_stack");
 var DealRule = require("../rules/deal");
@@ -29,7 +28,7 @@ class MajkinGame extends BaseGame {
 
         // create play area and hand for each player
         // deal 5 cards to each player
-        {'rule': 'deal', num: 15, max: 5,
+        {'rule': 'deal', num: 3, max: 3,
          "from": {area:"main", "group": "badness", name: "draw"},
          "to": {"group": "default", name: "hand"}},
         // TODO: DealRule(max=5)
