@@ -11,13 +11,17 @@ class Rule {
   }
 
   constructor(options={}) {
+    _.extend(this, Backbone.Events);
     this.game = options.game;
     this.initialize(options);
     this.log = debug("rule:" + this.name);
     this.options = options;
   }
   initialize() {}
-  execute() {}
+  execute() {
+    // OVERRIDE THIS, return a promise
+  }
+  destroy() {}
   createStack(name, options) {
     var stack = document.createElement("stack-element");
     stack.id = name;

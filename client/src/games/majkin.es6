@@ -14,6 +14,7 @@ Rule.register("deal", DealRule);
 Rule.register("signal", require("../rules/signal"));
 Rule.register("modify-player", require("../rules/modify_player"));
 Rule.register("activate-actions", require("../rules/activate_actions"));
+Rule.register("timeout", require("../rules/timeout"));
 
 
 class MajkinGame extends BaseGame {
@@ -59,7 +60,9 @@ class MajkinGame extends BaseGame {
         {'rule': 'activate-actions', 'actions': ['forfeit', 'play-card'],
           filters: {active: true}},
 
-        // TODO: after thirty seconds: forfeit
+        // after thirty seconds: forfeit
+        {'rule': 'timeout', 'time': 2 * 1000},
+        {'rule': 'signal', 'name': 'forfeit', 'message': 'next turn'},
       ],
       'card': [
         // TODO: cancel turn timeout
@@ -93,14 +96,29 @@ class MajkinGame extends BaseGame {
     this.perform('setup');
   }
   perform(rules) {
-    for (let rule of this.rules[rules]) {
-      // TODO: set context data like game
-      // TODO: run each one at a time indepenedent of the for loop
-      // this will enable us to do timed events
-      // and optionally skip to other events without finishing the rest of the set
-      rule.game = this;
-      Rule.load(rule).execute();
-    }
+    var q = queue({concurrency: 1});
+    var game = this;
+    this.rules[rules].forEach(function(rule) {
+      q.push(function(done) {
+        // TODO: set context data like game
+        // TODO: run each one at a time indepenedent of the for loop
+        // this will enable us to do timed events
+        // and optionally skip to other events without finishing the rest of the set
+        rule.game = game;
+        rule = Rule.load(rule);
+        var promise = rule.execute();
+        if (promise) {
+          promise.then(function() {
+            rule.destroy();
+            done();
+          });
+        } else {
+          rule.destroy();
+          done();
+        }
+      });
+    });
+    q.start();
   }
   start() {
 
