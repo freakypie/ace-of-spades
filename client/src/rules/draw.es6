@@ -5,15 +5,19 @@ var Rule = require("./base");
 
 
 class DrawRule extends Rule {
+  get name() {
+    return "draw";
+  }
+
   execute() {
     // from deck
-    var here = this.stack(
-      this.options.from.area, this.options.from.group, this.options.from.stack);
+    var here = this.stack(this.options.from);
+
     // to deck
-    var there = this.stack(
-      this.options.to.area, this.options.to.group, this.options.to.stack);
-    console.log(here, there);
-    here.top().raise(100).move(there);
+    var there = this.stack(this.options.to);
+
+    this.log(`drawing one card from ${this.options.from.name} to ${this.options.to.name}`);
+    there.cards.shift(here.cards.unshift());
   }
 }
 

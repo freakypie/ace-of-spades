@@ -32,7 +32,11 @@ class Rule {
     // get area
     var container = null;
     if (options.player) {
-      container = this.players.findWhere({id: options.player}).area;
+      if (_.isObject(options.player)) {
+        container = this.players.findWhere(options.player).area;
+      } else {
+        container = this.players.findWhere({id: options.player}).area;
+      }
     } else {
       container = this.game.center;
     }
@@ -52,6 +56,17 @@ class Rule {
       stack = container.stacks.add({name: options.name});
     }
     return stack;
+  }
+  conditions(conditions) {
+    // TODO: optimize
+    var funcs = {
+      "stack-size-gte": function(stack, value) {
+        return stack.cards.length > value;
+      }
+    }
+    for (let cond of conditions) {
+
+    }
   }
 
   static get registry() {

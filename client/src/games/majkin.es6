@@ -11,6 +11,7 @@ var Rule = require("../rules/base");
 
 Rule.register("create-stack", PopulateStackRule);
 Rule.register("deal", DealRule);
+Rule.register("draw", require("../rules/draw"));
 Rule.register("signal", require("../rules/signal"));
 Rule.register("modify-player", require("../rules/modify_player"));
 Rule.register("activate-actions", require("../rules/activate_actions"));
@@ -34,7 +35,7 @@ class MajkinGame extends BaseGame {
         {'rule': 'deal', num: 3, max: 3,
          "from": {area:"main", "group": "badness", name: "draw"},
          "to": {"group": "default", name: "hand"}},
-        // TODO: DealRule(max=5)
+         // TODO: DealRule(max=5)
 
         // pick random player to start
         {'rule': 'modify-player', 'which': 'random', 'data': {'active': true}},
@@ -48,7 +49,11 @@ class MajkinGame extends BaseGame {
         // move discard to draw
       ],
       'round': [
-        // draw an event card to the event discard pile
+        // draw an event card to the event discard pile to start round
+        {'rule': 'draw',
+          from: {area: "main", group: "event", name: "draw"},
+          to: {area: "main", group: "event", name: "discard"}},
+
         // players draw to 5 max
         {'rule': 'signal', 'name': 'turn', 'message': 'starting round'},
 
@@ -66,13 +71,21 @@ class MajkinGame extends BaseGame {
       ],
       'card': [
         // TODO: cancel turn timeout
+        {'rule': 'timeout:cancel'}
+
         // TODO: place card on discard pile
         // TODO: activate action: challenge
       ],
       'forfeit': [
-        // TODO: take event card
+        // take event card
+        {'rule': 'draw', 'from': {'area': 'main', "group": "event", 'name': "discard"},
+        'to': {'player': {'active': true}, 'name': 'event'}},
         // TODO: check winning conditions
-        // TODO: advance next player
+        {'rule': 'signal', 'name': 'forfeit', 'message': 'next turn', 'conditions': [
+          {'condition': 'stack-size-gte', value: 3, stack: {'player': {active: true}, name: 'event'}}
+        ]},
+        // advance next player
+        {'rule': 'signal', 'name': 'next-turn', 'message': 'next turn'},
       ],
       'challenge': [
         // TODO: add vote
@@ -89,6 +102,9 @@ class MajkinGame extends BaseGame {
 
         // next turn... will cause infinite loop
         // {'rule': 'signal', 'name': 'turn'},
+      ],
+      "win": [
+        // end game
       ]
     };
   }
