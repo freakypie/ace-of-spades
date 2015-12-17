@@ -66,7 +66,7 @@ class MajkinGame extends BaseGame {
           filters: {active: true}},
 
         // after thirty seconds: forfeit
-        {'rule': 'timeout', 'time': 2 * 1000},
+        {'rule': 'timeout', 'time': 3 * 1000},
         {'rule': 'signal', 'name': 'forfeit', 'message': 'next turn'},
       ],
       'card': [
@@ -79,7 +79,7 @@ class MajkinGame extends BaseGame {
       'forfeit': [
         // take event card
         {'rule': 'draw', 'from': {'area': 'main', "group": "event", 'name': "discard"},
-        'to': {'player': {'active': true}, 'name': 'event'}},
+                         'to': {'player': {'active': true}, 'name': 'event'}},
         // TODO: check winning conditions
         {'rule': 'signal', 'name': 'forfeit', 'message': 'next turn', 'conditions': [
           {'condition': 'stack-size-gte', value: 3, stack: {'player': {active: true}, name: 'event'}}
@@ -101,7 +101,7 @@ class MajkinGame extends BaseGame {
         {'rule': 'modify-player', 'filters': {finished: true}, 'data': {'finished': false, 'active': false}},
 
         // next turn... will cause infinite loop
-        // {'rule': 'signal', 'name': 'turn'},
+        {'rule': 'signal', 'name': 'turn'},
       ],
       "win": [
         // end game

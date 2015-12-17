@@ -9,12 +9,18 @@ class Rule {
   get name() {
     return "base";
   }
+  static get logger() {
+    if (! this._log) {
+      this._log = debug("rule:" + this.name);
+    }
+    return this._log;
+  }
 
   constructor(options={}) {
     _.extend(this, Backbone.Events);
     this.game = options.game;
     this.initialize(options);
-    this.log = debug("rule:" + this.name);
+    this.log = this.constructor.logger;
     this.options = options;
   }
   initialize() {}
@@ -33,6 +39,7 @@ class Rule {
     var container = null;
     if (options.player) {
       if (_.isObject(options.player)) {
+        this.log(options.player);
         container = this.players.findWhere(options.player).area;
       } else {
         container = this.players.findWhere({id: options.player}).area;
@@ -41,8 +48,9 @@ class Rule {
       container = this.game.center;
     }
 
-    // TODO: get group
-    // var groupName = options.group || "default";
+    // get group
+    var groupName = options.group || "default";
+    var name = `${groupName}:${options.name}`;
     // var group = container.stacks.findWhere({name: groupName});
     // if (! group) {
     //   this.log(`creating group "${groupName}" in area`, container.attributes.name);
@@ -50,23 +58,35 @@ class Rule {
     // }
 
     // get stack
-    var stack = container.stacks.findWhere({name: options.name});
+    var stack = container.stacks.findWhere({name: name});
     if (! stack) {
-      this.log(`creating stack "${options.name}" in area`, container.attributes.name);
-      stack = container.stacks.add({name: options.name});
+      this.log(`creating stack "${name}" in area`, container.attributes.name);
+      stack = container.stacks.add({name: name});
     }
     return stack;
   }
   conditions(conditions) {
     // TODO: optimize
-    var funcs = {
-      "stack-size-gte": function(stack, value) {
-        return stack.cards.length > value;
+    if (conditions) {
+      var funcs = {
+        "stack-size-gte": function(options) {
+          var stack = this.stack(options.stack);
+          var value = options.value;
+          this.log("comparing stack size", stack.cards.length, value);
+          return stack.cards.length > value;
+        }
+      }
+      let func = null;
+      for (let cond of conditions) {
+        func = funcs[cond.condition].bind(this);
+        if (! func(cond)) {
+          this.log("failed condition", cond.condition);
+          return false;
+        }
       }
     }
-    for (let cond of conditions) {
-
-    }
+    this.log("condition succeeded");
+    return true;
   }
 
   static get registry() {

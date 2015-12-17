@@ -39,9 +39,9 @@ class BaseGame extends Backbone.Model {
       // window.app.socket.send(event,
     });
     this.listenTo(this, "change:players", function(e) {
-      log("game players updated");
-      this.players.set(this.attributes.players);
-      this.setupPlayers();
+      // console.error("game players updated");
+      // this.players.set(this.attributes.players);
+      // this.setupPlayers();
     });
 
     // get or create the current player
@@ -99,6 +99,7 @@ class BaseGame extends Backbone.Model {
    */
   start() {
     initialize();
+    console.log(this.players.models);
     this.trigger(this, "game:started");
   }
 

@@ -31,6 +31,7 @@ class PopulateStackRule extends Rule {
         stack.cards.unshift(el);
       }
     }
+    this.log(`${this.options.name} has ${stack.cards.length} cards`);
   }
 }
 
