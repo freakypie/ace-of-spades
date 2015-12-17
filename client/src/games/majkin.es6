@@ -66,7 +66,7 @@ class MajkinGame extends BaseGame {
           filters: {active: true}},
 
         // after thirty seconds: forfeit
-        {'rule': 'timeout', 'time': 3 * 1000},
+        {'rule': 'timeout', 'time': 30 * 1000},
         {'rule': 'signal', 'name': 'forfeit', 'message': 'next turn'},
       ],
       'card': [
@@ -85,7 +85,7 @@ class MajkinGame extends BaseGame {
           {'condition': 'stack-size-gte', value: 3, stack: {'player': {active: true}, name: 'event'}}
         ]},
         // advance next player
-        {'rule': 'signal', 'name': 'next-turn', 'message': 'next turn'},
+        {'rule': 'signal', 'name': 'round', 'message': 'next round'},
       ],
       'challenge': [
         // TODO: add vote
@@ -101,10 +101,12 @@ class MajkinGame extends BaseGame {
         {'rule': 'modify-player', 'filters': {finished: true}, 'data': {'finished': false, 'active': false}},
 
         // next turn... will cause infinite loop
-        {'rule': 'signal', 'name': 'turn'},
+        // {'rule': 'signal', 'name': 'turn'},
       ],
       "win": [
         // end game
+        {'rule': 'clear-queue'},
+        {'rule': 'message', 'message': "we have a winner"}
       ]
     };
   }
@@ -113,6 +115,7 @@ class MajkinGame extends BaseGame {
   }
   perform(rules) {
     var q = queue({concurrency: 1});
+    this.ruleQueue = q;
     var game = this;
     this.rules[rules].forEach(function(rule) {
       q.push(function(done) {

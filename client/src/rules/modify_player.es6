@@ -19,7 +19,6 @@ class ModifyPlayerRule extends Rule {
     if (player) {
       player.set(this.options.data);
       this.log(`player ${player.id} marked`, this.options.data);
-      this.log('player stats', player.attributes);
     } else {
       this.log(`player not found to mod`, this.options.data);
     }

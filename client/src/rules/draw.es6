@@ -12,12 +12,16 @@ class DrawRule extends Rule {
     // to deck
     var there = this.stack(this.options.to);
 
-    this.log(`${this.options.from.name} has ${here.cards.length} cards`);
-    this.log(`${this.options.to.name} has ${there.cards.length} cards`);
-    this.log(`drawing one card from ${this.options.from.name} to ${this.options.to.name}`);
-    there.cards.unshift(here.cards.shift());
-    this.log(`${this.options.from.name} has ${here.cards.length} cards`);
-    this.log(`${this.options.to.name} has ${there.cards.length} cards`);
+    if (here.cards.length > 0) {
+      this.log(`${this.options.from.name} has ${here.cards.length} cards`);
+      this.log(`${this.options.to.name} has ${there.cards.length} cards`);
+      this.log(`drawing one card from ${this.options.from.name} to ${this.options.to.name}`);
+      there.cards.unshift(here.cards.shift());
+      this.log(`${this.options.from.name} has ${here.cards.length} cards`);
+      this.log(`${this.options.to.name} has ${there.cards.length} cards`);
+    } else {
+      this.log(`${this.options.from.name} has no more cards to draw from`);
+    }
   }
 }
 
